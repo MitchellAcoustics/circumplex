@@ -1,0 +1,27 @@
+[project]
+name = "circumplex"
+version = "0.1.0"
+description = "A Python port of the R Circumplex package"
+authors = [
+    {name = "Andrew Mitchell", email = "andrew.mitchell.18@ucl.ac.uk"},
+]
+dependencies = [
+    "numpy>=1.25.2",
+    "matplotlib>=3.8.1",
+    "scipy>=1.9.3",
+    "pandas[excel]>=2.1.0",
+]
+requires-python = ">=3.9"
+readme = "README.md"
+license = {text = "GNU-GPLv3"}
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.4.3",
+]
+docs = [
+    "jupyter>=1.0.0",
+]
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
