@@ -11,7 +11,7 @@ dependencies = [
     "scipy>=1.9.3",
     "pandas[excel]>=2.1.0",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 readme = "README.md"
 license = {text = "GNU-GPLv3"}
 
@@ -21,6 +21,10 @@ test = [
 ]
 docs = [
     "jupyter>=1.0.0",
+]
+dev = [
+    "setuptools>=68.2.2",
+    "soundscapy>=0.5.3",
 ]
 [build-system]
 requires = ["pdm-backend"]
