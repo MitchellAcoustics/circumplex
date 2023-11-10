@@ -1,6 +1,8 @@
 # %%
 
 import matplotlib.pyplot as plt
+from matplotlib import colormaps
+from cycler import cycler
 import numpy as np
 import pandas as pd
 from scipy.optimize import curve_fit
@@ -170,7 +172,7 @@ class SSMResults(object):
             df = pd.concat([df, val.table])
         return df
 
-    def plot(self) -> tuple:
+    def plot(self, colors=None, legend=True, *args, **kwargs) -> tuple:
         """
         Plot the results in the circumplex
 
@@ -178,14 +180,19 @@ class SSMResults(object):
             tuple: A tuple containing the figure and axis objects.
         """
         fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
+        if colors is None:
+            colors = colormaps.get_cmap("tab20").colors
+        colors = iter(colors)
         for key, val in self.results.items():
             ax.plot(
                 np.deg2rad(val.displacement),
                 val.amplitude,
-                color="black",
+                color=next(colors),
                 marker="o",
                 markersize=10,
+                label=key,
             )
+        fig.legend(loc="upper right", bbox_to_anchor=(1.2, 1))
         return fig, ax
 
     def profile_plots(self) -> None:
@@ -362,17 +369,20 @@ def ssm_parameters(scores, angles, bounds=BOUNDS):
 
         >>> scores = np.array([-0.5, 0, 0.25, 0.51, 0.52, 0.05, -0.26, -0.7])
         >>> angles = OCTANTS
-        >>> ssm_parameters(scores, angles)
-        (0.5, 0.0, 0.0, 0.0, 0.0, 1.0)
+        >>> results = ssm_parameters(scores, angles)
+        >>> [round(i, 3) for i in results]
+        [-0.016, -0.478, 0.333, 0.582, 145.158, 0.967]
     """
 
     # noinspection PyTupleAssignmentBalance
-    # BUG: Sometimes returns displacement at the trough, not the crest, so 180 degrees off
+    # NOTE: Bug - Sometimes returns displacement at the trough, not the crest, so 180 degrees off
+    # This was addressed by setting the lower bound of amplitude to 0, not -np.inf. Need a less hard-coded solution
     param, covariance = curve_fit(
         cosine_form, xdata=angles, ydata=scores, bounds=bounds
     )
     r2 = _r2_score(scores, cosine_form(angles, *param))
     ampl, disp, elev = param
+    disp = disp - 360 if disp > 360 else disp
 
     def polar2cart(r, theta):
         x = r * np.cos(theta)
@@ -403,8 +413,8 @@ def profile_plot(amplitude, displacement, elevation, r2, angles, scores, label):
         elevation,
         f"d = {int(displacement)}",
     )
-    ax.axhline(elevation - amplitude, color="black", linestyle="--")
-    ax.text(0, elevation - amplitude * 0.9, f"a = {amplitude:.2f}")
+    ax.axhline(amplitude + elevation, color="black", linestyle="--")
+    ax.text(0, amplitude + elevation * 0.9, f"a = {amplitude:.2f}")
 
     ax.text(0, elevation * 0.5, f"R2 = {r2:.2f}")
 

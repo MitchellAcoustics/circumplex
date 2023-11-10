@@ -1,1 +1,1 @@
-from circumplex.analysis import *
+from circumplex.circumplex import *
