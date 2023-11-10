@@ -89,11 +89,11 @@ class SSMParams(object):
 
     def __repr__(self):
         # TODO: Add param results
-        return f"SSMParams(scores={self.scores}, angles={self.angles})"
+        return f"SSMParams({self.label}, scores={self.scores}, angles={self.angles})"
 
     def __str__(self):
         # TODO: Add param results
-        return f"SSMParams(scores={self.scores}, angles={self.angles})"
+        return f"{self.label}: {self.params})"
 
     def profile_plot(self) -> tuple:
         """
@@ -139,11 +139,13 @@ class SSMResults(object):
         grouping (list): A list of the names of the groups included in `scores`.
     """
 
-    def __init__(self, results: dict | SSMParams, measures=None, grouping=None):
+    def __init__(
+        self, results: list[SSMParams] | SSMParams, measures=None, grouping=None
+    ):
         if isinstance(results, SSMParams):
             measures = [results.measure]
             grouping = [results.group]
-            results = {results.label: results}
+            results = [results]
 
         self.results = results
         self.measures = measures
@@ -152,12 +154,12 @@ class SSMResults(object):
     @property
     def groups(self) -> set:
         """Return a list of the groups included in the analysis."""
-        return set(val.group for val in self.results.values() if val.group is not None)
+        return set(val.group for val in self.results if val.group is not None)
 
     @property
     def labels(self) -> set:
         """Return a list of the labels included in the analysis."""
-        return set(self.results.keys())
+        return set(val.label for val in self.results)
 
     @property
     def table(self) -> pd.DataFrame:
@@ -168,9 +170,18 @@ class SSMResults(object):
             pd.DataFrame: A dataframe containing the results of the SSM analysis.
         """
         df = pd.DataFrame()
-        for key, val in self.results.items():
+        for val in self.results:
             df = pd.concat([df, val.table])
         return df
+
+    def query_label(self, label: str) -> SSMParams:
+        """Query the results for a specific SSMParams by label."""
+        for res in self.results:
+            if res.label == label:
+                return res
+        raise ValueError(
+            f"No results found for {label}"
+        )  # Raised if the label is never found
 
     def plot(self, colors=None, legend=True, *args, **kwargs) -> tuple:
         """
@@ -183,14 +194,14 @@ class SSMResults(object):
         if colors is None:
             colors = colormaps.get_cmap("tab20").colors
         colors = iter(colors)
-        for key, val in self.results.items():
+        for res in self.results:
             ax.plot(
-                np.deg2rad(val.displacement),
-                val.amplitude,
+                np.deg2rad(res.displacement),
+                res.amplitude,
                 color=next(colors),
                 marker="o",
                 markersize=10,
-                label=key,
+                label=res.label,
             )
         fig.legend(loc="upper right", bbox_to_anchor=(1.2, 1))
         return fig, ax
@@ -202,8 +213,8 @@ class SSMResults(object):
         Returns:
             None
         """
-        for key, val in self.results.items():
-            fig, ax = val.profile_plot()
+        for res in self.results:
+            fig, ax = res.profile_plot()
             plt.show()
 
 
@@ -267,15 +278,15 @@ def ssm_analyse_grouped_corrs(
 
             SSMResults: A SSMResults object containing the results of the analysis.
     """
-    res = {}
+    res = []
     for group_var in grouping:
         for group, group_data in data.groupby(group_var):
             try:
-                ssm = ssm_analyse_corrs(
-                    group_data, scales, measures, angles, group=group
+                res.append(
+                    ssm_analyse_corrs(
+                        group_data, scales, measures, angles, group=group
+                    ).results[0]
                 )
-                ssm = {key: val for key, val in ssm.results.items()}
-                res.update(ssm)
             except ValueError as e:
                 print(f"Error: {e} | in {group_var} = {group}")
 
@@ -304,12 +315,12 @@ def ssm_analyse_corrs(
 
         SSMResults: A SSMResults object containing the results of the analysis.
     """
-    res = {}
+    res = []
     for measure in measures:
         r = data[scales].corrwith(data[measure])
         ssm = SSMParams(r, scales, angles, measure=measure, group=group)
         # ssm.param_calc()
-        res[ssm.label] = ssm
+        res.append(ssm)
 
     return SSMResults(res, measures)
 
@@ -332,12 +343,12 @@ def ssm_analyse_means(
         SSMResults: A SSMResults object containing the results of the analysis.
     """
     means = data.groupby(grouping)[scales].mean()
-    res = {}
+    res = []
     for group, scores in means.iterrows():
         scores = means.loc[group]
         ssm = SSMParams(scores, scales, angles, group=group)
         # ssm.param_calc()
-        res[ssm.label] = ssm
+        res.append(ssm)
 
     return SSMResults(res, grouping=grouping)
 
