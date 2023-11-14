@@ -21,6 +21,7 @@ test = [
 ]
 docs = [
     "jupyter>=1.0.0",
+    "mkdocs>=1.5.3",
 ]
 dev = [
     "setuptools>=68.2.2",
