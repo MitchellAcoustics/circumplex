@@ -1,3 +1,51 @@
-site_name: Circumplex
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+site_name: "Circumplex"
 site_url: https://example.com/ # TODO: update site url
+site_dir: site
+repo_name: "MitchellAcoustics/circumplex"
+repo_url: https://github.com/MitchellAcoustics/circumplex
+copyright: Copyright &copy; 2023 Andrew Mitchell
+nav:
+    - Home: index.md
+    - About:
+        - 'About': about.md
+        - 'License': license.md
+    - Tutorials:
+        - tutorials/index.md
+        - 'Introduction to SSM': tutorials/Intro_to_SSM_Analysis.ipynb
+    - 'API reference': api.md
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
 
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+
+
+plugins:
+    - search
+    - mkdocstrings:
+        handlers:
+          python:
+            options:
+              docstring_section_style: table
+    - mkdocs-jupyter:
+        include_source: true
+        theme: default
+#        execute: true
