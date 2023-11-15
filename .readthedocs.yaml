@@ -20,7 +20,7 @@ build:
       - VIRTUAL_ENV=$(dirname $(dirname $(which python))) pdm install -dG docs
 
 # Build documentation in the "docs/" directory with Sphinx
-sphinx:
+mkdocs:
    configuration: mkdocs.yml
 
 # Optionally build your docs in additional formats such as PDF and ePub
