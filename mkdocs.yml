@@ -54,7 +54,7 @@ plugins:
             options:
               docstring_section_style: spacy
               docstring_style: "google"
-              separate_signature: false
+              separate_signature: true
               show_if_no_docstring: false
               merge_init_into_class: true
               show_symbol_type_heading: true # waiting for general release
