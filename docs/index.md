@@ -1,6 +1,7 @@
-<img src="docs/img/logo-light.png" width="300">
+![Image title](img/logo-light.png#only-light)
+![Image title](img/logo-dark.png#only-dark)
 
-# circumplex
+# Welcome to Circumplex
 
 [![PyPI version](https://badge.fury.io/py/circumplex.svg)](https://badge.fury.io/py/circumplex)
 [![Documentation Status](https://readthedocs.org/projects/circumplex/badge/?version=latest)](https://circumplex.readthedocs.io/en/latest/?badge=latest)

@@ -96,12 +96,12 @@ class SSMParams(object):
         # TODO: Add param results
         return f"{self.label}: {self.params})"
 
-    def profile_plot(self, ax=None) -> tuple:
+    def profile_plot(self, ax=None) -> plt.Axes:
         """
         Plot the SSM profile.
 
         Returns:
-            tuple: A tuple containing the figure and axis objects.
+            plt.Axes: A tuple containing the figure and axis objects.
         """
         return profile_plot(
             self.amplitude,
@@ -114,12 +114,12 @@ class SSMParams(object):
             ax=ax,
         )
 
-    def plot(self):
+    def plot(self) -> plt.Axes:
         """
         Plot the results in the circumplex
 
         Returns:
-            tuple: A tuple containing the figure and axis objects.
+            plt.Axes: A tuple containing the figure and axis objects.
         """
         fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
         ax.plot(
@@ -136,7 +136,7 @@ class SSMResults(object):
     A class to store the results of a SSM analysis.
 
     Attributes:
-        results (dict): A dictionary containing the results of the SSM analysis.
+        results (list[SSMParams]): A list containing the SSMParams results of the SSM analysis.
         measures (list): A list of the names of the measures included in `scores`.
         grouping (list): A list of the names of the groups included in `scores`.
     """
@@ -185,12 +185,12 @@ class SSMResults(object):
             f"No results found for {label}"
         )  # Raised if the label is never found
 
-    def plot(self, colors=None, legend=True, *args, **kwargs) -> tuple:
+    def plot(self, colors=None, legend=True, *args, **kwargs) -> plt.Axes:
         """
         Plot the results in the circumplex
 
         Returns:
-            tuple: A tuple containing the figure and axis objects.
+            plt.Axes: A tuple containing the figure and axis objects.
         """
         fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
         if colors is None:
@@ -208,12 +208,12 @@ class SSMResults(object):
         fig.legend(loc="upper right", bbox_to_anchor=(1.2, 1))
         return fig, ax
 
-    def profile_plots(self, axes=None) -> None:
+    def profile_plots(self, axes=None) -> plt.Axes:
         """
         Plot the SSM profiles.
 
         Returns:
-            None
+            plt.Axes: A tuple containing the figure and axis objects.
         """
         if axes is None:
             fig, axes = plt.subplots(
@@ -242,7 +242,6 @@ def ssm_analyse(
     Analyse a set of data using the SSM method.
 
     Args:
-
         data (pd.DataFrame): A dataframe containing the data to be analysed.
         scales (list): A list of the names of the circumplex scales to be included in the analysis.
         measures (list, optional): A list of the names of the measures to be included in the analysis. Defaults to None.
@@ -250,7 +249,6 @@ def ssm_analyse(
         angles (tuple, optional): A tuple containing the angular displacement of each circumplex scale included in `scores`. Defaults to OCTANTS.
 
     Returns:
-
         SSMResults: A SSMResults object containing the results of the analysis.
 
     """
@@ -280,7 +278,6 @@ def ssm_analyse_grouped_corrs(
     Perform SSM analysis of correlations for a set of grouped data.
 
     Args:
-
         data (pd.DataFrame): A dataframe containing the data to be analysed.
         scales (tuple): A list of the names of the circumplex scales to be included in the analysis.
         measures (list): A list of the names of the measures to be included in the analysis.
@@ -288,7 +285,6 @@ def ssm_analyse_grouped_corrs(
         angles (tuple, optional): A tuple containing the angular displacement of each circumplex scale included in `scores`. Defaults to OCTANTS.
 
     Returns:
-
             SSMResults: A SSMResults object containing the results of the analysis.
     """
     res = []
@@ -319,7 +315,6 @@ def ssm_analyse_corrs(
     Perform SSM analysis of correlations for a set of data.
 
     Args:
-
         data (pd.DataFrame): A dataframe containing the data to be analysed.
         scales (tuple): A list of the names of the circumplex scales to be included in the analysis.
         measures (list): A list of the names of the measures to be included in the analysis.
@@ -327,7 +322,6 @@ def ssm_analyse_corrs(
         group (str, optional): The name of the group to be included in the analysis. Defaults to None.
 
     Returns:
-
         SSMResults: A SSMResults object containing the results of the analysis.
     """
     res = []
@@ -351,14 +345,12 @@ def ssm_analyse_means(
     Perform SSM analysis of means for a set of data.
 
     Args:
-
         data (pd.DataFrame): A dataframe containing the data to be analysed.
         scales (tuple): A list of the names of the circumplex scales to be included in the analysis.
         grouping (list): A list of the names of the groups to be included in the analysis.
         angles (tuple, optional): A tuple containing the angular displacement of each circumplex scale included in `scores`. Defaults to OCTANTS.
 
     Returns:
-
         SSMResults: A SSMResults object containing the results of the analysis.
     """
     means = data.groupby(grouping)[scales].mean()
@@ -386,7 +378,7 @@ def _r2_score(y_true: np.array, y_pred: np.array):
     return 1 - (ss_res / ss_tot)
 
 
-def ssm_parameters(scores, angles, bounds=BOUNDS):
+def ssm_parameters(scores, angles, bounds=BOUNDS) -> tuple:
     """Calculate SSM parameters (without confidence intervals) for a set of scores.
 
     Args:
@@ -398,7 +390,6 @@ def ssm_parameters(scores, angles, bounds=BOUNDS):
         tuple: A tuple containing the elevation, x-value, y-value, amplitude, displacement, and R2 fit of the SSM curve.
 
     Examples:
-
         >>> scores = np.array([-0.5, 0, 0.25, 0.51, 0.52, 0.05, -0.26, -0.7])
         >>> angles = OCTANTS
         >>> results = ssm_parameters(scores, angles)
@@ -426,12 +417,12 @@ def ssm_parameters(scores, angles, bounds=BOUNDS):
 
 def profile_plot(
     amplitude, displacement, elevation, r2, angles, scores, label, ax=None
-):
+) -> plt.Axes:
     """
     Plot the SSM profile.
 
     Returns:
-        tuple: A tuple containing the figure and axis objects.
+        plt.Axes: A tuple containing the figure and axis objects.
     """
     thetas = np.linspace(0, 360, 1000)
     fit = cosine_form(thetas, amplitude, displacement, elevation)
