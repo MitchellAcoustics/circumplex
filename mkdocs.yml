@@ -8,14 +8,20 @@ copyright: Copyright &copy; 2023 Andrew Mitchell
 nav:
     - Home: index.md
     - About:
-        - 'About': about.md
         - 'License': license.md
     - Tutorials:
         - tutorials/index.md
         - 'Introduction to SSM': tutorials/Intro_to_SSM_Analysis.ipynb
-    - 'API reference': api.md
+        - 'Random Examples': tutorials/Random_exs.ipynb
+    - 'API reference':
+        - 'Core functions': reference/api.md
+        - 'Dealing with results': reference/classes.md
+        - 'Utils': reference/utils.md
+    - 'News': news.md
 theme:
   name: material
+  logo: img/small-logo.png
+  favicon: img/favicon.ico
   features:
     - navigation.tabs
     - navigation.expand
@@ -35,8 +41,8 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
-
-
+extra_css:
+  - stylesheets/extra.css
 
 plugins:
     - search
@@ -49,3 +55,6 @@ plugins:
         include_source: true
         theme: default
 #        execute: true
+
+markdown_extensions:
+  - admonition

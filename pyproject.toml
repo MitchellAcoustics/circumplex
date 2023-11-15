@@ -25,10 +25,11 @@ docs = [
     "mkdocs-material>=9.4.8",
     "mkdocstrings[python]>=0.23.0",
     "mkdocs-jupyter>=0.24.6",
+    "markdown>=3.5.1",
+    "pymdown-extensions>=10.4",
 ]
 dev = [
     "setuptools>=68.2.2",
-    "soundscapy>=0.5.3",
 ]
 [build-system]
 requires = ["pdm-backend"]

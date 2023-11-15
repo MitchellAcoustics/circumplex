@@ -1,13 +1,40 @@
-# Welcome to MkDocs
+![Image title](img/logo-light.png#only-light)
+![Image title](img/logo-dark.png#only-dark)
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+# Welcome to Circumplex
 
-## Commands
+[![PyPI version](https://badge.fury.io/py/circumplex.svg)](https://badge.fury.io/py/circumplex)
+[![Documentation Status](https://readthedocs.org/projects/circumplex/badge/?version=latest)](https://circumplex.readthedocs.io/en/latest/?badge=latest)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+_circumplex_ is a Python package for analyzing and visualizing circumplex data. It provides a set of tools for analyzing and visualizing circumplex data, following the Structural Summary Method. This project is a Python implementation based on the R [circumplex](https://circumplex.jmgirard.com/) package. Our goal is to provide a similar functionality and experience for Python users.
+
+!!! note
+    This project is still under development. We're working hard to make it as good as possible, but there may be bugs or missing features. If you find any issues, please let us know by submitting an issue on Github.
+
+## Getting Started
+
+To get started with _circumplex_, you'll need to install it first. You can do this by running the following command:
+
+```bash
+pip install circumplex
+```
+
+## Documentation
+
+This documentation is designed to help you understand and use _circumplex_ effectively. It's divided into several sections:
+
+- **Tutorials**: Practical examples showing how to use our project in real-world scenarios.
+- **API Reference**: Detailed information about our project's API.
+- **Contribute**: Information on how you can contribute to our project.
+
+## Contributing
+
+We welcome contributions from the community. If you're interested in contributing, please get in touch or submit an issue on Github.
+
+## License
+
+This project is licensed under the GNU GPLv3 License. For more information, please see the `license.md` file.
 
 ## Project layout
 
