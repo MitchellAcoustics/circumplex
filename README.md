@@ -1,6 +1,4 @@
-<img src="https://raw.githubusercontent.com/MitchellAcoustics/circumplex/main/docs/img/logo-dark.png" width="300">
-
-# circumplex
+# circumplex <img src="https://raw.githubusercontent.com/MitchellAcoustics/circumplex/main/docs/img/logo-dark.png" align="right" alt="" width="200" />
 
 [![PyPI version](https://badge.fury.io/py/circumplex.svg)](https://badge.fury.io/py/circumplex)
 [![Documentation Status](https://readthedocs.org/projects/circumplex/badge/?version=latest)](https://circumplex.readthedocs.io/en/latest/?badge=latest)
