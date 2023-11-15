@@ -1,4 +1,4 @@
-<img src="docs/img/logo-light.png" width="300">
+<img src="docs/img/logo-dark.png" width="300">
 
 # circumplex
 
