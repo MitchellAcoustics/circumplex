@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 site_name: "Circumplex"
-site_url: https://example.com/ # TODO: update site url
+site_url: https://circumplex.readthedocs.io/en/latest/
 site_dir: site
 repo_name: "MitchellAcoustics/circumplex"
 repo_url: https://github.com/MitchellAcoustics/circumplex
