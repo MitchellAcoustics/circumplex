@@ -18,6 +18,7 @@ license = {text = "GNU-GPLv3"}
 [project.optional-dependencies]
 test = [
     "pytest>=7.4.3",
+    "flake8>=6.1.0",
 ]
 docs = [
     "jupyter>=1.0.0",
