@@ -1,4 +1,4 @@
-<img src="docs/img/logo-dark.png" width="300">
+<img src="https://github.com/MitchellAcoustics/circumplex/blob/main/docs/img/logo-dark.png" width="300">
 
 # circumplex
 

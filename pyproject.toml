@@ -1,6 +1,6 @@
 [project]
 name = "circumplex"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Python package for analyzing and visualizing circumplex data"
 authors = [
     {name = "Andrew Mitchell", email = "andrew.mitchell.18@ucl.ac.uk"},
