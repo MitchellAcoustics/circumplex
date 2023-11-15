@@ -47,10 +47,19 @@ extra_css:
 plugins:
     - search
     - mkdocstrings:
+        default_handler: python
         handlers:
           python:
+            paths: [src.circumplex]
             options:
-              docstring_section_style: table
+              docstring_section_style: spacy
+              docstring_style: "google"
+              separate_signature: false
+              show_if_no_docstring: false
+              merge_init_into_class: true
+              show_symbol_type_heading: true # waiting for general release
+              show_symbol_type_toc: true
+
     - mkdocs-jupyter:
         include_source: true
         theme: default
