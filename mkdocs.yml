@@ -16,6 +16,7 @@ nav:
     - 'API reference':
         - 'Core functions': reference/api.md
         - 'Dealing with results': reference/classes.md
+        - 'Survey Instruments': reference/instruments.md
         - 'Utils': reference/utils.md
     - 'News': news.md
 theme:
