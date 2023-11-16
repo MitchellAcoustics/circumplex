@@ -1,0 +1,74 @@
+{
+  "details": {
+    "name": "Circumplex Scales of Interpersonal Problems",
+    "abbrev": "CSIP",
+    "items": 64,
+    "scales": 8,
+    "prefix": "",
+    "suffix": "",
+    "status": "open-access",
+    "construct": "interpersonal problems",
+    "reference": "Boudreaux, Ozer, Oltmanns, & Wright (2018)",
+    "url": "https://doi.org/10.1037/pas0000505"
+  },
+  "anchors": {
+    "0": "Not a problem",
+    "1": "Minor problem",
+    "2": "Moderate problem",
+    "3": "Serious problem"
+  },
+  "scales": {
+    "PA": {
+      "label": "Domineering",
+      "angle": 90,
+      "items": {
+        "1": "Bossing around other people too much",
+        "9": "Verbally or physically abusing others",
+        "17": "Starting arguments and conflicts with others",
+        "25": "Trying to influence or control other people too much",
+        "33": "Dominating or intimidating others",
+        "41": "Acting aggressively toward others",
+        "49": "Manipulating other people to get what I want",
+        "57": "Acting superior or condescending toward others"
+      }
+    },
+    "BC": {
+      "label": "Self-Centered",
+      "angle": 135,
+      "items": {
+        "2": "Acting rude and inconsiderate toward others",
+        "10": "Acting selfishly with others",
+        "18": "Being unable to feel guilt or remorse",
+        "26": "Lacking respect for other people's beliefs, attitudes, or opinions",
+        "34": "Having trouble getting along with others",
+        "42": "Being insensitive to the thoughts, feelings, and needs of others",
+        "50": "Disliking most people",
+        "58": "Having trouble giving emotional or moral support to others"
+      }
+    },
+    "DE": {
+      "label": "Distant",
+      "angle": 180
+    },
+    "FG": {
+      "label": "Socially Inhibited",
+      "angle": 225
+    },
+    "HI": {
+      "label": "Nonassertive",
+      "angle": 270
+    },
+    "JK": {
+      "label": "Exploitable",
+      "angle": 315
+    },
+    "LM": {
+      "label": "Self-Sacrificing",
+      "angle": 360
+    },
+    "NO": {
+      "label": "Intrusive",
+      "angle": 45
+    }
+  }
+}

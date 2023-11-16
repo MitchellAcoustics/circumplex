@@ -94,7 +94,21 @@ class SSMParams(object):
 
     def __str__(self):
         # TODO: Add param results
-        return f"{self.label}: {self.params})"
+        return (
+            "====================================\n"
+            f"Measure:          {self.measure}\n"
+            f"Group:            {self.group}\n"
+            f"Scales:           {self.scales}\n"
+            f"Scale Angles:     {self.angles}\n"
+            f"\nProfile [All]:\n"
+            f"                  Estimate\n"
+            f"Elevation:        {round(self.elevation, 3)}\n"
+            f"X-Value:          {round(self.xval, 3)}\n"
+            f"Y-Value:          {round(self.yval, 3)}\n"
+            f"Amplitude:        {round(self.amplitude, 3)}\n"
+            f"Displacement:     {round(self.displacement, 3)}\n"
+            f"R2:               {round(self.r2, 3)}\n"
+        )
 
     def profile_plot(self, ax=None) -> plt.Axes:
         """
@@ -152,6 +166,9 @@ class SSMResults(object):
         self.results = results
         self.measures = measures
         self.grouping = grouping
+
+    def __str__(self):
+        return "\n".join([str(res) for res in self.results])
 
     @property
     def groups(self) -> set:
@@ -221,6 +238,7 @@ class SSMResults(object):
                 figsize=(8, 4 * len(self.results)),
             )
         for i, res in enumerate(self.results):
+            # BUG: Raises error if we only need a single plot
             fig, ax = res.profile_plot(ax=axes.flatten()[i])
         plt.tight_layout()
         # plt.show()
@@ -433,7 +451,9 @@ def profile_plot(
         fig = ax.get_figure()
 
     ax.plot(thetas, fit, color="black")
-    ax.plot(angles, scores, color="red", marker="o")
+    ax.plot(
+        angles, scores, color="red", marker="o"
+    )  # TODO: reorder angles to be in order
     # ax.scatter(self.angles, self.scores, marker="o", color="black")
     ax.axvline(displacement, color="black", linestyle="--")
     ax.text(
