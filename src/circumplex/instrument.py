@@ -145,6 +145,17 @@ class InstrumentDetails:
 
 @dataclass
 class Instrument:
+    """
+    A class for representing circumplex instruments.
+
+    Attributes:
+        scales: Scales
+        anchors: Anchors
+        details: InstrumentDetails
+        items: Items | None = None
+        _data: pd.DataFrame | None = None
+    """
+
     scales: Scales
     anchors: Anchors
     details: InstrumentDetails
