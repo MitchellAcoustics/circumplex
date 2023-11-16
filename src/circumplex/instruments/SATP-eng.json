@@ -1,0 +1,55 @@
+{
+  "details": {
+    "name": "Soundscape Attributes Translation Project - English Translation",
+    "abbrev": "SATP-eng",
+    "items": 8,
+    "scales": 8,
+    "prefix": "For each of the 8 scales below, to what extent do you agree or disagree that the present surrounding sound environment is...",
+    "suffix": "",
+    "status": "open-access",
+    "construct": "soundscape circumplex",
+    "reference": "Aletta, Mitchell, et.al. (2024)",
+    "url": ""
+  },
+  "anchors": {
+    "0": "Strongly disagree",
+    "25": "Somewhat disagree",
+    "50": "Neither agree nor disagree",
+    "75": "Somewhat agree",
+    "100": "Strongly agree"
+  },
+  "scales": {
+    "PAQ1": {
+      "label": "pleasant",
+      "angle": 0
+    },
+    "PAQ2": {
+      "label": "vibrant",
+      "angle": 46
+    },
+    "PAQ3": {
+      "label": "eventful",
+      "angle": 93
+    },
+    "PAQ4": {
+      "label": "chaotic",
+      "angle": 138
+    },
+    "PAQ5": {
+      "label": "annoying",
+      "angle": 178
+    },
+    "PAQ6": {
+      "label": "monotonous",
+      "angle": 228
+    },
+    "PAQ7": {
+      "label": "uneventful",
+      "angle": 272
+    },
+    "PAQ8": {
+      "label": "calm",
+      "angle": 340
+    }
+  }
+}

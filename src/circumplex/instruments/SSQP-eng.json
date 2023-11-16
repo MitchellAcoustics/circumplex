@@ -1,0 +1,55 @@
+{
+  "details": {
+    "name": "Swedish Soundscape Quality Protocol - English Translation",
+    "abbrev": "SSQP-eng",
+    "items": 8,
+    "scales": 8,
+    "prefix": "For each of the 8 scales below, to what extent do you agree or disagree that the present surrounding sound environment is...",
+    "suffix": "",
+    "status": "open-access",
+    "construct": "soundscape circumplex",
+    "reference": "Axelsson, Nilsson, & Berglund (2012)",
+    "url": "https://doi.org/10.1121/1.4709112"
+  },
+  "anchors": {
+    "1": "Strongly disagree",
+    "2": "Somewhat disagree",
+    "3": "Neither agree nor disagree",
+    "4": "Somewhat agree",
+    "5": "Strongly agree"
+  },
+  "scales": {
+    "PAQ1": {
+      "label": "pleasant",
+      "angle": 0
+    },
+    "PAQ2": {
+      "label": "vibrant",
+      "angle": 46
+    },
+    "PAQ3": {
+      "label": "eventful",
+      "angle": 93
+    },
+    "PAQ4": {
+      "label": "chaotic",
+      "angle": 138
+    },
+    "PAQ5": {
+      "label": "annoying",
+      "angle": 178
+    },
+    "PAQ6": {
+      "label": "monotonous",
+      "angle": 228
+    },
+    "PAQ7": {
+      "label": "uneventful",
+      "angle": 272
+    },
+    "PAQ8": {
+      "label": "calm",
+      "angle": 340
+    }
+  }
+}
