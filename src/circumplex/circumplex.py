@@ -17,8 +17,10 @@ class SSMParams(object):
     A class to store the results of a single SSM analysis.
 
     Attributes:
-        scores (np.array): A numeric vector (or single row dataframe) containing one score for each of a set of circumplex scales.
-        angles (tuple): A numeric vector containing the angular displacement of each circumplex scale included in `scores`.
+        scores (np.array): A numeric vector (or single row dataframe) containing one score for each of a
+            set of circumplex scales.
+        angles (tuple): A numeric vector containing the angular displacement of each circumplex scale
+            included in `scores`.
         scales (list): A list of the names of the circumplex scales included in `scores`.
         group (list): A list of the names of the groups included in `scores`.
         measure (list): A list of the names of the measures included in `scores`.
@@ -110,7 +112,7 @@ class SSMParams(object):
             f"R2:               {round(self.r2, 3)}\n"
         )
 
-    def profile_plot(self, ax=None) -> plt.Axes:
+    def profile_plot(self, ax=None, **kwargs) -> plt.Axes:
         """
         Plot the SSM profile.
 
@@ -126,6 +128,7 @@ class SSMParams(object):
             self.scores,
             self.label,
             ax=ax,
+            **kwargs,
         )
 
     def plot(self) -> plt.Axes:
@@ -264,7 +267,10 @@ def ssm_analyse(
         scales (list): A list of the names of the circumplex scales to be included in the analysis.
         measures (list, optional): A list of the names of the measures to be included in the analysis. Defaults to None.
         grouping (list, optional): A list of the names of the groups to be included in the analysis. Defaults to None.
-        angles (tuple, optional): A tuple containing the angular displacement of each circumplex scale included in `scores`. Defaults to OCTANTS.
+        angles (tuple, optional): A tuple containing the angular displacement of each circumplex scale
+            included in `scores`. Defaults to OCTANTS.
+        grouped_angles (dict, optional): A dictionary containing the angular displacement of each circumplex scale
+            included in `scores` for each group. Defaults to None.
 
     Returns:
         SSMResults: A SSMResults object containing the results of the analysis.
@@ -300,7 +306,8 @@ def ssm_analyse_grouped_corrs(
         scales (tuple): A list of the names of the circumplex scales to be included in the analysis.
         measures (list): A list of the names of the measures to be included in the analysis.
         grouping (list): A list of the names of the groups to be included in the analysis.
-        angles (tuple, optional): A tuple containing the angular displacement of each circumplex scale included in `scores`. Defaults to OCTANTS.
+        angles (tuple, optional): A tuple containing the angular displacement of each circumplex scale
+            included in `scores`. Defaults to OCTANTS.
 
     Returns:
             SSMResults: A SSMResults object containing the results of the analysis.
@@ -336,7 +343,8 @@ def ssm_analyse_corrs(
         data (pd.DataFrame): A dataframe containing the data to be analysed.
         scales (tuple): A list of the names of the circumplex scales to be included in the analysis.
         measures (list): A list of the names of the measures to be included in the analysis.
-        angles (tuple, optional): A tuple containing the angular displacement of each circumplex scale included in `scores`. Defaults to OCTANTS.
+        angles (tuple, optional): A tuple containing the angular displacement of each circumplex scale
+            included in `scores`. Defaults to OCTANTS.
         group (str, optional): The name of the group to be included in the analysis. Defaults to None.
 
     Returns:
@@ -366,7 +374,8 @@ def ssm_analyse_means(
         data (pd.DataFrame): A dataframe containing the data to be analysed.
         scales (tuple): A list of the names of the circumplex scales to be included in the analysis.
         grouping (list): A list of the names of the groups to be included in the analysis.
-        angles (tuple, optional): A tuple containing the angular displacement of each circumplex scale included in `scores`. Defaults to OCTANTS.
+        angles (tuple, optional): A tuple containing the angular displacement of each circumplex scale
+            included in `scores`. Defaults to OCTANTS.
 
     Returns:
         SSMResults: A SSMResults object containing the results of the analysis.
@@ -400,9 +409,12 @@ def ssm_parameters(scores, angles, bounds=BOUNDS) -> tuple:
     """Calculate SSM parameters (without confidence intervals) for a set of scores.
 
     Args:
-        scores (np.array): A numeric vector (or single row dataframe) containing one score for each of a set of circumplex scales.
-        angles (tuple): A numeric vector containing the angular displacement of each circumplex scale included in `scores`.
-        bounds (tuple, optional): The bounds for each of the parameters of the curve optimisation. Defaults to ([0, 0, -1], [np.inf, 360, 1]).
+        scores (np.array): A numeric vector (or single row dataframe) containing one score for each of a
+            set of circumplex scales.
+        angles (tuple): A numeric vector containing the angular displacement of each circumplex scale
+            included in `scores`.
+        bounds (tuple, optional): The bounds for each of the parameters of the curve optimisation.
+            Defaults to ([0, 0, -1], [np.inf, 360, 1]).
 
     Returns:
         tuple: A tuple containing the elevation, x-value, y-value, amplitude, displacement, and R2 fit of the SSM curve.
@@ -434,37 +446,65 @@ def ssm_parameters(scores, angles, bounds=BOUNDS) -> tuple:
 
 
 def profile_plot(
-    amplitude, displacement, elevation, r2, angles, scores, label, ax=None
+    amplitude,
+    displacement,
+    elevation,
+    r2,
+    angles,
+    scores,
+    label,
+    ax=None,
+    reorder_scales=True,
+    incl_pred=True,
+    incl_fit=True,
+    incl_disp=True,
+    incl_amp=True,
 ) -> plt.Axes:
     """
     Plot the SSM profile.
 
+    Args:
+        reorder_scales:
+        incl_pred:
+        incl_fit:
+        incl_disp:
+        incl_amp:
+
     Returns:
         plt.Axes: A tuple containing the figure and axis objects.
     """
-    thetas = np.linspace(0, 360, 1000)
-    fit = cosine_form(thetas, amplitude, displacement, elevation)
 
     if ax is None:
         fig, ax = plt.subplots(figsize=(8, 4))
     else:
         fig = ax.get_figure()
 
-    ax.plot(thetas, fit, color="black")
-    ax.plot(
-        angles, scores, color="red", marker="o"
-    )  # TODO: reorder angles to be in order
-    # ax.scatter(self.angles, self.scores, marker="o", color="black")
-    ax.axvline(displacement, color="black", linestyle="--")
-    ax.text(
-        displacement + 5,
-        elevation,
-        f"d = {int(displacement)}",
-    )
-    ax.axhline(amplitude + elevation, color="black", linestyle="--")
-    ax.text(0, amplitude + elevation * 0.9, f"a = {amplitude:.2f}")
+    if reorder_scales:
+        angles, scores = sort_angles(angles, scores)
+        if angles[-1] == 360:
+            angles = (0,) + angles
+            scores = (scores[-1],) + scores
 
-    ax.text(0, elevation * 0.5, f"R2 = {r2:.2f}")
+    if incl_pred:
+        thetas = np.linspace(0, 360, 1000)
+        fit = cosine_form(thetas, amplitude, displacement, elevation)
+        ax.plot(thetas, fit, color="black")
+
+    ax.plot(angles, scores, color="red", marker="o")
+    # ax.scatter(self.angles, self.scores, marker="o", color="black")
+    if incl_disp:
+        ax.axvline(displacement, color="black", linestyle="--")
+        ax.text(
+            displacement + 5,
+            elevation,
+            f"d = {int(displacement)}",
+        )
+    if incl_amp:
+        ax.axhline(amplitude + elevation, color="black", linestyle="--")
+        ax.text(0, amplitude + elevation * 0.9, f"a = {amplitude:.2f}")
+
+    if incl_fit:
+        ax.text(0, elevation * 0.5, f"R2 = {r2:.2f}")
 
     ax.set_xticks(OCTANTS)
     ax.set_xticklabels(
@@ -474,3 +514,14 @@ def profile_plot(
     ax.set_ylabel("Score", fontsize=16)
     ax.set_title(f"{label} Profile", fontsize=20)
     return fig, ax
+
+
+def sort_angles(angles, scores):
+    """Sort angles, scores, and scales in order of scale."""
+    # Zip the values and labels together
+    zipped = list(zip(angles, scores))
+    # Sort the list of zipped tuples
+    zipped.sort(key=lambda x: x[0])
+    # Unzip the list of tuples
+    angles, scores = zip(*zipped)
+    return angles, scores
