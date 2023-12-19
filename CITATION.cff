@@ -1,0 +1,25 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: circumplex
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Andrew
+    family-names: Mitchell
+    email: andrew.mitchell.18@ucl.ac.uk
+    affiliation: University College London
+    orcid: 'https://orcid.org/0000-0003-0978-5046'
+identifiers:
+  - type: doi
+    value: 10.17605/OSF.IO/3XQ4T
+    description: OSF Repo of the Package
+repository-code: 'https://github.com/MitchellAcoustics/circumplex'
+url: 'https://circumplex.readthedocs.io/en/latest/'
+repository: 'https://osf.io/3xq4t/'
+license: GPL-3.0
+version: 0.1.4
+date-released: '2023-11-25'
