@@ -18,6 +18,26 @@ INSTRUMENT_JSONS = {
 }
 
 
+def instruments() -> None:
+    """
+    Print a list of the instruments included in the circumplex package.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    ins = {name: load_instrument(name) for name in INSTRUMENT_JSONS.keys()}
+    print(f"The circumplex package currently includes {len(ins)} instruments:")
+    i = 1
+    for name, inst in ins.items():
+        print(f"{i}. {name}: {inst.details.name} ({inst.details.abbrev})")
+        i += 1
+
+    return None
+
+
 def from_dict(inst_dict: dict) -> Instrument:
     """
     Compose an Instrument object from a dictionary.
