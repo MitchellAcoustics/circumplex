@@ -13,6 +13,7 @@ from circumplex import SSMResults, ssm_analyse
 
 INSTRUMENT_JSONS = {
     "CSIP": str(files("circumplex.instruments").joinpath("CSIP.json")),
+    "IIPSC": str(files("circumplex.instruments").joinpath("IIPSC.json")),
     "SSQP-eng": str(files("circumplex.instruments").joinpath("SSQP-eng.json")),
     "SATP-eng": str(files("circumplex.instruments").joinpath("SATP-eng.json")),
 }
@@ -50,33 +51,24 @@ def from_dict(inst_dict: dict) -> Instrument:
         Instrument: An Instrument object.
     """
     items_exist = sum(
-        ["items" in scale.keys() for scale in inst_dict["scales"].values()]
+        ["inst_items" in scale.keys() for scale in inst_dict["scales"].values()]
     )
     scales = Scales(
         abbrev=list(inst_dict["scales"].keys()),
         label=[scale["label"] for scale in inst_dict["scales"].values()],
         angle=[scale["angle"] for scale in inst_dict["scales"].values()],
-        items=[
-            inst_dict["scales"][scale]["items"] for scale in inst_dict["scales"].keys()
+        inst_items=[
+            inst_dict["scales"][scale]["inst_items"] for scale in inst_dict["scales"].keys()
         ]
         if items_exist
         else None,
     )
-    if items_exist:
-        items = {
-            int(key): val
-            for scale in inst_dict["scales"].values()
-            for key, val in scale["items"].items()
-        }
-        items = Items(data={k: v for k, v in sorted(items.items())})
-    else:
-        items = None
     anchors = Anchors(
         value=[int(key) for key in inst_dict["anchors"].keys()],
         label=list(inst_dict["anchors"].values()),
     )
     details = InstrumentDetails(**inst_dict["details"])
-    return Instrument(scales, anchors, details, items)
+    return Instrument(scales, anchors, details)
 
 
 def load_instrument(instrument: str) -> Instrument:
@@ -132,7 +124,7 @@ class Items:
     def values(self) -> list:
         return list(self.data.values())
 
-    def items(self) -> list:
+    def inst_items(self) -> list:
         return list(self.data.items())
 
     def __str__(self):
@@ -144,7 +136,7 @@ class Scales:
     abbrev: list[str]
     label: list[str]
     angle: list[float]
-    items: list[dict] | None = None
+    inst_items: list[dict] | None = None
 
     def __post_init__(self):
         assert len(self.abbrev) == len(self.angle)
@@ -161,15 +153,15 @@ class Scales:
             ]
         )
 
-    def show(self, items: bool = True):
-        if items is False:
+    def show(self, inst_items: bool = True):
+        if inst_items is False:
             return print(self)
         else:
             p = []
             for i, abbrev in enumerate(self.abbrev):
                 p.append(f"{abbrev}: {self.label[i]} ({self.angle[i]}°)")
                 p.append(
-                    "\n".join([f"\t{key}: {val}" for key, val in self.items[i].items()])
+                    "\n".join([f"\t{key}: {val}" for key, val in self.inst_items[i].items()])
                 )
             return print("\n".join(p))
 
@@ -178,7 +170,7 @@ class Scales:
 class InstrumentDetails:
     name: str
     abbrev: str
-    items: int | None = None
+    inst_items: int | None = None
     scales: int | None = None
     prefix: str | None = None
     suffix: str | None = None
@@ -190,7 +182,7 @@ class InstrumentDetails:
     def __str__(self):
         return (
             f"{self.abbrev}: {self.name}\n"
-            f"{self.items} Items, {self.scales} Scales\n"
+            f"{self.inst_items} Items, {self.scales} Scales\n"
             f"{self.reference}\n"
             f"<{self.url}>"
         )
@@ -205,7 +197,7 @@ class Instrument:
         scales: Scales
         anchors: Anchors
         details: InstrumentDetails
-        items: Items | None = None
+        inst_items: Items | None = None
         _data: pd.DataFrame | None = None
     """
 
@@ -217,7 +209,7 @@ class Instrument:
     def __repr__(self):
         return (
             f"{self.details.abbrev}: {self.details.name}\n"
-            f"{self.details.items} Items, {self.details.scales} Scales\n"
+            f"{self.details.inst_items} Items, {self.details.scales} Scales\n"
             f"{self.details.reference}\n"
             f"<{self.details.url}>"
         )
@@ -232,12 +224,12 @@ class Instrument:
             return self._data
 
     @property
-    def items(self):
-        if self.scales.items is None:
+    def inst_items(self):
+        if self.scales.inst_items is None:
             raise UserWarning("No items have been defined for this instrument.")
         else:
             item_dict = {}
-            for val in self.scales.items:
+            for val in self.scales.inst_items:
                 for key, value in val.items():
                     item_dict[int(key)] = value
             item_dict = {k: v for k, v in sorted(item_dict.items())}
@@ -255,9 +247,20 @@ class Instrument:
         )
         print(self.anchors)
         print(
-            f"\nThe {self.details.abbrev} contains {self.details.items} items ({self.details.status})."
+            f"\nThe {self.details.abbrev} contains {self.details.inst_items} items ({self.details.status})."
         )
-        print(self.items)
+        try:
+            print(self.inst_items)
+        except UserWarning:
+            print("\nNo items have been defined for this instrument.")
+        try:
+            print(self.data)
+        except UserWarning:
+            print(
+                "\nNo data has been loaded for this instrument. Use attach_data() to load data."
+            )
+
+
 
     def attach_data(self, data: pd.DataFrame) -> Instrument:
         # check scales
