@@ -4,8 +4,8 @@
 [metadata]
 groups = ["default", "test", "docs", "dev"]
 strategy = ["cross_platform"]
-lock_version = "4.4"
-content_hash = "sha256:848ce47f3f300af75b678c47428cd88f980a59b3b7135cb09ba4e6a8c290513b"
+lock_version = "4.4.1"
+content_hash = "sha256:edea839a7335e06464b42385df99678d28bee0e6dfd9cb37b8d49462d9101f8f"
 
 [[package]]
 name = "anyio"
@@ -2104,6 +2104,22 @@ files = [
 ]
 
 [[package]]
+name = "rdata"
+version = "0.11.2"
+requires_python = ">=3.9"
+summary = "Read R datasets from Python."
+dependencies = [
+    "numpy",
+    "pandas",
+    "typing-extensions>4.4",
+    "xarray",
+]
+files = [
+    {file = "rdata-0.11.2-py3-none-any.whl", hash = "sha256:d819241bcec2aaaf5d267256cbdbcbe4fcbfae66b605e7a34980049f80521450"},
+    {file = "rdata-0.11.2.tar.gz", hash = "sha256:86f50312f97569c656f01d6dc343b920ded0ccf884a31decfb670cbef80bab39"},
+]
+
+[[package]]
 name = "referencing"
 version = "0.30.2"
 requires_python = ">=3.8"
@@ -2455,6 +2471,16 @@ files = [
 ]
 
 [[package]]
+name = "typing-extensions"
+version = "4.10.0"
+requires_python = ">=3.8"
+summary = "Backported and Experimental Type Hints for Python 3.8+"
+files = [
+    {file = "typing_extensions-4.10.0-py3-none-any.whl", hash = "sha256:69b1a937c3a517342112fb4c6df7e72fc39a38e7891a5730ed4985b5214b5475"},
+    {file = "typing_extensions-4.10.0.tar.gz", hash = "sha256:b0abd7c89e8fb96f98db18d86106ff1d90ab692004eb746cf6eda2682f91b3cb"},
+]
+
+[[package]]
 name = "tzdata"
 version = "2023.3"
 requires_python = ">=2"
@@ -2555,6 +2581,21 @@ summary = "Jupyter interactive widgets for Jupyter Notebook"
 files = [
     {file = "widgetsnbextension-4.0.9-py3-none-any.whl", hash = "sha256:91452ca8445beb805792f206e560c1769284267a30ceb1cec9f5bcc887d15175"},
     {file = "widgetsnbextension-4.0.9.tar.gz", hash = "sha256:3c1f5e46dc1166dfd40a42d685e6a51396fd34ff878742a3e47c6f0cc4a2a385"},
+]
+
+[[package]]
+name = "xarray"
+version = "2024.2.0"
+requires_python = ">=3.9"
+summary = "N-D labeled arrays and datasets in Python"
+dependencies = [
+    "numpy>=1.23",
+    "packaging>=22",
+    "pandas>=1.5",
+]
+files = [
+    {file = "xarray-2024.2.0-py3-none-any.whl", hash = "sha256:a31a9b37e39bd5aeb098070a75d6dd4d59019eb339d735b86108b9e0cb391f94"},
+    {file = "xarray-2024.2.0.tar.gz", hash = "sha256:a105f02791082c888ebe2622090beaff2e7b68571488d62fe6afdab35b4b717f"},
 ]
 
 [[package]]

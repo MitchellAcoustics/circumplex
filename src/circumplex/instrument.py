@@ -1,7 +1,7 @@
 # %%
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 import pandas as pd
 from dataclasses import dataclass
@@ -49,12 +49,28 @@ def from_dict(inst_dict: dict) -> Instrument:
     Returns:
         Instrument: An Instrument object.
     """
+    items_exist = sum(
+        ["items" in scale.keys() for scale in inst_dict["scales"].values()]
+    )
     scales = Scales(
         abbrev=list(inst_dict["scales"].keys()),
         label=[scale["label"] for scale in inst_dict["scales"].values()],
         angle=[scale["angle"] for scale in inst_dict["scales"].values()],
+        items=[
+            inst_dict["scales"][scale]["items"] for scale in inst_dict["scales"].keys()
+        ]
+        if items_exist
+        else None,
     )
-    items = None
+    if items_exist:
+        items = {
+            int(key): val
+            for scale in inst_dict["scales"].values()
+            for key, val in scale["items"].items()
+        }
+        items = Items(data={k: v for k, v in sorted(items.items())})
+    else:
+        items = None
     anchors = Anchors(
         value=[int(key) for key in inst_dict["anchors"].keys()],
         label=list(inst_dict["anchors"].values()),
@@ -99,20 +115,28 @@ class Anchors:
 
 @dataclass
 class Items:
-    number: list[int]
-    text: list[str]
+    data: dict
 
-    def __post_init__(self):
-        assert len(self.number) == len(self.text)
-        assert len(self.text) == len(set(self.text)), "Items must be unique"
+    def __getitem__(self, key: Any) -> Any:
+        return self.data[key]
+
+    def __setitem__(self, key: Any, value: Any) -> None:
+        self.data[key] = value
+
+    def __delitem__(self, key: Any) -> None:
+        del self.data[key]
+
+    def keys(self) -> list:
+        return list(self.data.keys())
+
+    def values(self) -> list:
+        return list(self.data.values())
+
+    def items(self) -> list:
+        return list(self.data.items())
 
     def __str__(self):
-        return "\n".join(
-            [f"{number}. {text}" for number, text in zip(self.number, self.text)]
-        )
-
-    def get_items(self, numbers: list[int]) -> Items:
-        return Items(numbers, [self.text[number] for number in numbers])
+        return "\n".join([f"{number}. {text}" for number, text in self.data.items()])
 
 
 @dataclass
@@ -120,8 +144,7 @@ class Scales:
     abbrev: list[str]
     label: list[str]
     angle: list[float]
-    items: list[int] | None = None
-    data: pd.DataFrame | None = None
+    items: list[dict] | None = None
 
     def __post_init__(self):
         assert len(self.abbrev) == len(self.angle)
@@ -130,15 +153,25 @@ class Scales:
             max(self.angle) <= 360 and min(self.angle) >= 0
         ), "Angles must be between 0 and 360"
 
-    def __str__(self, items: bool = False):
-        # TODO: Add print method for items = True
+    def __str__(self):
+        return "\n".join(
+            [
+                f"{abbrev}: {label} ({angle}°)"
+                for abbrev, label, angle in zip(self.abbrev, self.label, self.angle)
+            ]
+        )
+
+    def show(self, items: bool = True):
         if items is False:
-            return "\n".join(
-                [
-                    f"{abbrev}: {label} ({angle}°)"
-                    for abbrev, label, angle in zip(self.abbrev, self.label, self.angle)
-                ]
-            )
+            return print(self)
+        else:
+            p = []
+            for i, abbrev in enumerate(self.abbrev):
+                p.append(f"{abbrev}: {self.label[i]} ({self.angle[i]}°)")
+                p.append(
+                    "\n".join([f"\t{key}: {val}" for key, val in self.items[i].items()])
+                )
+            return print("\n".join(p))
 
 
 @dataclass
@@ -179,7 +212,6 @@ class Instrument:
     scales: Scales
     anchors: Anchors
     details: InstrumentDetails
-    items: Items | None = None
     _data: pd.DataFrame | None = None
 
     def __repr__(self):
@@ -198,6 +230,19 @@ class Instrument:
             )
         else:
             return self._data
+
+    @property
+    def items(self):
+        if self.scales.items is None:
+            raise UserWarning("No items have been defined for this instrument.")
+        else:
+            item_dict = {}
+            for val in self.scales.items:
+                for key, value in val.items():
+                    item_dict[int(key)] = value
+            item_dict = {k: v for k, v in sorted(item_dict.items())}
+
+            return Items(item_dict)
 
     def summary(self):
         print(self.details)

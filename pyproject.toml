@@ -35,6 +35,7 @@ docs = [
 ]
 dev = [
     "setuptools>=68.2.2",
+    "rdata>=0.11.2",
 ]
 [build-system]
 requires = ["pdm-backend"]
