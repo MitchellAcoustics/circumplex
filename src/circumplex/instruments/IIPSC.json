@@ -18,6 +18,29 @@
     "3": "Very",
     "4": "Extremely"
   },
+  "norms": {
+    "sample": [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2],
+    "scale": ["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO", "PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
+    "angle": [90, 135, 180, 225, 270, 315, 360, 45, 90, 135, 180, 225, 270, 315, 360, 45],
+    "m": [0.76, 0.7925, 0.9, 1.0475, 1.42, 1.385, 1.465, 1.025, 0.99, 0.97, 1.30, 1.33, 1.81, 1.92, 2.14, 1.43],
+    "sd": [0.66, 0.69, 0.855, 0.9475, 0.915, 0.8525, 0.825, 0.8, 0.82, 0.85, 1.07, 0.98, 0.89, 0.89, 0.90, 1.05]
+  },
+  "norms_src": {
+    "sample": [1, 2],
+    "size": [872, 106],
+    "population": [
+      "American college students",
+      "American psychiatric outpatients"
+    ],
+    "reference": [
+      "Hopwood, Pincus, DeMoor, & Koonce (2011)",
+      "Soldz, Budman, Demby, & Merry (1995)"
+    ],
+    "url": [
+      "https://doi.org/10.1080/00223890802388665",
+      "https://doi.org/10.1177/1073191195002001006"
+    ]
+  },
   "scales": {
     "PA": {
       "label": "Domineering",

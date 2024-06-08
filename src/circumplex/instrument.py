@@ -67,8 +67,12 @@ def from_dict(inst_dict: dict) -> Instrument:
         value=[int(key) for key in inst_dict["anchors"].keys()],
         label=list(inst_dict["anchors"].values()),
     )
+    norms = Norms(
+        table=pd.DataFrame.from_dict(inst_dict["norms"]),
+        src=pd.DataFrame.from_dict(inst_dict["norms_src"])
+    ) if "norms" in inst_dict else None
     details = InstrumentDetails(**inst_dict["details"])
-    return Instrument(scales, anchors, details)
+    return Instrument(scales, anchors, details, norms)
 
 
 def load_instrument(instrument: str) -> Instrument:
@@ -167,6 +171,15 @@ class Scales:
 
 
 @dataclass
+class Norms:
+    table: pd.DataFrame
+    src: pd.DataFrame
+
+    def get_sample(self, sample: int) -> pd.DataFrame:
+        return self.table.query("sample == @sample")
+
+
+@dataclass
 class InstrumentDetails:
     name: str
     abbrev: str
@@ -204,12 +217,18 @@ class Instrument:
     scales: Scales
     anchors: Anchors
     details: InstrumentDetails
+    norms: Norms | None = None
     _data: pd.DataFrame | None = None
 
     def __repr__(self):
         return (
             f"{self.details.abbrev}: {self.details.name}\n"
             f"{self.details.inst_items} Items, {self.details.scales} Scales\n"
+            f"{self.details.reference}\n"
+            f"<{self.details.url}>"
+        ) if self.norms is None else (
+            f"{self.details.abbrev}: {self.details.name}\n"
+            f"{self.details.inst_items} Items, {self.details.scales} Scales, {len(self.norms.src)} normative data sets\n"
             f"{self.details.reference}\n"
             f"<{self.details.url}>"
         )
@@ -259,7 +278,6 @@ class Instrument:
             print(
                 "\nNo data has been loaded for this instrument. Use attach_data() to load data."
             )
-
 
 
     def attach_data(self, data: pd.DataFrame) -> Instrument:
