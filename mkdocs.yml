@@ -11,6 +11,7 @@ nav:
         - 'License': license.md
     - Tutorials:
         - tutorials/index.md
+        - 'Using Circumplex Instrument': tutorials/using-instruments.ipynb
         - 'Introduction to SSM': tutorials/Intro_to_SSM_Analysis.ipynb
         - 'Random Examples': tutorials/Random_exs.ipynb
     - 'API reference':
