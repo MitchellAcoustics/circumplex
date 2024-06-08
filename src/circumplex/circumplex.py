@@ -459,6 +459,8 @@ def profile_plot(
     incl_fit=True,
     incl_disp=True,
     incl_amp=True,
+    c_scores='red',
+    c_fit='black',
 ) -> plt.Axes:
     """
     Plot the SSM profile.
@@ -488,9 +490,9 @@ def profile_plot(
     if incl_pred:
         thetas = np.linspace(0, 360, 1000)
         fit = cosine_form(thetas, amplitude, displacement, elevation)
-        ax.plot(thetas, fit, color="black")
+        ax.plot(thetas, fit, color=c_fit)
 
-    ax.plot(angles, scores, color="red", marker="o")
+    ax.plot(angles, scores, color=c_scores, marker="o")
     # ax.scatter(self.angles, self.scores, marker="o", color="black")
     if incl_disp:
         ax.axvline(displacement, color="black", linestyle="--")
