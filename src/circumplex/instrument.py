@@ -108,6 +108,9 @@ class Anchors:
             [f"{value}. {label}" for value, label in zip(self.value, self.label)]
         )
 
+    def show(self):
+        return print(self)
+
 
 @dataclass
 class Items:
@@ -133,6 +136,13 @@ class Items:
 
     def __str__(self):
         return "\n".join([f"{number}. {text}" for number, text in self.data.items()])
+
+    def show(self, n=10):
+        p = "\n".join([f"{number}. {text}" for number, text in list(self.data.items())[:n]])
+        if n < len(self.data):
+            p += f"\n\n...and {len(self.data) - n} more items."
+
+        return print(p)
 
 
 @dataclass
@@ -177,6 +187,9 @@ class Norms:
 
     def get_sample(self, sample: int) -> pd.DataFrame:
         return self.table.query("sample == @sample")
+
+    def show(self):
+        return print(self.src)
 
 
 @dataclass
