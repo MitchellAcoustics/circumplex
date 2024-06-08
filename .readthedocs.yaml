@@ -16,7 +16,7 @@ build:
     # golang: "1.19"
   jobs:
     post_install:
-      - pip install .[docs]
+      - pip install .[dev]
 
 # Build documentation in the "docs/" directory with Sphinx
 mkdocs:
