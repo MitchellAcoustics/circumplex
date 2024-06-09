@@ -1,14 +1,15 @@
 # %%
 from __future__ import annotations
 
+import json
+from dataclasses import dataclass
+from importlib.resources import files
 from typing import Any
 
-import pandas as pd
-from dataclasses import dataclass
-import json
-from importlib.resources import files
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+
 from circumplex import SSMResults, ssm_analyse
 
 INSTRUMENT_JSONS = {
@@ -138,6 +139,7 @@ class Items:
         return "\n".join([f"{number}. {text}" for number, text in self.data.items()])
 
     def show(self, n=10):
+        n = len(self.data) if n is None or n > len(self.data) else n
         p = "\n".join([f"{number}. {text}" for number, text in list(self.data.items())[:n]])
         if n < len(self.data):
             p += f"\n\n...and {len(self.data) - n} more items."
