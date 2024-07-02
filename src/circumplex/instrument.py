@@ -295,7 +295,7 @@ class Instrument:
             )
 
 
-    def attach_data(self, data: pd.DataFrame) -> Instrument:
+    def attach_data(self, data: pd.DataFrame, scales: list | dict = None) -> Instrument:
         # check scales
         assert set(self.scales.abbrev).issubset(data.columns), (
             f"Data is missing scales. "
