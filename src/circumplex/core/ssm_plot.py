@@ -227,7 +227,7 @@ def ssm_plot_contrast(ssm_object: SSMResults,
     # Create plot
     fig, ax = plt.subplots(figsize=(12, 6))
     sns.pointplot(data=plot_df, x='Parameter', y='Estimate', hue='Label',
-                  join=False, ci=None, palette=color, scale=0.75, ax=ax
+                  join=False, ci=None, color=color, scale=0.75, ax=ax
                   )
 
     # Add error bars

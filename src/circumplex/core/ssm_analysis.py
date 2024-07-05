@@ -490,6 +490,7 @@ def ssm_analyze_corrs(data: pd.DataFrame,
     else:
         bs_input = data[scales + measures].copy()
         bs_input['Group'] = 'All'
+        bs_input['Group'] = bs_input['Group'].astype('category')
 
     # Check that this combination of arguments is executable
     n_measures = len(measures)
@@ -700,8 +701,8 @@ if __name__ == "__main__":
         data=data,
         scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
         angles=[90, 135, 180, 225, 270, 315, 0, 45],
-        # grouping = 'Gender',
-        # contrast='model'
+        grouping = 'Gender',
+        # contrast='model',
         measures = ['NARPD', 'ASPD'],
         # measures_labels=['Narcissistic PD', 'Antisocial PD'],
     )
