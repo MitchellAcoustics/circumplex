@@ -5,6 +5,7 @@ import numpy as np
 from scipy import stats
 from scipy.optimize import curve_fit
 from typing import Optional, List, Union, Callable
+from circumplex.core.ssm_results import SSMResults
 
 
 BOUNDS = ([0, 0, -np.inf], [np.inf, 2*np.pi, np.inf])
@@ -22,7 +23,7 @@ def ssm_analyze(
     interval: float = 0.95,
     listwise: bool = True,
     measures_labels: Optional[List[str]] = None,
-) -> dict:
+) -> SSMResults:
     """
     Perform analyses using the Structural Summary Method.
 
@@ -44,7 +45,7 @@ def ssm_analyze(
         measures_labels (Optional[List[str]]): Labels for each measure provided in measures.
 
     Returns:
-        dict: A dictionary containing the results and description of the analysis.
+        SSMResults: An object containing the results and description of the analysis.
     """
 
     assert isinstance(data, pd.DataFrame), "data must be a pandas DataFrame"
@@ -126,7 +127,19 @@ def ssm_analyze(
                 data, scales, angles_rad, None, "none", boots, interval, listwise
             )
 
-    return results
+    # Calculate scores
+    if measures is not None:
+        scores = corr_scores(data[scales], data[measures], data[grouping] if grouping else None, listwise)
+    else:
+        scores = data[scales].groupby(data[grouping] if grouping else pd.Series(['All'] * len(data))).mean()
+
+    # Create the call string
+    call_str = f"ssm_analyze(data, scales={scales}, angles={angles}, measures={measures}, " \
+                f"grouping={grouping}, contrast={contrast}, boots={boots}, " \
+                f"interval={interval}, listwise={listwise}, measures_labels={measures_labels})"
+
+    # Create and return the SSMResults object
+    return SSMResults(results=results['results'], scores=scores, details=results['details'], call=call_str)
 
 
 def ssm_analyze_means(
@@ -174,13 +187,13 @@ def ssm_analyze_means(
         bs_input = bs_input.dropna()
 
     # Calculate mean observed scores
-    scores = bs_input.groupby("Group")[scales].mean().reset_index()
+    scores = bs_input.groupby("Group", observed=False)[scales].mean().reset_index()
     scores = scores.rename_axis("label").reset_index()
 
     # Define bootstrap function
     def bs_function(data, index, angles, contrast, listwise):
         resample = data.iloc[index]
-        scores_r = resample.groupby("Group")[scales].mean()
+        scores_r = resample.groupby("Group", observed=False)[scales].mean()
         return ssm_by_group(scores_r, angles, contrast)
 
     # Perform bootstrapping
@@ -218,11 +231,11 @@ def ssm_analyze_means(
         "results_type": "Profile" if contrast == "none" else "Contrast",
     }
 
-    # Create output dictionary
-    out = {"results": results, "scores": scores, "details": details}
+    call_str = f"ssm_analyze_means(data, scales={scales}, angles={angles}, " \
+                f"grouping={grouping}, contrast={contrast}, boots={boots}, " \
+                f"interval={interval}, listwise={listwise})"
 
-    return out
-
+    return {"results": results, "details": details, "call": call_str}
 
 def ssm_by_group(
     scores: pd.DataFrame, angles: List[float], contrast: str
@@ -568,15 +581,12 @@ def ssm_analyze_corrs(data: pd.DataFrame,
         'results_type': "Profile" if contrast == "none" else "Contrast"
     }
 
-    # Create output dictionary
-    out = {
-        'results': results,
-        'scores': scores_df,
-        'details': details
-    }
+    call_str = f"ssm_analyze_corrs(data, scales={scales}, angles={angles}, " \
+                f"measures={measures}, grouping={grouping}, contrast={contrast}, " \
+                f"boots={boots}, interval={interval}, listwise={listwise}, " \
+                f"measures_labels={measures_labels})"
 
-    return out
-
+    return {"results": results, "details": details, "call": call_str}
 
 def corr_scores(scores: Union[np.ndarray, pd.DataFrame],
                 measures: Union[np.ndarray, pd.DataFrame],
@@ -680,6 +690,9 @@ def pairwise_r(x: np.ndarray, y: np.ndarray) -> float:
 if __name__ == "__main__":
     ######## SCRATCH ########
     from importlib.resources import files
+    from ssm_plot import ssm_plot
+    import matplotlib.pyplot as plt
+    from plot import ssm_plot as sm_plot
 
     _jz2017_path = str(files("circumplex.data").joinpath("jz2017.csv"))
     data = pd.read_csv(_jz2017_path)
@@ -689,7 +702,17 @@ if __name__ == "__main__":
         scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
         angles=[90, 135, 180, 225, 270, 315, 0, 45],
         grouping = 'Gender',
-        measures = ['NARPD', 'ASPD'],
+        # contrast='model'
+        # measures = ['NARPD', 'ASPD'],
         # measures_labels=['Narcissistic PD', 'Antisocial PD'],
     )
-    print(results['results'])
+    print(results)
+    print(results.summary())
+    fig = ssm_plot(results)
+    plt.show()
+
+    fig = sm_plot(results)
+    plt.show()
+
+
+
