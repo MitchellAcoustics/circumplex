@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
-import matplotlib.patches as patches
+import seaborn as sns
 import numpy as np
+import pandas as pd
 from typing import Optional, List
 from circumplex.core.ssm_results import SSMResults
+import matplotlib.patches as patches
+
 
 def ssm_plot(ssm_object: SSMResults, fontsize: int = 12, **kwargs):
     """
@@ -19,6 +22,8 @@ def ssm_plot(ssm_object: SSMResults, fontsize: int = 12, **kwargs):
     assert isinstance(ssm_object, SSMResults), "ssm_object must be an SSMResults instance"
     assert fontsize > 0, "fontsize must be a positive number"
 
+    sns.set(style="whitegrid", font_scale=fontsize / 12)
+
     if ssm_object.details['contrast'] == "test":
         return ssm_plot_contrast(ssm_object, fontsize=fontsize, **kwargs)
     else:
@@ -32,11 +37,11 @@ def ssm_plot_circle(ssm_object: SSMResults,
                     lowfit: bool = True,
                     repel: bool = False,
                     angle_labels: Optional[List[str]] = None,
-                    palette: Optional[str] = "Set2",
+                    palette: Optional[str] = "husl",
                     **kwargs
                     ):
     """
-    Create a Circular Plot of SSM Results.
+    Create a Circular Plot of SSM Results using Seaborn.
 
     Args:
         ssm_object (SSMResults): The output of ssm_analyze.
@@ -47,7 +52,7 @@ def ssm_plot_circle(ssm_object: SSMResults,
         repel (bool): Experimental argument for plotting text labels instead of colors.
         angle_labels (Optional[List[str]]): Text labels to plot around the circle for each scale.
         palette (Optional[str]): Color palette to use for the plot.
-        **kwargs: Additional arguments for matplotlib.
+        **kwargs: Additional arguments for seaborn.
 
     Returns:
         matplotlib.figure.Figure: A figure object containing the circular plot.
@@ -58,17 +63,16 @@ def ssm_plot_circle(ssm_object: SSMResults,
     if amax is None:
         amax = np.ceil(df['a_uci'].max() * 10) / 10
 
-    # Convert results to numbers usable by matplotlib
+    # Convert results to numbers usable by seaborn
     df_plot = df.copy()
     df_plot['d_uci'] = np.where(df_plot['d_uci'] < df_plot['d_lci'],
-                                np.deg2rad(df_plot['d_uci'] + 360),
-                                np.deg2rad(df_plot['d_uci'])
+                                df_plot['d_uci'] + 360,
+                                df_plot['d_uci']
                                 )
-    df_plot['d_lci'] = np.deg2rad(df_plot['d_lci'])
-    df_plot['a_lci'] = df_plot['a_lci'] * 10 / (2 * amax)
-    df_plot['a_uci'] = df_plot['a_uci'] * 10 / (2 * amax)
-    df_plot['x_est'] = df_plot['x_est'] * 10 / (2 * amax)
-    df_plot['y_est'] = df_plot['y_est'] * 10 / (2 * amax)
+    df_plot['a_lci'] = df_plot['a_lci'] * 5 / amax
+    df_plot['a_uci'] = df_plot['a_uci'] * 5 / amax
+    df_plot['x_est'] = df_plot['x_est'] * 5 / amax
+    df_plot['y_est'] = df_plot['y_est'] * 5 / amax
 
     # Remove profiles with low model fit (unless overridden)
     if not lowfit:
@@ -81,17 +85,23 @@ def ssm_plot_circle(ssm_object: SSMResults,
     fig, ax = plt.subplots(figsize=(10, 10))
     circle_base(ax, angles, amax, fontsize=scale_font_size, labels=angle_labels)
 
-    colors = plt.cm.get_cmap(palette)(np.linspace(0, 1, len(df_plot)))
+    # Use seaborn color palette
+    colors = sns.color_palette(palette, n_colors=len(df_plot))
 
+    # Plot confidence regions
     for i, (_, row) in enumerate(df_plot.iterrows()):
-        wedge = patches.Wedge((0, 0), row['a_uci'], np.rad2deg(row['d_lci']), np.rad2deg(row['d_uci']),
+        wedge = patches.Wedge((0, 0), row['a_uci'], row['d_lci'], row['d_uci'],
                               width=row['a_uci'] - row['a_lci'],
                               fc=colors[i],
-                              alpha=0.4,
+                              alpha=0.3,
                               linestyle=row['linestyle']
                               )
         ax.add_patch(wedge)
-        ax.plot(row['x_est'], row['y_est'], 'o', color=colors[i])
+
+    # Plot points
+    sns.scatterplot(data=df_plot, x='x_est', y='y_est', hue='label',
+                    palette=palette, s=100, ax=ax, legend='brief'
+                    )
 
     if repel:
         for _, row in df_plot.iterrows():
@@ -103,9 +113,11 @@ def ssm_plot_circle(ssm_object: SSMResults,
                         bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.8),
                         arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=0')
                         )
+        ax.legend().remove()
     else:
-        ax.legend(df_plot['label'], loc='center left', bbox_to_anchor=(1, 0.5),
-                  fontsize=legend_font_size
+        ax.legend(title=ssm_object.details['results_type'],
+                  fontsize=legend_font_size,
+                  title_fontsize=legend_font_size
                   )
 
     return fig
@@ -130,8 +142,7 @@ def circle_base(ax, angles, amax=0.5, amin=0, fontsize=12, labels=None):
 
     # Draw circles
     for r in range(1, 6):
-        circle = plt.Circle((0, 0), r, fill=False, color='gray')
-        ax.add_artist(circle)
+        ax.add_artist(plt.Circle((0, 0), r, fill=False, color='gray'))
 
     # Draw lines
     for angle in np.deg2rad(angles):
@@ -161,7 +172,7 @@ def ssm_plot_contrast(ssm_object: SSMResults,
                       fontsize: int = 12
                       ):
     """
-    Create a Difference Plot of SSM Contrast Results.
+    Create a Difference Plot of SSM Contrast Results using Seaborn.
 
     Args:
         ssm_object (SSMResults): The results output of ssm_analyze.
@@ -199,20 +210,39 @@ def ssm_plot_contrast(ssm_object: SSMResults,
                             (res['d_lci'] - 360) % 360, res['d_lci']
                             )
 
-    fig, axes = plt.subplots(1, len(pvals), figsize=(4 * len(pvals), 4), sharey=True)
-    fig.suptitle(axislabel, fontsize=fontsize + 2)
-
-    for ax, param in zip(axes, pvals):
-        ax.axhline(y=0, color='darkgray', linewidth=linesize)
-        ax.errorbar(res['label'], res[f'{param}_est'],
-                    yerr=[res[f'{param}_est'] - res[f'{param}_lci'],
-                          res[f'{param}_uci'] - res[f'{param}_est']],
-                    fmt='o', color=color, capsize=5, capthick=linesize,
-                    elinewidth=linesize, markersize=linesize * 3
+    # Reshape data for seaborn
+    plot_data = []
+    for param in pvals:
+        for _, row in res.iterrows():
+            plot_data.append({
+                'Parameter': plabs[param],
+                'Estimate' : row[f'{param}_est'],
+                'Lower CI' : row[f'{param}_lci'],
+                'Upper CI' : row[f'{param}_uci'],
+                'Label'    : row['label']
+                }
                     )
-        ax.set_title(plabs[param], fontsize=fontsize)
-        ax.tick_params(axis='x', rotation=45)
-        ax.tick_params(axis='both', labelsize=fontsize - 2)
+    plot_df = pd.DataFrame(plot_data)
 
-    fig.tight_layout()
+    # Create plot
+    fig, ax = plt.subplots(figsize=(12, 6))
+    sns.pointplot(data=plot_df, x='Parameter', y='Estimate', hue='Label',
+                  join=False, ci=None, palette=color, scale=0.75, ax=ax
+                  )
+
+    # Add error bars
+    ax.errorbar(x=plot_df['Parameter'], y=plot_df['Estimate'],
+                yerr=[plot_df['Estimate'] - plot_df['Lower CI'],
+                      plot_df['Upper CI'] - plot_df['Estimate']],
+                fmt='none', ecolor=color, elinewidth=linesize, capsize=5
+                )
+
+    # Customize plot
+    ax.axhline(y=0, color='gray', linestyle='--', linewidth=linesize)
+    ax.set_ylabel(axislabel, fontsize=fontsize)
+    ax.set_xlabel('')
+    ax.tick_params(axis='both', which='major', labelsize=fontsize - 2)
+    ax.legend(title=ssm_object.details['results_type'], fontsize=fontsize - 2, title_fontsize=fontsize)
+
+    plt.tight_layout()
     return fig

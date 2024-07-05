@@ -690,9 +690,8 @@ def pairwise_r(x: np.ndarray, y: np.ndarray) -> float:
 if __name__ == "__main__":
     ######## SCRATCH ########
     from importlib.resources import files
-    from ssm_plot import ssm_plot
     import matplotlib.pyplot as plt
-    from plot import ssm_plot as sm_plot
+    from ssm_plot import ssm_plot
 
     _jz2017_path = str(files("circumplex.data").joinpath("jz2017.csv"))
     data = pd.read_csv(_jz2017_path)
@@ -701,18 +700,15 @@ if __name__ == "__main__":
         data=data,
         scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
         angles=[90, 135, 180, 225, 270, 315, 0, 45],
-        grouping = 'Gender',
+        # grouping = 'Gender',
         # contrast='model'
-        # measures = ['NARPD', 'ASPD'],
+        measures = ['NARPD', 'ASPD'],
         # measures_labels=['Narcissistic PD', 'Antisocial PD'],
     )
     print(results)
     print(results.summary())
+
+
     fig = ssm_plot(results)
     plt.show()
-
-    fig = sm_plot(results)
-    plt.show()
-
-
 
