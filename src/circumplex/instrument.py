@@ -59,7 +59,8 @@ def from_dict(inst_dict: dict) -> Instrument:
         label=[scale["label"] for scale in inst_dict["scales"].values()],
         angle=[scale["angle"] for scale in inst_dict["scales"].values()],
         inst_items=[
-            inst_dict["scales"][scale]["inst_items"] for scale in inst_dict["scales"].keys()
+            inst_dict["scales"][scale]["inst_items"]
+            for scale in inst_dict["scales"].keys()
         ]
         if items_exist
         else None,
@@ -68,10 +69,14 @@ def from_dict(inst_dict: dict) -> Instrument:
         value=[int(key) for key in inst_dict["anchors"].keys()],
         label=list(inst_dict["anchors"].values()),
     )
-    norms = Norms(
-        table=pd.DataFrame.from_dict(inst_dict["norms"]),
-        src=pd.DataFrame.from_dict(inst_dict["norms_src"])
-    ) if "norms" in inst_dict else None
+    norms = (
+        Norms(
+            table=pd.DataFrame.from_dict(inst_dict["norms"]),
+            src=pd.DataFrame.from_dict(inst_dict["norms_src"]),
+        )
+        if "norms" in inst_dict
+        else None
+    )
     details = InstrumentDetails(**inst_dict["details"])
     return Instrument(scales, anchors, details, norms)
 
@@ -140,7 +145,9 @@ class Items:
 
     def show(self, n=10):
         n = len(self.data) if n is None or n > len(self.data) else n
-        p = "\n".join([f"{number}. {text}" for number, text in list(self.data.items())[:n]])
+        p = "\n".join(
+            [f"{number}. {text}" for number, text in list(self.data.items())[:n]]
+        )
         if n < len(self.data):
             p += f"\n\n...and {len(self.data) - n} more items."
 
@@ -177,7 +184,9 @@ class Scales:
             for i, abbrev in enumerate(self.abbrev):
                 p.append(f"{abbrev}: {self.label[i]} ({self.angle[i]}°)")
                 p.append(
-                    "\n".join([f"\t{key}: {val}" for key, val in self.inst_items[i].items()])
+                    "\n".join(
+                        [f"\t{key}: {val}" for key, val in self.inst_items[i].items()]
+                    )
                 )
             return print("\n".join(p))
 
@@ -237,15 +246,19 @@ class Instrument:
 
     def __repr__(self):
         return (
-            f"{self.details.abbrev}: {self.details.name}\n"
-            f"{self.details.inst_items} Items, {self.details.scales} Scales\n"
-            f"{self.details.reference}\n"
-            f"<{self.details.url}>"
-        ) if self.norms is None else (
-            f"{self.details.abbrev}: {self.details.name}\n"
-            f"{self.details.inst_items} Items, {self.details.scales} Scales, {len(self.norms.src)} normative data sets\n"
-            f"{self.details.reference}\n"
-            f"<{self.details.url}>"
+            (
+                f"{self.details.abbrev}: {self.details.name}\n"
+                f"{self.details.inst_items} Items, {self.details.scales} Scales\n"
+                f"{self.details.reference}\n"
+                f"<{self.details.url}>"
+            )
+            if self.norms is None
+            else (
+                f"{self.details.abbrev}: {self.details.name}\n"
+                f"{self.details.inst_items} Items, {self.details.scales} Scales, {len(self.norms.src)} normative data sets\n"
+                f"{self.details.reference}\n"
+                f"<{self.details.url}>"
+            )
         )
 
     @property
@@ -293,7 +306,6 @@ class Instrument:
             print(
                 "\nNo data has been loaded for this instrument. Use attach_data() to load data."
             )
-
 
     def attach_data(self, data: pd.DataFrame, scales: list | dict = None) -> Instrument:
         # check scales

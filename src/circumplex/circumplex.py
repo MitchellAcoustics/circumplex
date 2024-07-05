@@ -459,8 +459,8 @@ def profile_plot(
     incl_fit=True,
     incl_disp=True,
     incl_amp=True,
-    c_scores='red',
-    c_fit='black',
+    c_scores="red",
+    c_fit="black",
 ) -> plt.Axes:
     """
     Plot the SSM profile.

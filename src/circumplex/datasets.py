@@ -11,4 +11,6 @@ _raw_iipsc_path = str(files("circumplex.data").joinpath("raw_iipsc.csv"))
 
 _satp_path = str(files("circumplex.data").joinpath("SATP Dataset v1.4.xlsx"))
 satp_data = pd.read_excel(_satp_path)
-SATP_ENG = instrument.load_instrument("SATP-eng").attach_data(satp_data.query("Language == 'eng'"))
+SATP_ENG = instrument.load_instrument("SATP-eng").attach_data(
+    satp_data.query("Language == 'eng'")
+)
