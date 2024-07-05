@@ -2,13 +2,12 @@
 
 import pandas as pd
 import numpy as np
-from scipy import stats
 from scipy.optimize import curve_fit
 from typing import Optional, List, Union, Callable
 from circumplex.core.ssm_results import SSMResults
 
 
-BOUNDS = ([0, 0, -np.inf], [np.inf, 2*np.pi, np.inf])
+BOUNDS = ([0, 0, -np.inf], [np.inf, 2 * np.pi, np.inf])
 OCTANTS = (0, 45, 90, 135, 180, 225, 270, 315)
 
 
@@ -129,17 +128,30 @@ def ssm_analyze(
 
     # Calculate scores
     if measures is not None:
-        scores = corr_scores(data[scales], data[measures], data[grouping] if grouping else None, listwise)
+        scores = corr_scores(
+            data[scales], data[measures], data[grouping] if grouping else None, listwise
+        )
     else:
-        scores = data[scales].groupby(data[grouping] if grouping else pd.Series(['All'] * len(data))).mean()
+        scores = (
+            data[scales]
+            .groupby(data[grouping] if grouping else pd.Series(["All"] * len(data)))
+            .mean()
+        )
 
     # Create the call string
-    call_str = f"ssm_analyze(data, scales={scales}, angles={angles}, measures={measures}, " \
-                f"grouping={grouping}, contrast={contrast}, boots={boots}, " \
-                f"interval={interval}, listwise={listwise}, measures_labels={measures_labels})"
+    call_str = (
+        f"ssm_analyze(data, scales={scales}, angles={angles}, measures={measures}, "
+        f"grouping={grouping}, contrast={contrast}, boots={boots}, "
+        f"interval={interval}, listwise={listwise}, measures_labels={measures_labels})"
+    )
 
     # Create and return the SSMResults object
-    return SSMResults(results=results['results'], scores=scores, details=results['details'], call=call_str)
+    return SSMResults(
+        results=results["results"],
+        scores=scores,
+        details=results["details"],
+        call=call_str,
+    )
 
 
 def ssm_analyze_means(
@@ -231,11 +243,14 @@ def ssm_analyze_means(
         "results_type": "Profile" if contrast == "none" else "Contrast",
     }
 
-    call_str = f"ssm_analyze_means(data, scales={scales}, angles={angles}, " \
-                f"grouping={grouping}, contrast={contrast}, boots={boots}, " \
-                f"interval={interval}, listwise={listwise})"
+    call_str = (
+        f"ssm_analyze_means(data, scales={scales}, angles={angles}, "
+        f"grouping={grouping}, contrast={contrast}, boots={boots}, "
+        f"interval={interval}, listwise={listwise})"
+    )
 
     return {"results": results, "details": details, "call": call_str}
+
 
 def ssm_by_group(
     scores: pd.DataFrame, angles: List[float], contrast: str
@@ -333,7 +348,6 @@ def _r2_score(y_true: np.array, y_pred: np.array):
     return 1 - (ss_res / ss_tot)
 
 
-
 def ssm_parameters_cpp(scores, angles, bounds=BOUNDS) -> tuple:
     """Calculate SSM parameters (without confidence intervals) for a set of scores.
 
@@ -372,6 +386,7 @@ def ssm_parameters_cpp(scores, angles, bounds=BOUNDS) -> tuple:
 
     xval, yval = polar2cart(ampl, disp)
     return np.array([elev, xval, yval, ampl, disp, r2])
+
 
 def ssm_bootstrap(
     bs_input: pd.DataFrame,
@@ -455,16 +470,18 @@ def angle_median(angles: np.ndarray) -> float:
     return np.arctan2(np.median(np.sin(angles)), np.median(np.cos(angles)))
 
 
-def ssm_analyze_corrs(data: pd.DataFrame,
-                      scales: List[str],
-                      angles: List[float],
-                      measures: List[str],
-                      grouping: Optional[str] = None,
-                      contrast: str = "none",
-                      boots: int = 2000,
-                      interval: float = 0.95,
-                      listwise: bool = True,
-                      measures_labels: Optional[List[str]] = None) -> dict:
+def ssm_analyze_corrs(
+    data: pd.DataFrame,
+    scales: List[str],
+    angles: List[float],
+    measures: List[str],
+    grouping: Optional[str] = None,
+    contrast: str = "none",
+    boots: int = 2000,
+    interval: float = 0.95,
+    listwise: bool = True,
+    measures_labels: Optional[List[str]] = None,
+) -> dict:
     """
     Perform analyses using the correlation-based Structural Summary Method.
 
@@ -486,22 +503,24 @@ def ssm_analyze_corrs(data: pd.DataFrame,
     # Select circumplex scales, measure variables, and grouping variable
     if grouping is not None:
         bs_input = data[scales + measures + [grouping]].copy()
-        bs_input['Group'] = bs_input[grouping].astype('category')
+        bs_input["Group"] = bs_input[grouping].astype("category")
     else:
         bs_input = data[scales + measures].copy()
-        bs_input['Group'] = 'All'
-        bs_input['Group'] = bs_input['Group'].astype('category')
+        bs_input["Group"] = "All"
+        bs_input["Group"] = bs_input["Group"].astype("category")
 
     # Check that this combination of arguments is executable
     n_measures = len(measures)
-    n_groups = bs_input['Group'].nunique()
+    n_groups = bs_input["Group"].nunique()
     if contrast != "none":
-        contrast_measures = (n_measures == 2 and n_groups == 1)
-        contrast_groups = (n_measures == 1 and n_groups == 2)
+        contrast_measures = n_measures == 2 and n_groups == 1
+        contrast_groups = n_measures == 1 and n_groups == 2
         if not (contrast_measures or contrast_groups):
-            raise ValueError("No valid contrasts were possible. To contrast measures, ensure "
-                             "there are 2 measures and no grouping variable. To contrast groups, "
-                             "ensure there is 1 measure and a dichotomous grouping variable.")
+            raise ValueError(
+                "No valid contrasts were possible. To contrast measures, ensure "
+                "there are 2 measures and no grouping variable. To contrast groups, "
+                "ensure there is 1 measure and a dichotomous grouping variable."
+            )
 
     # Perform listwise deletion if requested
     if listwise:
@@ -516,24 +535,24 @@ def ssm_analyze_corrs(data: pd.DataFrame,
     # Calculate observed scores (i.e., correlations)
     cs = bs_input[scales].values
     mv = bs_input[measures].values
-    grp = bs_input['Group'].astype('category').cat.codes.values
+    grp = bs_input["Group"].astype("category").cat.codes.values
     scores = corr_scores(cs, mv, grp, listwise)
     scores_df = pd.DataFrame(scores, columns=scales)
-    scores_df['Group'] = np.repeat(bs_input['Group'].unique(), len(measures))
-    scores_df['Measure'] = np.tile(measure_names, n_groups)
+    scores_df["Group"] = np.repeat(bs_input["Group"].unique(), len(measures))
+    scores_df["Measure"] = np.tile(measure_names, n_groups)
     if grouping is not None:
-        scores_df['label'] = scores_df['Group'].astype(str) + "_" + scores_df['Measure']
+        scores_df["label"] = scores_df["Group"].astype(str) + "_" + scores_df["Measure"]
     else:
-        scores_df['label'] = scores_df['Measure']
+        scores_df["label"] = scores_df["Measure"]
 
     # Define bootstrap function
     def bs_function(data, index, angles, contrast, listwise):
         resample = data.iloc[index]
-        grp = resample['Group'].astype('category').cat.codes.values
+        grp = resample["Group"].astype("category").cat.codes.values
         cs = resample[scales].values
         mv = resample[measures].values
         scores_r = corr_scores(cs, mv, grp, listwise)
-        scores_r = scores_r.drop(columns=['Group', 'Measure'])
+        scores_r = scores_r.drop(columns=["Group", "Measure"])
         return ssm_by_group(scores_r, angles, contrast)
 
     # Perform bootstrapping
@@ -545,11 +564,11 @@ def ssm_analyze_corrs(data: pd.DataFrame,
         interval=interval,
         contrast=contrast,
         listwise=listwise,
-        strata=bs_input['Group']
+        strata=bs_input["Group"],
     )
 
     # Select and label results
-    group_names = bs_input['Group'].cat.categories
+    group_names = bs_input["Group"].cat.categories
     if contrast == "none":
         row_data = bs_output
         grp_labels = np.repeat(group_names, len(measures))
@@ -559,9 +578,7 @@ def ssm_analyze_corrs(data: pd.DataFrame,
         else:
             lbl_labels = msr_labels
         results = row_data.assign(
-            label=lbl_labels,
-            Group=grp_labels,
-            Measure=msr_labels
+            label=lbl_labels, Group=grp_labels, Measure=msr_labels
         )
     else:
         row_data = bs_output.iloc[-1:].copy()
@@ -573,28 +590,32 @@ def ssm_analyze_corrs(data: pd.DataFrame,
 
     # Collect analysis details
     details = {
-        'boots': boots,
-        'interval': interval,
-        'listwise': listwise,
-        'angles': np.rad2deg(angles),
-        'contrast': contrast,
-        'score_type': "Correlation",
-        'results_type': "Profile" if contrast == "none" else "Contrast"
+        "boots": boots,
+        "interval": interval,
+        "listwise": listwise,
+        "angles": np.rad2deg(angles),
+        "contrast": contrast,
+        "score_type": "Correlation",
+        "results_type": "Profile" if contrast == "none" else "Contrast",
     }
 
-    call_str = f"ssm_analyze_corrs(data, scales={scales}, angles={angles}, " \
-                f"measures={measures}, grouping={grouping}, contrast={contrast}, " \
-                f"boots={boots}, interval={interval}, listwise={listwise}, " \
-                f"measures_labels={measures_labels})"
+    call_str = (
+        f"ssm_analyze_corrs(data, scales={scales}, angles={angles}, "
+        f"measures={measures}, grouping={grouping}, contrast={contrast}, "
+        f"boots={boots}, interval={interval}, listwise={listwise}, "
+        f"measures_labels={measures_labels})"
+    )
 
     return {"results": results, "details": details, "call": call_str}
 
-def corr_scores(scores: Union[np.ndarray, pd.DataFrame],
-                measures: Union[np.ndarray, pd.DataFrame],
-                grouping: Union[np.ndarray, pd.Series],
-                listwise: bool,
-                scales: List[str] = None
-                ) -> pd.DataFrame:
+
+def corr_scores(
+    scores: Union[np.ndarray, pd.DataFrame],
+    measures: Union[np.ndarray, pd.DataFrame],
+    grouping: Union[np.ndarray, pd.Series],
+    listwise: bool,
+    scales: List[str] = None,
+) -> pd.DataFrame:
     """
     Calculate the correlation of each measure with each scale by group.
 
@@ -611,7 +632,9 @@ def corr_scores(scores: Union[np.ndarray, pd.DataFrame],
     # Convert inputs to numpy arrays if they're not already
     cs_array = scores.values if isinstance(scores, pd.DataFrame) else scores
     mv_array = measures.values if isinstance(measures, pd.DataFrame) else measures
-    grp_array = grouping.values if isinstance(grouping, (pd.Series, pd.DataFrame)) else grouping
+    grp_array = (
+        grouping.values if isinstance(grouping, (pd.Series, pd.DataFrame)) else grouping
+    )
 
     levels = np.unique(grp_array)
     ng = len(levels)
@@ -633,14 +656,14 @@ def corr_scores(scores: Union[np.ndarray, pd.DataFrame],
         if listwise:
             # Multiple groups and LWD
             for g, level in enumerate(levels):
-                mask = (grp_array == level)
+                mask = grp_array == level
                 gcs = cs_array[mask]
                 gmv = mv_array[mask]
-                out[g * pm:(g + 1) * pm, :] = np.corrcoef(gmv.T, gcs.T)[:pm, pm:]
+                out[g * pm : (g + 1) * pm, :] = np.corrcoef(gmv.T, gcs.T)[:pm, pm:]
         else:
             # Multiple groups and PWD
             for g, level in enumerate(levels):
-                mask = (grp_array == level)
+                mask = grp_array == level
                 gcs = cs_array[mask]
                 gmv = mv_array[mask]
                 for m in range(pm):
@@ -654,7 +677,7 @@ def corr_scores(scores: Union[np.ndarray, pd.DataFrame],
         if isinstance(scores, pd.DataFrame):
             scales = scores.columns.tolist()
         else:
-            scales = [f'Scale_{i + 1}' for i in range(ps)]
+            scales = [f"Scale_{i + 1}" for i in range(ps)]
 
     df_out = pd.DataFrame(out, columns=scales)
 
@@ -662,10 +685,10 @@ def corr_scores(scores: Union[np.ndarray, pd.DataFrame],
     if isinstance(measures, pd.DataFrame):
         measure_names = measures.columns.tolist()
     else:
-        measure_names = [f'Measure_{i + 1}' for i in range(pm)]
+        measure_names = [f"Measure_{i + 1}" for i in range(pm)]
 
-    df_out['Group'] = np.repeat(levels, pm)
-    df_out['Measure'] = np.tile(measure_names, ng)
+    df_out["Group"] = np.repeat(levels, pm)
+    df_out["Measure"] = np.tile(measure_names, ng)
 
     return df_out
 
@@ -701,15 +724,13 @@ if __name__ == "__main__":
         data=data,
         scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
         angles=[90, 135, 180, 225, 270, 315, 0, 45],
-        grouping = 'Gender',
+        grouping="Gender",
         # contrast='model',
-        measures = ['NARPD', 'ASPD'],
+        measures=["NARPD", "ASPD"],
         # measures_labels=['Narcissistic PD', 'Antisocial PD'],
     )
     print(results)
     print(results.summary())
 
-
     fig = ssm_plot(results)
     plt.show()
-

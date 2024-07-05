@@ -2,10 +2,8 @@
 
 import matplotlib.pyplot as plt
 from matplotlib import colormaps
-from cycler import cycler
 import numpy as np
 import pandas as pd
-import math
 from scipy.optimize import curve_fit
 
 OCTANTS = (0, 45, 90, 135, 180, 225, 270, 315)
