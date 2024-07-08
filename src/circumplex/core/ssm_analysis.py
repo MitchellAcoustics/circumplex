@@ -1,14 +1,11 @@
-# %%
-
 import pandas as pd
 import numpy as np
 from scipy.optimize import curve_fit
 from typing import Optional, List, Union, Callable
 from circumplex.core.ssm_results import SSMResults
-
+from circumplex.core.utils import OCTANTS, cosine_form, r2_score
 
 BOUNDS = ([0, 0, -np.inf], [np.inf, 2 * np.pi, np.inf])
-OCTANTS = (0, 45, 90, 135, 180, 225, 270, 315)
 
 
 def ssm_analyze(
@@ -300,55 +297,12 @@ def group_parameters(scores: np.ndarray, angles: List[float]) -> np.ndarray:
     out = np.zeros(n * 6)  # Initialize output array
 
     for i in range(n):
-        out[i * 6 : (i + 1) * 6] = ssm_parameters_cpp(scores[i], angles)
+        out[i * 6 : (i + 1) * 6] = ssm_parameters(scores[i], angles)
 
     return out
 
 
-# def ssm_parameters_cpp(scores: np.ndarray, angles: List[float]) -> np.ndarray:
-#     """
-#     Calculate SSM parameters for a single group.
-#
-#     Args:
-#         scores (np.ndarray): 1D array of scores for a single group.
-#         angles (List[float]): Angular displacement of each circumplex scale (in radians).
-#
-#     Returns:
-#         np.ndarray: Array of 6 SSM parameters [elevation, x-value, y-value, amplitude, angular displacement, model fit].
-#     """
-#     # Ensure scores and angles are numpy arrays
-#     scores = np.array(scores)
-#     angles = np.array(angles)
-#
-#     # Calculate SSM parameters
-#     elevation = np.mean(scores)
-#     x_value = np.mean(scores * np.cos(angles))
-#     y_value = np.mean(scores * np.sin(angles))
-#     amplitude = np.sqrt(x_value**2 + y_value**2)
-#     displacement = np.arctan2(y_value, x_value)
-#
-#     # Calculate model fit (R-squared)
-#     predicted_scores = elevation + amplitude * np.cos(angles - displacement)
-#     ss_total = np.sum((scores - np.mean(scores)) ** 2)
-#     ss_residual = np.sum((scores - predicted_scores) ** 2)
-#     model_fit = 1 - (ss_residual / ss_total)
-#
-#     return np.array([elevation, x_value, y_value, amplitude, displacement, model_fit])
-
-
-def cosine_form(theta, ampl, disp, elev):
-    """Cosine function with amplitude, dispersion and elevation parameters."""
-    return elev + ampl * np.cos(theta - disp)
-
-
-def _r2_score(y_true: np.array, y_pred: np.array):
-    """Calculate the R2 score for a set of predictions."""
-    ss_res = np.sum(np.square(y_true - y_pred))
-    ss_tot = np.sum(np.square(y_true - np.mean(y_true)))
-    return 1 - (ss_res / ss_tot)
-
-
-def ssm_parameters_cpp(scores, angles, bounds=BOUNDS) -> tuple:
+def ssm_parameters(scores: np.ndarray, angles: List[float], bounds=BOUNDS) -> np.array:
     """Calculate SSM parameters (without confidence intervals) for a set of scores.
 
     Args:
@@ -376,7 +330,7 @@ def ssm_parameters_cpp(scores, angles, bounds=BOUNDS) -> tuple:
     param, covariance = curve_fit(
         cosine_form, xdata=angles, ydata=scores, bounds=bounds
     )
-    r2 = _r2_score(scores, cosine_form(angles, *param))
+    r2 = r2_score(scores, cosine_form(angles, *param))
     ampl, disp, elev = param
 
     def polar2cart(r, theta):
@@ -455,19 +409,6 @@ def ssm_bootstrap(
         results[col] = np.rad2deg(results[col])
 
     return results
-
-
-def angle_median(angles: np.ndarray) -> float:
-    """
-    Calculate the median of circular data.
-
-    Args:
-        angles (np.ndarray): Array of angles in radians.
-
-    Returns:
-        float: Median angle in radians.
-    """
-    return np.arctan2(np.median(np.sin(angles)), np.median(np.cos(angles)))
 
 
 def ssm_analyze_corrs(
@@ -709,13 +650,11 @@ def pairwise_r(x: np.ndarray, y: np.ndarray) -> float:
     return np.corrcoef(x, y)[0, 1] if len(x) > 1 else np.nan
 
 
-# %%
-
 if __name__ == "__main__":
     ######## SCRATCH ########
     from importlib.resources import files
     import matplotlib.pyplot as plt
-    from ssm_plot import ssm_plot
+    from visualization import ssm_plot
 
     _jz2017_path = str(files("circumplex.data").joinpath("jz2017.csv"))
     data = pd.read_csv(_jz2017_path)
@@ -724,9 +663,9 @@ if __name__ == "__main__":
         data=data,
         scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
         angles=[90, 135, 180, 225, 270, 315, 0, 45],
-        grouping="Gender",
+        # grouping="Gender",
         # contrast='model',
-        measures=["NARPD", "ASPD"],
+        # measures=["NARPD", "ASPD"],
         # measures_labels=['Narcissistic PD', 'Antisocial PD'],
     )
     print(results)
