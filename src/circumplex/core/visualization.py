@@ -313,7 +313,7 @@ def ssm_plot_contrast(
     return fig
 
 
-def ssm_plot_profile(
+def ssm_profile_plot(
     scores: np.ndarray,
     angles: np.ndarray,
     amplitude: float,

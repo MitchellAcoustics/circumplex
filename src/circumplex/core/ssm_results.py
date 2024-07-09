@@ -2,7 +2,7 @@ import pandas as pd
 from typing import Dict, Any
 
 from matplotlib import pyplot as plt
-from circumplex.core.visualization import ssm_plot_profile
+from circumplex.core.visualization import ssm_profile_plot
 
 
 class SSMResults:
@@ -72,7 +72,7 @@ class SSMResults:
             axes = [axes]
 
         for i, (ax, (_, row)) in enumerate(zip(axes, results.iterrows())):
-            fig, ax = ssm_plot_profile(
+            fig, ax = ssm_profile_plot(
                 scores=scores.iloc[i].values[:-3],
                 angles=details["angles"],
                 amplitude=row["a_est"],

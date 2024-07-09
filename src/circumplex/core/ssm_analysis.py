@@ -659,7 +659,6 @@ if __name__ == "__main__":
     ######## SCRATCH ########
     from importlib.resources import files
     import matplotlib.pyplot as plt
-    from visualization import ssm_plot, ssm_plot_profile
 
     _jz2017_path = str(files("circumplex.data").joinpath("jz2017.csv"))
     data = pd.read_csv(_jz2017_path)
@@ -668,7 +667,7 @@ if __name__ == "__main__":
         data=data,
         scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
         angles=[90, 135, 180, 225, 270, 315, 0, 45],
-        grouping="Gender",
+        # grouping="Gender",
         # contrast='model',
         measures=["NARPD", "ASPD"],
         # measures_labels=['Narcissistic PD', 'Antisocial PD'],
@@ -678,5 +677,5 @@ if __name__ == "__main__":
     print(results.summary())
 
     # fig = ssm_plot(results)
-    fig, ax = results.profile_plot()
+    fig, ax = results.profile_plot(incl_elev=True)
     plt.show()
