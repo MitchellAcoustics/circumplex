@@ -1,4 +1,5 @@
 import numpy as np
+from typing import Tuple
 
 
 def cosine_form(theta, ampl, disp, elev):
@@ -27,3 +28,11 @@ def r2_score(y_true: np.array, y_pred: np.array):
 
 
 OCTANTS = (0, 45, 90, 135, 180, 225, 270, 315)
+
+
+def sort_angles(
+    angles: np.ndarray, scores: np.ndarray
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Sort angles and corresponding scores in ascending order."""
+    sorted_indices = np.argsort(angles)
+    return np.array(angles)[sorted_indices], np.array(scores)[sorted_indices]

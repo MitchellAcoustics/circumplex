@@ -2,9 +2,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import pandas as pd
-from typing import Optional, List
-from circumplex.core.ssm_results import SSMResults
+from typing import Optional, List, Tuple
+from circumplex import SSMResults
 import matplotlib.patches as patches
+from circumplex.core.utils import cosine_form, OCTANTS, sort_angles
 
 
 def ssm_plot(ssm_object: SSMResults, fontsize: int = 12, **kwargs):
@@ -310,3 +311,96 @@ def ssm_plot_contrast(
 
     plt.tight_layout()
     return fig
+
+
+def ssm_plot_profile(
+    scores: np.ndarray,
+    angles: np.ndarray,
+    amplitude: float,
+    displacement: float,
+    elevation: float,
+    r2: float = None,
+    title: str = "SSM Profile",
+    reorder_scales: bool = True,
+    incl_pred: bool = True,
+    incl_fit: bool = True,
+    incl_disp: bool = True,
+    incl_amp: bool = True,
+    c_scores: str = "red",
+    c_fit: str = "black",
+    fontsize: int = 12,
+    ax: Optional[plt.Axes] = None,
+) -> Tuple[plt.Figure, plt.Axes]:
+    """
+    Plot the SSM profile.
+
+    Args:
+        scores (np.ndarray): Array of scores for each scale.
+        angles (np.ndarray): Array of angles for each scale.
+        amplitude (float): Amplitude of the cosine function.
+        displacement (float): Displacement of the cosine function.
+        elevation (float): Elevation of the cosine function.
+        r2 (float): R-squared value for the fit.
+        title (str): Title of the plot.
+        reorder_scales (bool): Whether to reorder scales based on angles.
+        incl_pred (bool): Whether to include the predicted fit line.
+        incl_fit (bool): Whether to include the R-squared value.
+        incl_disp (bool): Whether to include the displacement line.
+        incl_amp (bool): Whether to include the amplitude line.
+        c_scores (str): Color for the score points.
+        c_fit (str): Color for the fit line.
+        fontsize (int): Base font size for the plot.
+        ax (Optional[plt.Axes]): Existing axes to plot on. If None, creates new figure and axes.
+
+    Returns:
+        Tuple[plt.Figure, plt.Axes]: A tuple containing the figure and axis objects.
+    """
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(10, 5))
+    else:
+        fig = ax.get_figure()
+
+    assert len(scores) == len(angles), "Scores and angles must be the same length."
+    assert 0 <= elevation <= 1, "Elevation must be between 0 and 1."
+    assert 0 <= r2 <= 1, "R2 must be between 0 and 1."
+    assert 0 <= amplitude, "Amplitude must be a positive number."
+    assert 0 <= displacement <= 360, "Displacement must be between 0 and 360."
+
+    if reorder_scales:
+        angles, scores = sort_angles(angles, scores)
+        if angles[-1] == 360:
+            angles = (0,) + angles
+            scores = (scores[-1],) + scores
+
+    if incl_pred:
+        thetas = np.linspace(0, 360, 1000)
+        fit = cosine_form(np.deg2rad(thetas), amplitude, displacement, elevation)
+        ax.plot(thetas, fit, color=c_fit)
+
+    ax.plot(angles, scores, color=c_scores, marker="o")
+
+    if incl_disp:
+        ax.axvline(displacement, color="black", linestyle="--")
+        ax.text(
+            displacement + 5, elevation, f"d = {int(displacement)}", fontsize=fontsize
+        )
+
+    if incl_amp:
+        ax.axhline(amplitude + elevation, color="black", linestyle="--")
+        ax.text(
+            0, amplitude + elevation * 0.9, f"a = {amplitude:.2f}", fontsize=fontsize
+        )
+
+    if incl_fit:
+        ax.text(0, elevation * 0.5, f"R2 = {r2:.2f}", fontsize=fontsize)
+
+    ax.set_xticks(OCTANTS)
+    ax.set_xticklabels(
+        ["0", "45", "90", "135", "180", "225", "270", "315"], fontsize=fontsize
+    )
+    ax.set_xlabel("Angle [deg]", fontsize=fontsize + 2)
+    ax.set_ylabel("Score", fontsize=fontsize + 2)
+    ax.set_title(title, fontsize=fontsize + 4)
+
+    plt.tight_layout()
+    return fig, ax

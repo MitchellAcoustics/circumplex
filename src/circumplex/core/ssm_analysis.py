@@ -145,7 +145,7 @@ def ssm_analyze(
     # Create and return the SSMResults object
     return SSMResults(
         results=results["results"],
-        scores=scores,
+        scores=results["scores"],
         details=results["details"],
         call=call_str,
     )
@@ -246,7 +246,7 @@ def ssm_analyze_means(
         f"interval={interval}, listwise={listwise})"
     )
 
-    return {"results": results, "details": details, "call": call_str}
+    return {"results": results, "details": details, "call": call_str, "scores": scores}
 
 
 def ssm_by_group(
@@ -477,7 +477,7 @@ def ssm_analyze_corrs(
     cs = bs_input[scales].values
     mv = bs_input[measures].values
     grp = bs_input["Group"].astype("category").cat.codes.values
-    scores = corr_scores(cs, mv, grp, listwise)
+    scores = corr_scores(cs, mv, grp, listwise, scales)
     scores_df = pd.DataFrame(scores, columns=scales)
     scores_df["Group"] = np.repeat(bs_input["Group"].unique(), len(measures))
     scores_df["Measure"] = np.tile(measure_names, n_groups)
@@ -547,7 +547,12 @@ def ssm_analyze_corrs(
         f"measures_labels={measures_labels})"
     )
 
-    return {"results": results, "details": details, "call": call_str}
+    return {
+        "results": results,
+        "details": details,
+        "call": call_str,
+        "scores": scores_df,
+    }
 
 
 def corr_scores(
@@ -654,7 +659,7 @@ if __name__ == "__main__":
     ######## SCRATCH ########
     from importlib.resources import files
     import matplotlib.pyplot as plt
-    from visualization import ssm_plot
+    from visualization import ssm_plot, ssm_plot_profile
 
     _jz2017_path = str(files("circumplex.data").joinpath("jz2017.csv"))
     data = pd.read_csv(_jz2017_path)
@@ -663,13 +668,15 @@ if __name__ == "__main__":
         data=data,
         scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
         angles=[90, 135, 180, 225, 270, 315, 0, 45],
-        # grouping="Gender",
+        grouping="Gender",
         # contrast='model',
-        # measures=["NARPD", "ASPD"],
+        measures=["NARPD", "ASPD"],
         # measures_labels=['Narcissistic PD', 'Antisocial PD'],
     )
-    print(results)
+    print(results.scores)
+    # print(results)
     print(results.summary())
 
-    fig = ssm_plot(results)
+    # fig = ssm_plot(results)
+    fig, ax = results.profile_plot()
     plt.show()

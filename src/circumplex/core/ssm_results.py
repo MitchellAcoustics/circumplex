@@ -1,6 +1,9 @@
 import pandas as pd
 from typing import Dict, Any
 
+from matplotlib import pyplot as plt
+from circumplex.core.visualization import ssm_plot_profile
+
 
 class SSMResults:
     def __init__(
@@ -57,3 +60,27 @@ class SSMResults:
 
         output.extend(str(self).split("\n")[2:])  # Add the formatted results
         return "\n".join(output)
+
+    def profile_plot(self, **kwargs):
+        results = self.results
+        scores = self.scores
+        details = self.details
+
+        n_components = results.shape[0]
+        fig, axes = plt.subplots(n_components, 1, figsize=(6, 4 * n_components))
+        if n_components == 1:
+            axes = [axes]
+
+        for i, (ax, (_, row)) in enumerate(zip(axes, results.iterrows())):
+            fig, ax = ssm_plot_profile(
+                scores=scores.iloc[i].values[:-3],
+                angles=details["angles"],
+                amplitude=row["a_est"],
+                displacement=row["d_est"],
+                elevation=row["e_est"],
+                r2=row["fit_est"],
+                ax=ax,
+                title=f"{scores.iloc[i].values[-1]} Profile",
+                **kwargs,
+            )
+        return fig, axes
