@@ -374,7 +374,7 @@ def ssm_plot_profile(
 
     if incl_pred:
         thetas = np.linspace(0, 360, 1000)
-        fit = cosine_form(np.deg2rad(thetas), amplitude, displacement, elevation)
+        fit = cosine_form(np.deg2rad(thetas), amplitude, np.deg2rad(displacement), elevation)
         ax.plot(thetas, fit, color=c_fit)
 
     ax.plot(angles, scores, color=c_scores, marker="o")
