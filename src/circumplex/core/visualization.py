@@ -326,6 +326,7 @@ def ssm_plot_profile(
     incl_fit: bool = True,
     incl_disp: bool = True,
     incl_amp: bool = True,
+    incl_elev: bool = False,
     c_scores: str = "red",
     c_fit: str = "black",
     fontsize: int = 12,
@@ -335,6 +336,7 @@ def ssm_plot_profile(
     Plot the SSM profile.
 
     Args:
+        incl_elev:
         scores (np.ndarray): Array of scores for each scale.
         angles (np.ndarray): Array of angles for each scale.
         amplitude (float): Amplitude of the cosine function.
@@ -374,7 +376,9 @@ def ssm_plot_profile(
 
     if incl_pred:
         thetas = np.linspace(0, 360, 1000)
-        fit = cosine_form(np.deg2rad(thetas), amplitude, np.deg2rad(displacement), elevation)
+        fit = cosine_form(
+            np.deg2rad(thetas), amplitude, np.deg2rad(displacement), elevation
+        )
         ax.plot(thetas, fit, color=c_fit)
 
     ax.plot(angles, scores, color=c_scores, marker="o")
@@ -393,6 +397,10 @@ def ssm_plot_profile(
 
     if incl_fit:
         ax.text(0, elevation * 0.5, f"R2 = {r2:.2f}", fontsize=fontsize)
+
+    if incl_elev:
+        ax.axhline(elevation, color="black", linestyle="--")
+        ax.text(0, elevation, f"e = {elevation:.2f}", fontsize=fontsize)
 
     ax.set_xticks(OCTANTS)
     ax.set_xticklabels(

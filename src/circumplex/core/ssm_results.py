@@ -79,8 +79,8 @@ class SSMResults:
                 displacement=row["d_est"],
                 elevation=row["e_est"],
                 r2=row["fit_est"],
-                ax=ax,
                 title=f"{scores.iloc[i].values[-1]} Profile",
+                ax=ax,
                 **kwargs,
             )
         return fig, axes
