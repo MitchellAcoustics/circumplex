@@ -126,7 +126,6 @@ def ssm_analyze(
                     data, scales, angles, None, "none", boots, interval, listwise
             )
 
-
     # Create the call string
     call_str = (
         f"ssm_analyze(data, scales={scales}, angles={angles}, measures={measures}, "
