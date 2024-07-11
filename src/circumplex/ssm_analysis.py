@@ -79,9 +79,6 @@ def ssm_analyze(
             measures
         ), "measures_labels must have the same length as measures"
 
-    # Convert angles from degrees to radians
-    angles_rad = np.deg2rad(angles)
-
     # Determine analysis type and forward to appropriate subfunction
     if measures is not None:
         if grouping is not None:
@@ -89,7 +86,7 @@ def ssm_analyze(
             results = ssm_analyze_corrs(
                 data,
                 scales,
-                angles_rad,
+                    angles,
                 measures,
                 grouping,
                 contrast,
@@ -103,7 +100,7 @@ def ssm_analyze(
             results = ssm_analyze_corrs(
                 data,
                 scales,
-                angles_rad,
+                    angles,
                 measures,
                 None,
                 contrast,
@@ -116,7 +113,7 @@ def ssm_analyze(
         if grouping is not None:
             # Multiple group means
             results = ssm_analyze_means(
-                data, scales, angles_rad, grouping, contrast, boots, interval, listwise
+                    data, scales, angles, grouping, contrast, boots, interval, listwise
             )
         else:
             # Single group means
@@ -126,7 +123,7 @@ def ssm_analyze(
                     "Set contrast = 'none' or add the measures or grouping arguments."
                 )
             results = ssm_analyze_means(
-                data, scales, angles_rad, None, "none", boots, interval, listwise
+                    data, scales, angles, None, "none", boots, interval, listwise
             )
 
 
@@ -230,7 +227,7 @@ def ssm_analyze_means(
         "boots": boots,
         "interval": interval,
         "listwise": listwise,
-        "angles": np.rad2deg(angles),
+        "angles": angles,
         "contrast": contrast,
         "score_type": "Mean",
         "results_type": "Profile" if contrast == "none" else "Contrast",
@@ -324,9 +321,9 @@ def ssm_parameters(scores: np.ndarray, angles: Tuple[float], bounds=BOUNDS) -> n
     # NOTE: Bug - Sometimes returns displacement at the trough, not the crest, so 180 degrees off
     # This was addressed by setting the lower bound of amplitude to 0, not -np.inf. Need a less hard-coded solution
     param, covariance = curve_fit(
-            utils.cosine_form, xdata=angles, ydata=scores, bounds=bounds
+            utils.cosine_form, xdata=np.deg2rad(angles), ydata=scores, bounds=bounds
     )
-    r2 = utils.r2_score(scores, utils.cosine_form(angles, *param))
+    r2 = utils.r2_score(scores, utils.cosine_form(np.deg2rad(angles), *param))
     ampl, disp, elev = param
 
     def polar2cart(r, theta):
@@ -335,7 +332,7 @@ def ssm_parameters(scores: np.ndarray, angles: Tuple[float], bounds=BOUNDS) -> n
         return x, y
 
     xval, yval = polar2cart(ampl, disp)
-    return np.array([elev, xval, yval, ampl, disp, r2])
+    return np.array([elev, xval, yval, ampl, np.rad2deg(disp), r2])
 
 
 def ssm_bootstrap(
@@ -401,8 +398,6 @@ def ssm_bootstrap(
 
     # Combine results and convert radians to degrees for displacement
     results = pd.concat([bs_est, bs_lci, bs_uci], axis=1)
-    for col in ["d_est", "d_lci", "d_uci"]:
-        results[col] = np.rad2deg(results[col])
 
     return results
 
@@ -537,7 +532,7 @@ def ssm_analyze_corrs(
         "boots": boots,
         "interval": interval,
         "listwise": listwise,
-        "angles": np.rad2deg(angles),
+        "angles": angles,
         "contrast": contrast,
         "score_type": "Correlation",
         "results_type": "Profile" if contrast == "none" else "Contrast",
@@ -670,7 +665,7 @@ if __name__ == "__main__":
     results = ssm_analyze(
         data=data,
         scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
-        angles=[90, 135, 180, 225, 270, 315, 0, 45],
+            angles=(90, 135, 180, 225, 270, 315, 0, 45),
         # grouping="Gender",
         # contrast='model',
         measures=["NARPD", "ASPD"],

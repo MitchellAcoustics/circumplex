@@ -368,7 +368,8 @@ def ssm_profile_plot(
 
     assert len(scores) == len(angles), "Scores and angles must be the same length."
     # assert 0 <= elevation <= 1, "Elevation must be between 0 and 1."
-    assert 0 <= r2 <= 1, "R2 must be between 0 and 1."
+    if r2 is not None:
+        assert 0 <= r2 <= 1, "R2 must be between 0 and 1."
     assert 0 <= amplitude, "Amplitude must be a positive number."
     assert 0 <= displacement <= 360, "Displacement must be between 0 and 360."
 
