@@ -1,19 +1,24 @@
-import pandas as pd
-from typing import Dict, Any
+from __future__ import annotations
 
+from typing import Any, Dict, List
+
+import pandas as pd
 from matplotlib import pyplot as plt
-from circumplex.core.visualization import ssm_profile_plot
+
+import circumplex.visualization as vis
 
 
 class SSMResults:
     def __init__(
         self,
         results: pd.DataFrame,
+            scales: List[str],
         scores: pd.DataFrame,
         details: Dict[str, Any],
         call: str,
     ):
         self.results = results
+        self.scales = scales
         self.scores = scores
         self.details = details
         self.call = call
@@ -72,15 +77,18 @@ class SSMResults:
             axes = [axes]
 
         for i, (ax, (_, row)) in enumerate(zip(axes, results.iterrows())):
-            fig, ax = ssm_profile_plot(
-                scores=scores.iloc[i].values[:-3],
+            fig, ax = vis.ssm_profile_plot(
+                    scores=scores.iloc[i][self.scales],
                 angles=details["angles"],
                 amplitude=row["a_est"],
                 displacement=row["d_est"],
                 elevation=row["e_est"],
                 r2=row["fit_est"],
-                title=f"{scores.iloc[i].values[-1]} Profile",
+                    title=f"{results.iloc[i]['label']} Profile",
                 ax=ax,
                 **kwargs,
             )
+
+        plt.tight_layout()
+
         return fig, axes

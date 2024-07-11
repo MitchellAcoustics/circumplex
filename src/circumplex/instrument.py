@@ -10,7 +10,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from circumplex import SSMResults, ssm_analyse
+import circumplex.ssm_analysis as ssm
+import circumplex.ssm_results as ssm_results
 
 INSTRUMENT_JSONS = {
     "CSIP": str(files("circumplex.instruments").joinpath("CSIP.json")),
@@ -318,8 +319,8 @@ class Instrument:
 
     def ssm_analyse(
         self, measures: list[str] = None, grouping: list[str] = None
-    ) -> SSMResults:
-        return ssm_analyse(
+            ) -> ssm_results.SSMResults:
+        return ssm.ssm_analyze(
             self.data,
             self.scales.abbrev,
             measures=measures,

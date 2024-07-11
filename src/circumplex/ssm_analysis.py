@@ -1,25 +1,31 @@
-import pandas as pd
+from __future__ import annotations
+
+import warnings
+from typing import Callable, List, Optional, Tuple, Union
+
 import numpy as np
+import pandas as pd
 from scipy.optimize import curve_fit
-from typing import Optional, List, Union, Callable
-from circumplex.core.ssm_results import SSMResults
-from circumplex.core.utils import OCTANTS, cosine_form, r2_score
+
+import circumplex.ssm_results as ssm_results
+import circumplex.utils as utils
 
 BOUNDS = ([0, 0, -np.inf], [np.inf, 2 * np.pi, np.inf])
+OCTANTS = utils.OCTANTS
 
 
 def ssm_analyze(
     data: pd.DataFrame,
     scales: List[str],
-    angles: Optional[List[float]] = OCTANTS,
+        angles: Optional[Tuple[float]] = OCTANTS,
     measures: Optional[List[str]] = None,
     grouping: Optional[str] = None,
     contrast: Optional[str] = "none",
-    boots: int = 2000,
+        boots: int = 500,
     interval: float = 0.95,
     listwise: bool = True,
     measures_labels: Optional[List[str]] = None,
-) -> SSMResults:
+        ) -> ssm_results.SSMResults:
     """
     Perform analyses using the Structural Summary Method.
 
@@ -48,9 +54,9 @@ def ssm_analyze(
     assert all(
         scale in data.columns for scale in scales
     ), "All scales must be present in data"
-    assert isinstance(angles, list) and all(
+    assert isinstance(angles, tuple) and all(
         isinstance(a, (int, float)) for a in angles
-    ), "angles must be a list of numbers"
+            ), "angles must be a tuple of numbers"
     assert isinstance(boots, int) and boots > 0, "boots must be a positive integer"
     assert 0 < interval < 1, "interval must be between 0 and 1"
     assert isinstance(listwise, bool), "listwise must be a boolean"
@@ -123,17 +129,6 @@ def ssm_analyze(
                 data, scales, angles_rad, None, "none", boots, interval, listwise
             )
 
-    # Calculate scores
-    if measures is not None:
-        scores = corr_scores(
-            data[scales], data[measures], data[grouping] if grouping else None, listwise
-        )
-    else:
-        scores = (
-            data[scales]
-            .groupby(data[grouping] if grouping else pd.Series(["All"] * len(data)))
-            .mean()
-        )
 
     # Create the call string
     call_str = (
@@ -143,8 +138,9 @@ def ssm_analyze(
     )
 
     # Create and return the SSMResults object
-    return SSMResults(
+    return ssm_results.SSMResults(
         results=results["results"],
+            scales=scales,
         scores=results["scores"],
         details=results["details"],
         call=call_str,
@@ -154,7 +150,7 @@ def ssm_analyze(
 def ssm_analyze_means(
     data: pd.DataFrame,
     scales: List[str],
-    angles: List[float],
+        angles: Tuple[float],
     grouping: Optional[str] = None,
     contrast: str = "none",
     boots: int = 2000,
@@ -250,7 +246,7 @@ def ssm_analyze_means(
 
 
 def ssm_by_group(
-    scores: pd.DataFrame, angles: List[float], contrast: str
+        scores: pd.DataFrame, angles: Tuple[float], contrast: str
 ) -> np.ndarray:
     """
     Calculate SSM parameters for each group, potentially with contrast.
@@ -282,7 +278,7 @@ def ssm_by_group(
     return results
 
 
-def group_parameters(scores: np.ndarray, angles: List[float]) -> np.ndarray:
+def group_parameters(scores: np.ndarray, angles: Tuple[float]) -> np.ndarray:
     """
     Calculate the SSM parameters as a vector for each group where rows are groups.
 
@@ -302,7 +298,7 @@ def group_parameters(scores: np.ndarray, angles: List[float]) -> np.ndarray:
     return out
 
 
-def ssm_parameters(scores: np.ndarray, angles: List[float], bounds=BOUNDS) -> np.array:
+def ssm_parameters(scores: np.ndarray, angles: Tuple[float], bounds=BOUNDS) -> np.array:
     """Calculate SSM parameters (without confidence intervals) for a set of scores.
 
     Args:
@@ -328,9 +324,9 @@ def ssm_parameters(scores: np.ndarray, angles: List[float], bounds=BOUNDS) -> np
     # NOTE: Bug - Sometimes returns displacement at the trough, not the crest, so 180 degrees off
     # This was addressed by setting the lower bound of amplitude to 0, not -np.inf. Need a less hard-coded solution
     param, covariance = curve_fit(
-        cosine_form, xdata=angles, ydata=scores, bounds=bounds
+            utils.cosine_form, xdata=angles, ydata=scores, bounds=bounds
     )
-    r2 = r2_score(scores, cosine_form(angles, *param))
+    r2 = utils.r2_score(scores, utils.cosine_form(angles, *param))
     ampl, disp, elev = param
 
     def polar2cart(r, theta):
@@ -345,7 +341,7 @@ def ssm_parameters(scores: np.ndarray, angles: List[float], bounds=BOUNDS) -> np
 def ssm_bootstrap(
     bs_input: pd.DataFrame,
     bs_function: Callable,
-    angles: List[float],
+        angles: Tuple[float],
     boots: int,
     interval: float,
     contrast: str,
@@ -414,7 +410,7 @@ def ssm_bootstrap(
 def ssm_analyze_corrs(
     data: pd.DataFrame,
     scales: List[str],
-    angles: List[float],
+        angles: Tuple[float],
     measures: List[str],
     grouping: Optional[str] = None,
     contrast: str = "none",
@@ -444,11 +440,22 @@ def ssm_analyze_corrs(
     # Select circumplex scales, measure variables, and grouping variable
     if grouping is not None:
         bs_input = data[scales + measures + [grouping]].copy()
+        # Perform listwise deletion if requested
+        if listwise:
+            bs_input = bs_input.dropna()
         bs_input["Group"] = bs_input[grouping].astype("category")
+        if bs_input["Group"].nunique() != data[grouping].nunique():
+            warnings.warn("Listwise deletion removed some groups.")
+
     else:
         bs_input = data[scales + measures].copy()
+        # Perform listwise deletion if requested
+        if listwise:
+            bs_input = bs_input.dropna()
         bs_input["Group"] = "All"
         bs_input["Group"] = bs_input["Group"].astype("category")
+    if bs_input.empty:
+        raise ValueError("No data remains after listwise deletion.")
 
     # Check that this combination of arguments is executable
     n_measures = len(measures)
@@ -462,10 +469,6 @@ def ssm_analyze_corrs(
                 "there are 2 measures and no grouping variable. To contrast groups, "
                 "ensure there is 1 measure and a dichotomous grouping variable."
             )
-
-    # Perform listwise deletion if requested
-    if listwise:
-        bs_input = bs_input.dropna()
 
     # Select and label results
     if measures_labels is None:
@@ -658,6 +661,7 @@ def pairwise_r(x: np.ndarray, y: np.ndarray) -> float:
 if __name__ == "__main__":
     ######## SCRATCH ########
     from importlib.resources import files
+
     import matplotlib.pyplot as plt
 
     _jz2017_path = str(files("circumplex.data").joinpath("jz2017.csv"))

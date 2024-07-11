@@ -1,7 +1,9 @@
 # %%
-import pandas as pd
-from circumplex import instrument
 from importlib.resources import files
+
+import pandas as pd
+
+from circumplex import instrument
 
 _jz2017_path = str(files("circumplex.data").joinpath("jz2017.csv"))
 JZ2017 = instrument.load_instrument("CSIP").attach_data(pd.read_csv(_jz2017_path))

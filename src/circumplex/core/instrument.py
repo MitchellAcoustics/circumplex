@@ -1,5 +1,6 @@
+from typing import Any, Dict
+
 import pandas as pd
-from typing import Dict, Any
 
 
 class Instrument:

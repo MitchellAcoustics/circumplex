@@ -1,14 +1,18 @@
+from __future__ import annotations
+
+from typing import List, Optional, Tuple
+
+import matplotlib.patches as patches
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
 import pandas as pd
-from typing import Optional, List, Tuple
-from circumplex import SSMResults
-import matplotlib.patches as patches
-from circumplex.core.utils import cosine_form, OCTANTS, sort_angles
+import seaborn as sns
+
+import circumplex.ssm_results as ssm_results
+import circumplex.utils as utils
 
 
-def ssm_plot(ssm_object: SSMResults, fontsize: int = 12, **kwargs):
+def ssm_plot(ssm_object: ssm_results.SSMResults, fontsize: int = 12, **kwargs):
     """
     Create a figure from SSM results.
 
@@ -21,7 +25,7 @@ def ssm_plot(ssm_object: SSMResults, fontsize: int = 12, **kwargs):
         matplotlib.figure.Figure: A figure object representing the plot.
     """
     assert isinstance(
-        ssm_object, SSMResults
+            ssm_object, ssm_results.SSMResults
     ), "ssm_object must be an SSMResults instance"
     assert fontsize > 0, "fontsize must be a positive number"
 
@@ -34,7 +38,7 @@ def ssm_plot(ssm_object: SSMResults, fontsize: int = 12, **kwargs):
 
 
 def ssm_plot_circle(
-    ssm_object: SSMResults,
+        ssm_object: ssm_results.SSMResults,
     amax: Optional[float] = None,
     legend_font_size: int = 12,
     scale_font_size: int = 12,
@@ -205,7 +209,7 @@ def circle_base(ax, angles, amax=0.5, amin=0, fontsize=12, labels=None):
 
 
 def ssm_plot_contrast(
-    ssm_object: SSMResults,
+        ssm_object: ssm_results.SSMResults,
     axislabel: str = "Difference",
     xy: bool = True,
     color: str = "red",
@@ -363,20 +367,20 @@ def ssm_profile_plot(
         fig = ax.get_figure()
 
     assert len(scores) == len(angles), "Scores and angles must be the same length."
-    assert 0 <= elevation <= 1, "Elevation must be between 0 and 1."
+    # assert 0 <= elevation <= 1, "Elevation must be between 0 and 1."
     assert 0 <= r2 <= 1, "R2 must be between 0 and 1."
     assert 0 <= amplitude, "Amplitude must be a positive number."
     assert 0 <= displacement <= 360, "Displacement must be between 0 and 360."
 
     if reorder_scales:
-        angles, scores = sort_angles(angles, scores)
+        angles, scores = utils.sort_angles(angles, scores)
         if angles[-1] == 360:
             angles = (0,) + angles
             scores = (scores[-1],) + scores
 
     if incl_pred:
         thetas = np.linspace(0, 360, 1000)
-        fit = cosine_form(
+        fit = utils.cosine_form(
             np.deg2rad(thetas), amplitude, np.deg2rad(displacement), elevation
         )
         ax.plot(thetas, fit, color=c_fit)
@@ -392,17 +396,20 @@ def ssm_profile_plot(
     if incl_amp:
         ax.axhline(amplitude + elevation, color="black", linestyle="--")
         ax.text(
-            0, amplitude + elevation * 0.9, f"a = {amplitude:.2f}", fontsize=fontsize
+                0, elevation + amplitude * 0.5, f"a = {amplitude:.2f}", fontsize=fontsize
         )
 
     if incl_fit:
-        ax.text(0, elevation * 0.5, f"R2 = {r2:.2f}", fontsize=fontsize)
+        ylim = ax.get_ylim()
+        ax.text(
+                0, ylim[0] + 0.25 * (ylim[1] - ylim[0]), f"R2 = {r2:.2f}", fontsize=fontsize
+                )
 
     if incl_elev:
         ax.axhline(elevation, color="black", linestyle="--")
         ax.text(0, elevation, f"e = {elevation:.2f}", fontsize=fontsize)
 
-    ax.set_xticks(OCTANTS)
+    ax.set_xticks(utils.OCTANTS)
     ax.set_xticklabels(
         ["0", "45", "90", "135", "180", "225", "270", "315"], fontsize=fontsize
     )
@@ -410,5 +417,4 @@ def ssm_profile_plot(
     ax.set_ylabel("Score", fontsize=fontsize + 2)
     ax.set_title(title, fontsize=fontsize + 4)
 
-    plt.tight_layout()
     return fig, ax

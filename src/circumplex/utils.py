@@ -1,29 +1,38 @@
+from typing import Tuple
+
 import numpy as np
-import pandas as pd
-from circumplex.instrument import Scales, Instrument
+
+OCTANTS = (0, 45, 90, 135, 180, 225, 270, 315)
 
 
-def standardize(
-    data: pd.DataFrame,
-    scales: Scales,
-    angles: np.array,
-    instrument: Instrument,
-    sample: int = 1,
-    prefix: str = "",
-    suffix: str = "_z",
-):
-    scale_names = scales.abbrev
-    assert len(scale_names) == len(angles)
+def cosine_form(theta, ampl, disp, elev):
+    """Cosine function with amplitude, dispersion and elevation parameters."""
+    return elev + ampl * np.cos(theta - disp)
 
-    key = instrument.norms.get_sample(sample)
-    assert len(scale_names) == len(key)
 
-    for i in range(len(angles)):
-        scale_i = scale_names[i]
-        new_var = f"{prefix}{scale_i}{suffix}"
-        index_i = key["angle"][i]
-        m_i = key["m"][i]
-        s_i = key["sd"][i]
-        data[new_var] = (data[scale_i] - m_i) / s_i
+def angle_median(angles: np.ndarray) -> float:
+    """
+    Calculate the median of circular data.
 
-    return data
+    Args:
+        angles (np.ndarray): Array of angles in radians.
+
+    Returns:
+        float: Median angle in radians.
+    """
+    return np.arctan2(np.median(np.sin(angles)), np.median(np.cos(angles)))
+
+
+def r2_score(y_true: np.array, y_pred: np.array):
+    """Calculate the R2 score for a set of predictions."""
+    ss_res = np.sum(np.square(y_true - y_pred))
+    ss_tot = np.sum(np.square(y_true - np.mean(y_true)))
+    return 1 - (ss_res / ss_tot)
+
+
+def sort_angles(
+        angles: np.ndarray, scores: np.ndarray
+        ) -> Tuple[np.ndarray, np.ndarray]:
+    """Sort angles and corresponding scores in ascending order."""
+    sorted_indices = np.argsort(angles)
+    return np.array(angles)[sorted_indices], np.array(scores)[sorted_indices]
