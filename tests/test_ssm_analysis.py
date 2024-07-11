@@ -182,6 +182,8 @@ def test_ssm_parameters_correctness(amplitude, displacement, elevation):
         result_r2,
         ) = params
 
+    result_displacement = result_displacement % 360  # Normalize to 0-360 degrees
+
     # Assert correctness with some tolerance for floating-point precision
     np.testing.assert_allclose(result_elevation, elevation, atol=1e-7)
     np.testing.assert_allclose(result_x, expected_x, atol=1e-7)

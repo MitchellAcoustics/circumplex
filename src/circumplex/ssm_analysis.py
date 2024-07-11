@@ -10,7 +10,7 @@ from scipy.optimize import curve_fit
 import circumplex.ssm_results as ssm_results
 import circumplex.utils as utils
 
-BOUNDS = ([0, 0, -np.inf], [np.inf, 2 * np.pi, np.inf])
+BOUNDS = ([0, -2 * np.pi, -np.inf], [np.inf, 2 * np.pi, np.inf])
 OCTANTS = utils.OCTANTS
 
 
@@ -397,6 +397,7 @@ def ssm_bootstrap(
 
     # Combine results and convert radians to degrees for displacement
     results = pd.concat([bs_est, bs_lci, bs_uci], axis=1)
+    results["d_est"] = results["d_est"] % 360  # normalize to 0-360
 
     return results
 

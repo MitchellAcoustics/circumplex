@@ -59,12 +59,37 @@ class SSMResults:
                 f"Bootstrap Resamples:   {self.details['boots']}",
                 f"Confidence Level:      {self.details['interval']}",
                 f"Listwise Deletion:     {self.details['listwise']}",
-                f"Scale Displacements:   {self.details['angles'].tolist()}\n",
+                f"Scale Displacements:   {self.details['angles']}\n",
             ]
         )
 
         output.extend(str(self).split("\n")[2:])  # Add the formatted results
         return "\n".join(output)
+
+    def table(self):
+        table = pd.DataFrame(
+                columns=[
+                    "Profile",
+                    "Elevation",
+                    "X-Value",
+                    "Y-Value",
+                    "Amplitude",
+                    "Displacement",
+                    "Fit",
+                    ],
+                index=self.results.index,
+                )
+        for i, (_, row) in enumerate(self.results.iterrows()):
+            table.loc[i] = [
+                row["label"],
+                row["e_est"],
+                row["x_est"],
+                row["y_est"],
+                row["a_est"],
+                row["d_est"],
+                row["fit_est"],
+                ]
+        return table
 
     def profile_plot(self, **kwargs):
         results = self.results

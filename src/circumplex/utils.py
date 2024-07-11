@@ -1,6 +1,9 @@
-from typing import Tuple
+from typing import List, Tuple, Union
 
 import numpy as np
+import pandas as pd
+
+from circumplex.instrument import Instrument
 
 OCTANTS = (0, 45, 90, 135, 180, 225, 270, 315)
 
@@ -36,3 +39,49 @@ def sort_angles(
     """Sort angles and corresponding scores in ascending order."""
     sorted_indices = np.argsort(angles)
     return np.array(angles)[sorted_indices], np.array(scores)[sorted_indices]
+
+
+def standardize(
+        data: pd.DataFrame,
+        scales: Union[List[str], pd.Index],
+        angles: List[float],
+        instrument: Instrument,
+        sample: int = 1,
+        prefix: str = "",
+        suffix: str = "_z",
+        ) -> pd.DataFrame:
+    """
+    Standardize circumplex scales using normative data.
+
+    Args:
+        data (pd.DataFrame): A DataFrame containing at least circumplex scales.
+        scales (Union[List[str], pd.Index]): The column names for the variables in data that contain circumplex scales to be standardized.
+        angles (List[float]): A numeric list containing the angular displacement of each circumplex scale (in degrees).
+        instrument (Dict[str, Any]): An instrument object containing normative data.
+        sample (int): An integer corresponding to the normative sample to use in standardizing the scale scores (default = 1).
+        prefix (str): A string to include at the beginning of the newly calculated scale variables' names (default = "").
+        suffix (str): A string to include at the end of the newly calculated scale variables' names (default = "_z").
+
+    Returns:
+        pd.DataFrame: A DataFrame that matches data except that new variables are appended that contain standardized versions of scales.
+    """
+    assert isinstance(data, pd.DataFrame), "data must be a pandas DataFrame"
+    assert all(
+            scale in data.columns for scale in scales
+            ), "All scales must be present in data"
+    assert len(scales) == len(angles), "scales and angles must have the same length"
+    assert isinstance(sample, int), "sample must be an integer"
+    assert isinstance(prefix, str), "prefix must be a string"
+    assert isinstance(suffix, str), "suffix must be a string"
+
+    norms = instrument.norms
+    key = norms.table.query("sample == @sample")
+    assert len(key) == len(scales)
+
+    for scale, angle in zip(scales, angles):
+        new_var = f"{prefix}{scale}{suffix}"
+        m = key.query("scale == @scale")["m"].values[0]
+        sd = key.query("scale == @scale")["sd"].values[0]
+        data[new_var] = (data[scale] - m) / sd
+
+    return data

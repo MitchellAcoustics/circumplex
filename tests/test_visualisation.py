@@ -48,10 +48,10 @@ def mock_ssm_results():
                 }
             )
     details = {
-        "angles"      : (0, 45, 90, 135, 180, 225, 270, 315),
-        "score_type"  : "Mean",
+        "angles"    : (0, 45, 90, 135, 180, 225, 270, 315),
+        "score_type": "Mean",
         "results_type": "Profile",
-        "contrast"    : "none",
+        "contrast"  : "none",
         }
     return SSMResults(
             results=results, scores=scores, details=details, call="mock_call", scales=SCALES

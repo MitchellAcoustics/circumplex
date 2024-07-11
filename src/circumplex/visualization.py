@@ -69,7 +69,7 @@ def ssm_plot_circle(
     angles = np.round(ssm_object.details["angles"]).astype(int)
 
     if amax is None:
-        amax = np.ceil(df["a_uci"].max() * 10) / 10
+        amax = df["a_uci"].abs().max() * 1.5
 
     # Convert results to numbers usable by seaborn
     df_plot = df.copy()
@@ -96,16 +96,17 @@ def ssm_plot_circle(
     colors = sns.color_palette(palette, n_colors=len(df_plot))
 
     # Plot confidence regions
-    for i, (_, row) in enumerate(df_plot.iterrows()):
+    for i, row in df_plot.iterrows():
         wedge = patches.Wedge(
             (0, 0),
             row["a_uci"],
             row["d_lci"],
             row["d_uci"],
             width=row["a_uci"] - row["a_lci"],
-            fc=colors[i],
-            alpha=0.3,
+                fc=list(colors[i]) + [0.5],  # face opacity at 0.5
             linestyle=row["linestyle"],
+                edgecolor=list(colors[i]) + [1],  # edge opacity at 1
+                linewidth=2,
         )
         ax.add_patch(wedge)
 
