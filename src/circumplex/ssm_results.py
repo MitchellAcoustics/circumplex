@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple, Optional
 
 import pandas as pd
 from matplotlib import pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.axes import Axes
 
 import circumplex.visualization as vis
 
@@ -91,7 +93,40 @@ class SSMResults:
                 ]
         return table
 
-    def profile_plot(self, **kwargs):
+    def plot(self, **kwargs) -> Figure:
+        """
+        Create a figure from SSM results.
+        
+        This is a convenience wrapper for ssm_plot().
+        
+        Parameters
+        ----------
+        **kwargs
+            Additional arguments to pass to ssm_plot().
+            
+        Returns
+        -------
+        matplotlib.figure.Figure
+            A figure object representing the plot.
+        """
+        return vis.ssm_plot(self, **kwargs)
+        
+    def profile_plot(self, **kwargs) -> Tuple[Figure, List[Axes]]:
+        """
+        Create profile plots from SSM results.
+        
+        Creates one profile plot for each component in the results.
+        
+        Parameters
+        ----------
+        **kwargs
+            Additional arguments to pass to ssm_profile_plot().
+            
+        Returns
+        -------
+        Tuple[matplotlib.figure.Figure, List[matplotlib.axes.Axes]]
+            A tuple containing the figure and axes objects.
+        """
         results = self.results
         scores = self.scores
         details = self.details

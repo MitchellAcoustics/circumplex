@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import Callable, List, Optional, Tuple, Union
+from typing import Callable, List, Optional, Tuple, Union, Dict, Any
 
 import numpy as np
 import pandas as pd
@@ -14,18 +14,117 @@ BOUNDS = ([0, -2 * np.pi, -np.inf], [np.inf, 2 * np.pi, np.inf])
 OCTANTS = utils.OCTANTS
 
 
-def ssm_analyze(
+def validate_ssm_input(
     data: pd.DataFrame,
     scales: List[str],
-        angles: Optional[Tuple[float]] = OCTANTS,
+    angles: Tuple[float],
     measures: Optional[List[str]] = None,
     grouping: Optional[str] = None,
-    contrast: Optional[str] = "none",
-        boots: int = 500,
+    contrast: str = "none",
+    boots: int = 500,
     interval: float = 0.95,
     listwise: bool = True,
     measures_labels: Optional[List[str]] = None,
-        ) -> ssm_results.SSMResults:
+) -> None:
+    """
+    Validate input parameters for SSM analysis functions.
+    
+    Raises ValueError with helpful messages if validation fails.
+    
+    Parameters
+    ----------
+    data : pd.DataFrame
+        A DataFrame containing at least circumplex scales.
+    scales : List[str]
+        The variable names for the circumplex scales to be analyzed.
+    angles : Tuple[float]
+        Angular displacement of each circumplex scale (in degrees).
+    measures : Optional[List[str]]
+        Variables to be correlated with the circumplex scales.
+    grouping : Optional[str]
+        Variable name that indicates group membership of each observation.
+    contrast : str
+        Type of contrast to run ("none", "model", or "test").
+    boots : int
+        Number of bootstrap resamples for estimating confidence intervals.
+    interval : float
+        Confidence level for estimating the confidence intervals.
+    listwise : bool
+        Whether to use listwise deletion for missing values.
+    measures_labels : Optional[List[str]]
+        Labels for each measure provided in measures.
+        
+    Returns
+    -------
+    None
+    """
+    # Data validation
+    if not isinstance(data, pd.DataFrame):
+        raise ValueError("data must be a pandas DataFrame")
+    
+    # Scales validation
+    if not all(scale in data.columns for scale in scales):
+        missing = set(scales) - set(data.columns)
+        raise ValueError(f"Scales missing from data: {missing}")
+    
+    # Angles validation
+    if not (isinstance(angles, tuple) and all(isinstance(a, (int, float)) for a in angles)):
+        raise ValueError("angles must be a tuple of numbers")
+    if len(angles) != len(scales):
+        raise ValueError(f"angles and scales must have the same length (angles: {len(angles)}, scales: {len(scales)})")
+    
+    # Bootstrap validation
+    if not (isinstance(boots, int) and boots > 0):
+        raise ValueError("boots must be a positive integer")
+    
+    # Interval validation
+    if not (0 < interval < 1):
+        raise ValueError("interval must be between 0 and 1")
+    
+    # Listwise validation
+    if not isinstance(listwise, bool):
+        raise ValueError("listwise must be a boolean")
+    
+    # Contrast validation
+    if contrast not in ["none", "model", "test"]:
+        raise ValueError("contrast must be 'none', 'model', or 'test'")
+    
+    # Measures validation
+    if measures is not None and not all(measure in data.columns for measure in measures):
+        missing = set(measures) - set(data.columns)
+        raise ValueError(f"Measures missing from data: {missing}")
+    
+    # Grouping validation
+    if grouping is not None and grouping not in data.columns:
+        raise ValueError(f"grouping variable '{grouping}' not found in data")
+    
+    # Measures labels validation
+    if measures_labels is not None:
+        if measures is None:
+            raise ValueError("measures must be provided when measures_labels is provided")
+        if len(measures_labels) != len(measures):
+            raise ValueError("measures_labels must have the same length as measures")
+    
+    # Contrast possibility validation
+    if contrast != "none" and measures is None and grouping is None:
+        raise ValueError(
+            "Without specifying measures or grouping, no contrasts are possible. "
+            "Set contrast = 'none' or add the measures or grouping arguments."
+        )
+
+
+def ssm_analyze(
+    data: pd.DataFrame,
+    scales: List[str],
+    angles: Tuple[float] = OCTANTS,
+    measures: Optional[List[str]] = None,
+    grouping: Optional[str] = None,
+    contrast: str = "none",
+    boots: int = 500,
+    interval: float = 0.95,
+    listwise: bool = True,
+    measures_labels: Optional[List[str]] = None,
+) -> ssm_results.SSMResults:
     """
     Perform analyses using the Structural Summary Method.
 
@@ -34,50 +133,73 @@ def ssm_analyze(
     correlation-based analyses, uses one or more groups to stratify the data, and calculates
     contrasts between groups or measures.
 
-    Args:
-        data (pd.DataFrame): A DataFrame containing at least circumplex scales.
-        scales (List[str]): The variable names for the circumplex scales to be analyzed.
-        angles (Optional[List[float]]): Angular displacement of each circumplex scale (in degrees).
-        measures (Optional[List[str]]): Variables to be correlated with the circumplex scales.
-        grouping (Optional[str]): Variable name that indicates group membership of each observation.
-        contrast (str): Type of contrast to run ("none", "model", or "test").
-        boots (int): Number of bootstrap resamples for estimating confidence intervals.
-        interval (float): Confidence level for estimating the confidence intervals.
-        listwise (bool): Whether to use listwise deletion for missing values.
-        measures_labels (Optional[List[str]]): Labels for each measure provided in measures.
+    Parameters
+    ----------
+    data : pd.DataFrame
+        A DataFrame containing at least circumplex scales.
+    scales : List[str]
+        The variable names for the circumplex scales to be analyzed.
+    angles : Tuple[float], optional
+        Angular displacement of each circumplex scale (in degrees).
+        Default is (0, 45, 90, 135, 180, 225, 270, 315).
+    measures : Optional[List[str]], optional
+        Variables to be correlated with the circumplex scales.
+    grouping : Optional[str], optional
+        Variable name that indicates group membership of each observation.
+    contrast : str, optional
+        Type of contrast to run ("none", "model", or "test").
+        Default is "none".
+    boots : int, optional
+        Number of bootstrap resamples for estimating confidence intervals.
+        Default is 500.
+    interval : float, optional
+        Confidence level for estimating the confidence intervals.
+        Default is 0.95.
+    listwise : bool, optional
+        Whether to use listwise deletion for missing values.
+        Default is True.
+    measures_labels : Optional[List[str]], optional
+        Labels for each measure provided in measures.
 
-    Returns:
-        SSMResults: An object containing the results and description of the analysis.
+    Returns
+    -------
+    SSMResults
+        An object containing the results and description of the analysis.
+        
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> from circumplex import ssm_analyze
+    >>> 
+    >>> # Simple analysis of means
+    >>> results = ssm_analyze(
+    ...     data, 
+    ...     scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
+    ...     angles=(0, 45, 90, 135, 180, 225, 270, 315)
+    ... )
+    >>> 
+    >>> # Analysis with correlations and groups
+    >>> results = ssm_analyze(
+    ...     data,
+    ...     scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
+    ...     angles=(0, 45, 90, 135, 180, 225, 270, 315),
+    ...     measures=["Extraversion", "Neuroticism"],
+    ...     grouping="Gender"
+    ... )
     """
-
-    assert isinstance(data, pd.DataFrame), "data must be a pandas DataFrame"
-    assert all(
-        scale in data.columns for scale in scales
-    ), "All scales must be present in data"
-    assert isinstance(angles, tuple) and all(
-        isinstance(a, (int, float)) for a in angles
-            ), "angles must be a tuple of numbers"
-    assert isinstance(boots, int) and boots > 0, "boots must be a positive integer"
-    assert 0 < interval < 1, "interval must be between 0 and 1"
-    assert isinstance(listwise, bool), "listwise must be a boolean"
-    assert contrast in [
-        "none",
-        "model",
-        "test",
-    ], "contrast must be 'none', 'model', or 'test'"
-
-    if measures is not None:
-        assert all(
-            measure in data.columns for measure in measures
-        ), "All measures must be present in data"
-
-    if grouping is not None:
-        assert grouping in data.columns, "grouping must be a column in data"
-
-    if measures_labels is not None:
-        assert len(measures_labels) == len(
-            measures
-        ), "measures_labels must have the same length as measures"
+    # Validate all input parameters
+    validate_ssm_input(
+        data=data,
+        scales=scales,
+        angles=angles,
+        measures=measures,
+        grouping=grouping,
+        contrast=contrast,
+        boots=boots,
+        interval=interval,
+        listwise=listwise,
+        measures_labels=measures_labels
+    )
 
     # Determine analysis type and forward to appropriate subfunction
     if measures is not None:
@@ -146,28 +268,59 @@ def ssm_analyze(
 def ssm_analyze_means(
     data: pd.DataFrame,
     scales: List[str],
-        angles: Tuple[float],
+    angles: Tuple[float],
     grouping: Optional[str] = None,
     contrast: str = "none",
     boots: int = 2000,
     interval: float = 0.95,
     listwise: bool = True,
-) -> dict:
+) -> Dict[str, Any]:
     """
     Perform analyses using the mean-based Structural Summary Method.
 
-    Args:
-        data (pd.DataFrame): A DataFrame containing at least circumplex scales.
-        scales (List[str]): The variable names for the circumplex scales to be analyzed.
-        angles (List[float]): Angular displacement of each circumplex scale (in radians).
-        grouping (Optional[str]): Variable name that indicates group membership of each observation.
-        contrast (str): Type of contrast to run ("none", "model", or "test").
-        boots (int): Number of bootstrap resamples for estimating confidence intervals.
-        interval (float): Confidence level for estimating the confidence intervals.
-        listwise (bool): Whether to use listwise deletion for missing values.
+    This function calculates SSM parameters based on the mean scores of 
+    circumplex scales, optionally grouped by a categorical variable.
 
-    Returns:
-        dict: A dictionary containing the results and description of the analysis.
+    Parameters
+    ----------
+    data : pd.DataFrame
+        A DataFrame containing at least circumplex scales.
+    scales : List[str]
+        The variable names for the circumplex scales to be analyzed.
+    angles : Tuple[float]
+        Angular displacement of each circumplex scale (in degrees).
+    grouping : Optional[str], optional
+        Variable name that indicates group membership of each observation.
+    contrast : str, optional
+        Type of contrast to run ("none", "model", or "test").
+        Default is "none".
+    boots : int, optional
+        Number of bootstrap resamples for estimating confidence intervals.
+        Default is 2000.
+    interval : float, optional
+        Confidence level for estimating the confidence intervals.
+        Default is 0.95.
+    listwise : bool, optional
+        Whether to use listwise deletion for missing values.
+        Default is True.
+
+    Returns
+    -------
+    Dict[str, Any]
+        A dictionary containing the results and description of the analysis:
+        - results: DataFrame with SSM parameters for each group
+        - details: Dictionary with analysis details
+        - call: String representation of the function call
+        - scores: DataFrame with mean scores for each scale and group
+        
+    Examples
+    --------
+    >>> results_dict = ssm_analyze_means(
+    ...     data, 
+    ...     scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
+    ...     angles=(0, 45, 90, 135, 180, 225, 270, 315),
+    ...     grouping="Gender"
+    ... )
     """
     # Select circumplex scales and grouping variable (if applicable)
     if grouping is not None:
@@ -405,7 +558,7 @@ def ssm_bootstrap(
 def ssm_analyze_corrs(
     data: pd.DataFrame,
     scales: List[str],
-        angles: Tuple[float],
+    angles: Tuple[float],
     measures: List[str],
     grouping: Optional[str] = None,
     contrast: str = "none",
@@ -413,24 +566,58 @@ def ssm_analyze_corrs(
     interval: float = 0.95,
     listwise: bool = True,
     measures_labels: Optional[List[str]] = None,
-) -> dict:
+) -> Dict[str, Any]:
     """
     Perform analyses using the correlation-based Structural Summary Method.
 
-    Args:
-        data (pd.DataFrame): A DataFrame containing at least circumplex scales and measures.
-        scales (List[str]): The variable names for the circumplex scales to be analyzed.
-        angles (List[float]): Angular displacement of each circumplex scale (in radians).
-        measures (List[str]): Variables to be correlated with the circumplex scales.
-        grouping (Optional[str]): Variable name that indicates group membership of each observation.
-        contrast (str): Type of contrast to run ("none", "model", or "test").
-        boots (int): Number of bootstrap resamples for estimating confidence intervals.
-        interval (float): Confidence level for estimating the confidence intervals.
-        listwise (bool): Whether to use listwise deletion for missing values.
-        measures_labels (Optional[List[str]]): Labels for each measure provided in measures.
+    This function calculates SSM parameters based on the correlations between 
+    circumplex scales and external measures, optionally grouped by a categorical variable.
 
-    Returns:
-        dict: A dictionary containing the results and description of the analysis.
+    Parameters
+    ----------
+    data : pd.DataFrame
+        A DataFrame containing at least circumplex scales and measures.
+    scales : List[str]
+        The variable names for the circumplex scales to be analyzed.
+    angles : Tuple[float]
+        Angular displacement of each circumplex scale (in degrees).
+    measures : List[str]
+        Variables to be correlated with the circumplex scales.
+    grouping : Optional[str], optional
+        Variable name that indicates group membership of each observation.
+    contrast : str, optional
+        Type of contrast to run ("none", "model", or "test").
+        Default is "none".
+    boots : int, optional
+        Number of bootstrap resamples for estimating confidence intervals.
+        Default is 2000.
+    interval : float, optional
+        Confidence level for estimating the confidence intervals.
+        Default is 0.95.
+    listwise : bool, optional
+        Whether to use listwise deletion for missing values.
+        Default is True.
+    measures_labels : Optional[List[str]], optional
+        Labels for each measure provided in measures.
+
+    Returns
+    -------
+    Dict[str, Any]
+        A dictionary containing the results and description of the analysis:
+        - results: DataFrame with SSM parameters for each measure-group combination
+        - details: Dictionary with analysis details
+        - call: String representation of the function call
+        - scores: DataFrame with correlation scores between measures and scales
+        
+    Examples
+    --------
+    >>> results_dict = ssm_analyze_corrs(
+    ...     data, 
+    ...     scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
+    ...     angles=(0, 45, 90, 135, 180, 225, 270, 315),
+    ...     measures=["Extraversion", "Neuroticism"],
+    ...     measures_labels=["Extraversion Scale", "Neuroticism Scale"]
+    ... )
     """
     # Select circumplex scales, measure variables, and grouping variable
     if grouping is not None:

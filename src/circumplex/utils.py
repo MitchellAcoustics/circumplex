@@ -1,15 +1,39 @@
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Optional, Any
 
 import numpy as np
 import pandas as pd
 
-from circumplex.instrument import Instrument
+# Import Instrument type for type annotation only
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from circumplex.instrument import Instrument
 
+# Common constants
 OCTANTS = (0, 45, 90, 135, 180, 225, 270, 315)
 
 
-def cosine_form(theta, ampl, disp, elev):
-    """Cosine function with amplitude, dispersion and elevation parameters."""
+def cosine_form(theta: np.ndarray, ampl: float, disp: float, elev: float) -> np.ndarray:
+    """
+    Cosine function with amplitude, displacement and elevation parameters.
+    
+    This is the mathematical model used in the Structural Summary Method.
+    
+    Parameters
+    ----------
+    theta : np.ndarray
+        Angular positions in radians.
+    ampl : float
+        Amplitude of the cosine curve.
+    disp : float
+        Angular displacement in radians.
+    elev : float
+        Elevation (mean level) of the cosine curve.
+        
+    Returns
+    -------
+    np.ndarray
+        Predicted values at each theta position.
+    """
     return elev + ampl * np.cos(theta - disp)
 
 
@@ -26,8 +50,24 @@ def angle_median(angles: np.ndarray) -> float:
     return np.arctan2(np.median(np.sin(angles)), np.median(np.cos(angles)))
 
 
-def r2_score(y_true: np.array, y_pred: np.array):
-    """Calculate the R2 score for a set of predictions."""
+def r2_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    """
+    Calculate the R² coefficient of determination for a set of predictions.
+    
+    Measures how well the predictions match the observed data.
+    
+    Parameters
+    ----------
+    y_true : np.ndarray
+        True values.
+    y_pred : np.ndarray
+        Predicted values.
+        
+    Returns
+    -------
+    float
+        R² value between 0 and 1, where 1 indicates perfect prediction.
+    """
     ss_res = np.sum(np.square(y_true - y_pred))
     ss_tot = np.sum(np.square(y_true - np.mean(y_true)))
     return 1 - (ss_res / ss_tot)

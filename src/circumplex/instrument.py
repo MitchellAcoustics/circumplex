@@ -317,9 +317,24 @@ class Instrument:
         self._data = data
         return self
 
-    def ssm_analyse(
+    def ssm_analyze(
         self, measures: list[str] = None, grouping: list[str] = None
             ) -> ssm_results.SSMResults:
+        """
+        Perform Structural Summary Method analysis on the instrument's data.
+
+        Parameters
+        ----------
+        measures : list of str, optional
+            Variables to be correlated with the circumplex scales.
+        grouping : list of str, optional
+            Variable name that indicates group membership of each observation.
+
+        Returns
+        -------
+        SSMResults
+            An object containing the results and description of the analysis.
+        """
         return ssm.ssm_analyze(
             self.data,
             self.scales.abbrev,

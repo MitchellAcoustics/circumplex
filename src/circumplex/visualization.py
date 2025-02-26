@@ -1,33 +1,59 @@
 from __future__ import annotations
 
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union, Any
 
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from matplotlib.figure import Figure
+from matplotlib.axes import Axes
 
-import circumplex.ssm_results as ssm_results
+# Import only the utils module to avoid circular imports
 import circumplex.utils as utils
 
+# Forward type hint for SSMResults to avoid circular imports
+# This is needed because ssm_results imports visualization
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from circumplex.ssm_results import SSMResults
 
-def ssm_plot(ssm_object: ssm_results.SSMResults, fontsize: int = 12, **kwargs):
+
+def ssm_plot(ssm_object: 'SSMResults', fontsize: int = 12, **kwargs) -> Figure:
     """
     Create a figure from SSM results.
 
-    Args:
-        ssm_object (SSMResults): The results output of ssm_analyze.
-        fontsize (int): Font size of text in the figure, in points (default = 12).
-        **kwargs: Additional arguments to pass on to the plotting function.
+    Creates either a circular plot or a contrast plot depending on the 
+    type of results in ssm_object.
 
-    Returns:
-        matplotlib.figure.Figure: A figure object representing the plot.
+    Parameters
+    ----------
+    ssm_object : SSMResults
+        The results output of ssm_analyze.
+    fontsize : int, optional
+        Font size of text in the figure, in points.
+        Default is 12.
+    **kwargs
+        Additional arguments to pass on to the plotting function.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        A figure object representing the plot.
+        
+    Examples
+    --------
+    >>> from circumplex import ssm_analyze, ssm_plot
+    >>> results = ssm_analyze(data, scales, angles)
+    >>> fig = ssm_plot(results)
+    >>> fig.savefig('ssm_plot.png', dpi=300)
     """
-    assert isinstance(
-            ssm_object, ssm_results.SSMResults
-    ), "ssm_object must be an SSMResults instance"
-    assert fontsize > 0, "fontsize must be a positive number"
+    # Input validation
+    if not hasattr(ssm_object, 'details') or not hasattr(ssm_object, 'results'):
+        raise ValueError("ssm_object must be an SSMResults instance")
+    if not isinstance(fontsize, (int, float)) or fontsize <= 0:
+        raise ValueError("fontsize must be a positive number")
 
     sns.set(style="whitegrid", font_scale=fontsize / 12)
 
@@ -38,7 +64,7 @@ def ssm_plot(ssm_object: ssm_results.SSMResults, fontsize: int = 12, **kwargs):
 
 
 def ssm_plot_circle(
-        ssm_object: ssm_results.SSMResults,
+    ssm_object: 'SSMResults',
     amax: Optional[float] = None,
     legend_font_size: int = 12,
     scale_font_size: int = 12,
@@ -47,7 +73,7 @@ def ssm_plot_circle(
     angle_labels: Optional[List[str]] = None,
     palette: Optional[str] = "husl",
     **kwargs,
-):
+) -> Figure:
     """
     Create a Circular Plot of SSM Results using Seaborn.
 
@@ -210,13 +236,13 @@ def circle_base(ax, angles, amax=0.5, amin=0, fontsize=12, labels=None):
 
 
 def ssm_plot_contrast(
-        ssm_object: ssm_results.SSMResults,
+    ssm_object: 'SSMResults',
     axislabel: str = "Difference",
     xy: bool = True,
     color: str = "red",
     linesize: float = 1.25,
     fontsize: int = 12,
-):
+) -> Figure:
     """
     Create a Difference Plot of SSM Contrast Results using Seaborn.
 
@@ -319,12 +345,12 @@ def ssm_plot_contrast(
 
 
 def ssm_profile_plot(
-    scores: np.ndarray,
-    angles: np.ndarray,
+    scores: Union[np.ndarray, List[float]],
+    angles: Union[np.ndarray, List[float], Tuple[float, ...]],
     amplitude: float,
     displacement: float,
     elevation: float,
-    r2: float = None,
+    r2: Optional[float] = None,
     title: str = "SSM Profile",
     reorder_scales: bool = True,
     incl_pred: bool = True,
@@ -335,32 +361,73 @@ def ssm_profile_plot(
     c_scores: str = "red",
     c_fit: str = "black",
     fontsize: int = 12,
-    ax: Optional[plt.Axes] = None,
-) -> Tuple[plt.Figure, plt.Axes]:
+    ax: Optional[Axes] = None,
+) -> Tuple[Figure, Axes]:
     """
-    Plot the SSM profile.
+    Plot the SSM profile showing scale scores and fitted cosine curve.
 
-    Args:
-        incl_elev:
-        scores (np.ndarray): Array of scores for each scale.
-        angles (np.ndarray): Array of angles for each scale.
-        amplitude (float): Amplitude of the cosine function.
-        displacement (float): Displacement of the cosine function.
-        elevation (float): Elevation of the cosine function.
-        r2 (float): R-squared value for the fit.
-        title (str): Title of the plot.
-        reorder_scales (bool): Whether to reorder scales based on angles.
-        incl_pred (bool): Whether to include the predicted fit line.
-        incl_fit (bool): Whether to include the R-squared value.
-        incl_disp (bool): Whether to include the displacement line.
-        incl_amp (bool): Whether to include the amplitude line.
-        c_scores (str): Color for the score points.
-        c_fit (str): Color for the fit line.
-        fontsize (int): Base font size for the plot.
-        ax (Optional[plt.Axes]): Existing axes to plot on. If None, creates new figure and axes.
+    Creates a profile plot with observed scores and the fitted cosine curve,
+    optionally showing displacement, amplitude, elevation, and fit statistics.
 
-    Returns:
-        Tuple[plt.Figure, plt.Axes]: A tuple containing the figure and axis objects.
+    Parameters
+    ----------
+    scores : array-like
+        Array of scores for each scale.
+    angles : array-like
+        Array of angles for each scale (in degrees).
+    amplitude : float
+        Amplitude of the cosine function.
+    displacement : float
+        Angular displacement of the cosine function (in degrees).
+    elevation : float
+        Elevation (mean level) of the cosine function.
+    r2 : float, optional
+        R-squared value for the fit.
+    title : str, optional
+        Title of the plot. Default is "SSM Profile".
+    reorder_scales : bool, optional
+        Whether to reorder scales based on angles. Default is True.
+    incl_pred : bool, optional
+        Whether to include the predicted fit line. Default is True.
+    incl_fit : bool, optional
+        Whether to include the R-squared value. Default is True.
+    incl_disp : bool, optional
+        Whether to include the displacement line. Default is True.
+    incl_amp : bool, optional
+        Whether to include the amplitude line. Default is True.
+    incl_elev : bool, optional
+        Whether to include the elevation line. Default is False.
+    c_scores : str, optional
+        Color for the score points. Default is "red".
+    c_fit : str, optional
+        Color for the fit line. Default is "black".
+    fontsize : int, optional
+        Base font size for the plot. Default is 12.
+    ax : matplotlib.axes.Axes, optional
+        Existing axes to plot on. If None, creates new figure and axes.
+
+    Returns
+    -------
+    Tuple[matplotlib.figure.Figure, matplotlib.axes.Axes]
+        A tuple containing the figure and axis objects.
+        
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from circumplex import ssm_profile_plot
+    >>> 
+    >>> # Create a profile plot
+    >>> scores = np.array([0.5, 0.7, 0.3, -0.2, -0.5, -0.3, 0.1, 0.4])
+    >>> angles = (0, 45, 90, 135, 180, 225, 270, 315)
+    >>> fig, ax = ssm_profile_plot(
+    ...     scores=scores,
+    ...     angles=angles,
+    ...     amplitude=0.6,
+    ...     displacement=30,
+    ...     elevation=0.1,
+    ...     r2=0.85,
+    ...     title="Example Profile"
+    ... )
     """
     if ax is None:
         fig, ax = plt.subplots(figsize=(10, 5))
