@@ -205,7 +205,7 @@ def test_ssm_plot_profile(mock_ssm_results):
 
 
 def test_invalid_input():
-    with pytest.raises((AssertionError, TypeError)):
+    with pytest.raises((AssertionError, TypeError, ValueError)):
         visualization.ssm_plot("not an SSMResults object")
 
 

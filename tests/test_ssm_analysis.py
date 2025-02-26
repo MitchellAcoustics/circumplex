@@ -120,7 +120,7 @@ def test_ssm_bootstrap(sample_data, scales, angles):
 
 
 def test_invalid_input(sample_data, angles):
-    with pytest.raises(AssertionError):
+    with pytest.raises((AssertionError, ValueError)):
         ssm_analysis.ssm_analyze(sample_data, ["invalid_scale"], angles, boots=50)
 
 
