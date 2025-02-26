@@ -518,7 +518,7 @@ def ssm_bootstrap(
     for _ in range(boots):
         if strata is not None:
             resample = (
-                bs_input.groupby(strata, observed=False)
+                bs_input.groupby(strata, observed=False, include_groups=False)
                 .apply(lambda x: x.sample(n=len(x), replace=True))
                 .reset_index(drop=True)
             )
