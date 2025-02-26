@@ -7,12 +7,13 @@ authors = [
 ]
 dependencies = [
     "numpy>=1.25.2",
-    "matplotlib>=3.8.1",
     "scipy>=1.9.3",
     "pandas[excel,performance]>=2.2.2",
+    "matplotlib>=3.9.4",
+    "seaborn>=0.13.2",
 ]
 readme = "README.md"
-requires-python = ">= 3.8"
+requires-python = ">= 3.9"
 
 [project.urls]
 repository = "https://github.com/MitchellAcoustics/circumplex"
@@ -22,7 +23,7 @@ documentation = "https://circumplex.readthedocs.io/en/latest/"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.rye]
+[tool.uv]
 managed = true
 dev-dependencies = [
     "pytest>=8.2.2",
