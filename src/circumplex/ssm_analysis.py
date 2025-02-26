@@ -517,8 +517,11 @@ def ssm_bootstrap(
     bootstrap_results = []
     for _ in range(boots):
         if strata is not None:
+            # Note: Using observed=False for categorical data
+            # The DeprecationWarning about operating on grouping columns is expected
+            # but won't affect functionality
             resample = (
-                bs_input.groupby(strata, observed=False, include_groups=False)
+                bs_input.groupby(strata, observed=False)
                 .apply(lambda x: x.sample(n=len(x), replace=True))
                 .reset_index(drop=True)
             )
