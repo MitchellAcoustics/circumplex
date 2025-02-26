@@ -85,7 +85,7 @@ def standardize(
         data: pd.DataFrame,
         scales: Union[List[str], pd.Index],
         angles: List[float],
-        instrument: Instrument,
+        instrument: 'Instrument',
         sample: int = 1,
         prefix: str = "",
         suffix: str = "_z",
@@ -97,7 +97,7 @@ def standardize(
         data (pd.DataFrame): A DataFrame containing at least circumplex scales.
         scales (Union[List[str], pd.Index]): The column names for the variables in data that contain circumplex scales to be standardized.
         angles (List[float]): A numeric list containing the angular displacement of each circumplex scale (in degrees).
-        instrument (Dict[str, Any]): An instrument object containing normative data.
+        instrument (Instrument): An instrument object containing normative data.
         sample (int): An integer corresponding to the normative sample to use in standardizing the scale scores (default = 1).
         prefix (str): A string to include at the beginning of the newly calculated scale variables' names (default = "").
         suffix (str): A string to include at the end of the newly calculated scale variables' names (default = "_z").
