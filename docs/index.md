@@ -10,7 +10,7 @@
 _circumplex_ is a Python package for analyzing and visualizing circumplex data. It provides a set of tools for analyzing and visualizing circumplex data, following the Structural Summary Method. This project is a Python implementation based on the R [circumplex](https://circumplex.jmgirard.com/) package. Our goal is to provide a similar functionality and experience for Python users.
 
 !!! note
-    This project is still under development. We're working hard to make it as good as possible, but there may be bugs or missing features. If you find any issues, please let us know by submitting an issue on Github.
+This project is still under development. We're working hard to make it as good as possible, but there may be bugs or missing features. If you find any issues, please let us know by submitting an issue on Github.
 
 ## Getting Started
 
@@ -44,7 +44,7 @@ This project is licensed under the GNU GPLv3 License. For more information, plea
         about.md   # The about page.
         license.md # The license page.
         tutorials/ # Tutorial pages.
-            Introduction to SSM Analysis.ipynb  
+            Introduction to SSM Analysis.ipynb
         ...        # Other markdown pages, images and other files.
     src/circumplex/
-        circumplex.py 
+        circumplex.py
