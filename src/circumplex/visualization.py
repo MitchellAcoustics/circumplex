@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Optional, Tuple, Union, Any
+from typing import List, Optional, Tuple, Union
 
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
@@ -15,7 +15,7 @@ import circumplex.utils as utils
 
 # Forward type hint for SSMResults to avoid circular imports
 # This is needed because ssm_results imports visualization
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
     from circumplex.ssm_results import SSMResults
