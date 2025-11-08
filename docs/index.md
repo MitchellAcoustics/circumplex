@@ -1,11 +1,11 @@
-![Image title](img/logo-light.png#only-light)
-![Image title](img/logo-dark.png#only-dark)
-
 # Welcome to Circumplex
 
 [![PyPI version](https://badge.fury.io/py/circumplex.svg)](https://badge.fury.io/py/circumplex)
 [![Documentation Status](https://readthedocs.org/projects/circumplex/badge/?version=latest)](https://circumplex.readthedocs.io/en/latest/?badge=latest)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+![Image title](img/logo-light.png#only-light)
+![Image title](img/logo-dark.png#only-dark)
 
 _circumplex_ is a Python package for analyzing and visualizing circumplex data. It provides a set of tools for analyzing and visualizing circumplex data, following the Structural Summary Method. This project is a Python implementation based on the R [circumplex](https://circumplex.jmgirard.com/) package. Our goal is to provide a similar functionality and experience for Python users.
 
