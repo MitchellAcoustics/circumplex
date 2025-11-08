@@ -123,7 +123,7 @@ def standardize(
     assert isinstance(suffix, str), "suffix must be a string"
 
     norms = instrument.norms
-    key = norms.table.query("sample == @sample")
+    key = norms.table.query("sample == @sample")  # type: ignore[probably-unbound-attribute]
     assert len(key) == len(scales)
 
     for scale, angle in zip(scales, angles):
