@@ -165,9 +165,9 @@ class Scales:
     def __post_init__(self):
         assert len(self.abbrev) == len(self.angle)
         assert len(self.abbrev) == len(set(self.abbrev)), "Abbreviations must be unique"
-        assert (
-            max(self.angle) <= 360 and min(self.angle) >= 0
-        ), "Angles must be between 0 and 360"
+        assert max(self.angle) <= 360 and min(self.angle) >= 0, (
+            "Angles must be between 0 and 360"
+        )
 
     def __str__(self):
         return "\n".join(
@@ -319,7 +319,7 @@ class Instrument:
 
     def ssm_analyze(
         self, measures: list[str] = None, grouping: list[str] = None
-            ) -> ssm_results.SSMResults:
+    ) -> ssm_results.SSMResults:
         """
         Perform Structural Summary Method analysis on the instrument's data.
 

@@ -28,9 +28,9 @@ def validate_ssm_input(
 ) -> None:
     """
     Validate input parameters for SSM analysis functions.
-    
+
     Raises ValueError with helpful messages if validation fails.
-    
+
     Parameters
     ----------
     data : pd.DataFrame
@@ -53,7 +53,7 @@ def validate_ssm_input(
         Whether to use listwise deletion for missing values.
     measures_labels : Optional[List[str]]
         Labels for each measure provided in measures.
-        
+
     Returns
     -------
     None
@@ -61,50 +61,58 @@ def validate_ssm_input(
     # Data validation
     if not isinstance(data, pd.DataFrame):
         raise ValueError("data must be a pandas DataFrame")
-    
+
     # Scales validation
     if not all(scale in data.columns for scale in scales):
         missing = set(scales) - set(data.columns)
         raise ValueError(f"Scales missing from data: {missing}")
-    
+
     # Angles validation
-    if not (isinstance(angles, tuple) and all(isinstance(a, (int, float)) for a in angles)):
+    if not (
+        isinstance(angles, tuple) and all(isinstance(a, (int, float)) for a in angles)
+    ):
         raise ValueError("angles must be a tuple of numbers")
     if len(angles) != len(scales):
-        raise ValueError(f"angles and scales must have the same length (angles: {len(angles)}, scales: {len(scales)})")
-    
+        raise ValueError(
+            f"angles and scales must have the same length (angles: {len(angles)}, scales: {len(scales)})"
+        )
+
     # Bootstrap validation
     if not (isinstance(boots, int) and boots > 0):
         raise ValueError("boots must be a positive integer")
-    
+
     # Interval validation
     if not (0 < interval < 1):
         raise ValueError("interval must be between 0 and 1")
-    
+
     # Listwise validation
     if not isinstance(listwise, bool):
         raise ValueError("listwise must be a boolean")
-    
+
     # Contrast validation
     if contrast not in ["none", "model", "test"]:
         raise ValueError("contrast must be 'none', 'model', or 'test'")
-    
+
     # Measures validation
-    if measures is not None and not all(measure in data.columns for measure in measures):
+    if measures is not None and not all(
+        measure in data.columns for measure in measures
+    ):
         missing = set(measures) - set(data.columns)
         raise ValueError(f"Measures missing from data: {missing}")
-    
+
     # Grouping validation
     if grouping is not None and grouping not in data.columns:
         raise ValueError(f"grouping variable '{grouping}' not found in data")
-    
+
     # Measures labels validation
     if measures_labels is not None:
         if measures is None:
-            raise ValueError("measures must be provided when measures_labels is provided")
+            raise ValueError(
+                "measures must be provided when measures_labels is provided"
+            )
         if len(measures_labels) != len(measures):
             raise ValueError("measures_labels must have the same length as measures")
-    
+
     # Contrast possibility validation
     if contrast != "none" and measures is None and grouping is None:
         raise ValueError(
@@ -165,19 +173,19 @@ def ssm_analyze(
     -------
     SSMResults
         An object containing the results and description of the analysis.
-        
+
     Examples
     --------
     >>> import pandas as pd
     >>> from circumplex import ssm_analyze
-    >>> 
+    >>>
     >>> # Simple analysis of means
     >>> results = ssm_analyze(
-    ...     data, 
+    ...     data,
     ...     scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
     ...     angles=(0, 45, 90, 135, 180, 225, 270, 315)
     ... )
-    >>> 
+    >>>
     >>> # Analysis with correlations and groups
     >>> results = ssm_analyze(
     ...     data,
@@ -198,7 +206,7 @@ def ssm_analyze(
         boots=boots,
         interval=interval,
         listwise=listwise,
-        measures_labels=measures_labels
+        measures_labels=measures_labels,
     )
 
     # Determine analysis type and forward to appropriate subfunction
@@ -208,7 +216,7 @@ def ssm_analyze(
             results = ssm_analyze_corrs(
                 data,
                 scales,
-                    angles,
+                angles,
                 measures,
                 grouping,
                 contrast,
@@ -222,7 +230,7 @@ def ssm_analyze(
             results = ssm_analyze_corrs(
                 data,
                 scales,
-                    angles,
+                angles,
                 measures,
                 None,
                 contrast,
@@ -235,7 +243,7 @@ def ssm_analyze(
         if grouping is not None:
             # Multiple group means
             results = ssm_analyze_means(
-                    data, scales, angles, grouping, contrast, boots, interval, listwise
+                data, scales, angles, grouping, contrast, boots, interval, listwise
             )
         else:
             # Single group means
@@ -245,7 +253,7 @@ def ssm_analyze(
                     "Set contrast = 'none' or add the measures or grouping arguments."
                 )
             results = ssm_analyze_means(
-                    data, scales, angles, None, "none", boots, interval, listwise
+                data, scales, angles, None, "none", boots, interval, listwise
             )
 
     # Create the call string
@@ -258,7 +266,7 @@ def ssm_analyze(
     # Create and return the SSMResults object
     return ssm_results.SSMResults(
         results=results["results"],
-            scales=scales,
+        scales=scales,
         scores=results["scores"],
         details=results["details"],
         call=call_str,
@@ -278,7 +286,7 @@ def ssm_analyze_means(
     """
     Perform analyses using the mean-based Structural Summary Method.
 
-    This function calculates SSM parameters based on the mean scores of 
+    This function calculates SSM parameters based on the mean scores of
     circumplex scales, optionally grouped by a categorical variable.
 
     Parameters
@@ -312,11 +320,11 @@ def ssm_analyze_means(
         - details: Dictionary with analysis details
         - call: String representation of the function call
         - scores: DataFrame with mean scores for each scale and group
-        
+
     Examples
     --------
     >>> results_dict = ssm_analyze_means(
-    ...     data, 
+    ...     data,
     ...     scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
     ...     angles=(0, 45, 90, 135, 180, 225, 270, 315),
     ...     grouping="Gender"
@@ -395,7 +403,7 @@ def ssm_analyze_means(
 
 
 def ssm_by_group(
-        scores: pd.DataFrame, angles: Tuple[float], contrast: str
+    scores: pd.DataFrame, angles: Tuple[float], contrast: str
 ) -> np.ndarray:
     """
     Calculate SSM parameters for each group, potentially with contrast.
@@ -473,7 +481,7 @@ def ssm_parameters(scores: np.ndarray, angles: Tuple[float], bounds=BOUNDS) -> n
     # NOTE: Bug - Sometimes returns displacement at the trough, not the crest, so 180 degrees off
     # This was addressed by setting the lower bound of amplitude to 0, not -np.inf. Need a less hard-coded solution
     param, covariance = curve_fit(
-            utils.cosine_form, xdata=np.deg2rad(angles), ydata=scores, bounds=bounds
+        utils.cosine_form, xdata=np.deg2rad(angles), ydata=scores, bounds=bounds
     )
     r2 = utils.r2_score(scores, utils.cosine_form(np.deg2rad(angles), *param))
     ampl, disp, elev = param
@@ -490,7 +498,7 @@ def ssm_parameters(scores: np.ndarray, angles: Tuple[float], bounds=BOUNDS) -> n
 def ssm_bootstrap(
     bs_input: pd.DataFrame,
     bs_function: Callable,
-        angles: Tuple[float],
+    angles: Tuple[float],
     boots: int,
     interval: float,
     contrast: str,
@@ -573,7 +581,7 @@ def ssm_analyze_corrs(
     """
     Perform analyses using the correlation-based Structural Summary Method.
 
-    This function calculates SSM parameters based on the correlations between 
+    This function calculates SSM parameters based on the correlations between
     circumplex scales and external measures, optionally grouped by a categorical variable.
 
     Parameters
@@ -611,11 +619,11 @@ def ssm_analyze_corrs(
         - details: Dictionary with analysis details
         - call: String representation of the function call
         - scores: DataFrame with correlation scores between measures and scales
-        
+
     Examples
     --------
     >>> results_dict = ssm_analyze_corrs(
-    ...     data, 
+    ...     data,
     ...     scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
     ...     angles=(0, 45, 90, 135, 180, 225, 270, 315),
     ...     measures=["Extraversion", "Neuroticism"],
@@ -855,7 +863,7 @@ if __name__ == "__main__":
     results = ssm_analyze(
         data=data,
         scales=["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
-            angles=(90, 135, 180, 225, 270, 315, 0, 45),
+        angles=(90, 135, 180, 225, 270, 315, 0, 45),
         # grouping="Gender",
         # contrast='model',
         measures=["NARPD", "ASPD"],

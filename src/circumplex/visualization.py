@@ -16,15 +16,16 @@ import circumplex.utils as utils
 # Forward type hint for SSMResults to avoid circular imports
 # This is needed because ssm_results imports visualization
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from circumplex.ssm_results import SSMResults
 
 
-def ssm_plot(ssm_object: 'SSMResults', fontsize: int = 12, **kwargs) -> Figure:
+def ssm_plot(ssm_object: "SSMResults", fontsize: int = 12, **kwargs) -> Figure:
     """
     Create a figure from SSM results.
 
-    Creates either a circular plot or a contrast plot depending on the 
+    Creates either a circular plot or a contrast plot depending on the
     type of results in ssm_object.
 
     Parameters
@@ -41,7 +42,7 @@ def ssm_plot(ssm_object: 'SSMResults', fontsize: int = 12, **kwargs) -> Figure:
     -------
     matplotlib.figure.Figure
         A figure object representing the plot.
-        
+
     Examples
     --------
     >>> from circumplex import ssm_analyze, ssm_plot
@@ -50,7 +51,7 @@ def ssm_plot(ssm_object: 'SSMResults', fontsize: int = 12, **kwargs) -> Figure:
     >>> fig.savefig('ssm_plot.png', dpi=300)
     """
     # Input validation
-    if not hasattr(ssm_object, 'details') or not hasattr(ssm_object, 'results'):
+    if not hasattr(ssm_object, "details") or not hasattr(ssm_object, "results"):
         raise ValueError("ssm_object must be an SSMResults instance")
     if not isinstance(fontsize, (int, float)) or fontsize <= 0:
         raise ValueError("fontsize must be a positive number")
@@ -64,7 +65,7 @@ def ssm_plot(ssm_object: 'SSMResults', fontsize: int = 12, **kwargs) -> Figure:
 
 
 def ssm_plot_circle(
-    ssm_object: 'SSMResults',
+    ssm_object: "SSMResults",
     amax: Optional[float] = None,
     legend_font_size: int = 12,
     scale_font_size: int = 12,
@@ -129,10 +130,10 @@ def ssm_plot_circle(
             row["d_lci"],
             row["d_uci"],
             width=row["a_uci"] - row["a_lci"],
-                fc=list(colors[i]) + [0.5],  # face opacity at 0.5
+            fc=list(colors[i]) + [0.5],  # face opacity at 0.5
             linestyle=row["linestyle"],
-                edgecolor=list(colors[i]) + [1],  # edge opacity at 1
-                linewidth=2,
+            edgecolor=list(colors[i]) + [1],  # edge opacity at 1
+            linewidth=2,
         )
         ax.add_patch(wedge)
 
@@ -236,7 +237,7 @@ def circle_base(ax, angles, amax=0.5, amin=0, fontsize=12, labels=None):
 
 
 def ssm_plot_contrast(
-    ssm_object: 'SSMResults',
+    ssm_object: "SSMResults",
     axislabel: str = "Difference",
     xy: bool = True,
     color: str = "red",
@@ -410,12 +411,12 @@ def ssm_profile_plot(
     -------
     Tuple[matplotlib.figure.Figure, matplotlib.axes.Axes]
         A tuple containing the figure and axis objects.
-        
+
     Examples
     --------
     >>> import numpy as np
     >>> from circumplex import ssm_profile_plot
-    >>> 
+    >>>
     >>> # Create a profile plot
     >>> scores = np.array([0.5, 0.7, 0.3, -0.2, -0.5, -0.3, 0.1, 0.4])
     >>> angles = (0, 45, 90, 135, 180, 225, 270, 315)
@@ -465,14 +466,14 @@ def ssm_profile_plot(
     if incl_amp:
         ax.axhline(amplitude + elevation, color="black", linestyle="--")
         ax.text(
-                0, elevation + amplitude * 0.5, f"a = {amplitude:.2f}", fontsize=fontsize
+            0, elevation + amplitude * 0.5, f"a = {amplitude:.2f}", fontsize=fontsize
         )
 
     if incl_fit:
         ylim = ax.get_ylim()
         ax.text(
-                0, ylim[0] + 0.25 * (ylim[1] - ylim[0]), f"R2 = {r2:.2f}", fontsize=fontsize
-                )
+            0, ylim[0] + 0.25 * (ylim[1] - ylim[0]), f"R2 = {r2:.2f}", fontsize=fontsize
+        )
 
     if incl_elev:
         ax.axhline(elevation, color="black", linestyle="--")

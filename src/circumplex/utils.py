@@ -5,6 +5,7 @@ import pandas as pd
 
 # Import Instrument type for type annotation only
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from circumplex.instrument import Instrument
 
@@ -15,9 +16,9 @@ OCTANTS = (0, 45, 90, 135, 180, 225, 270, 315)
 def cosine_form(theta: np.ndarray, ampl: float, disp: float, elev: float) -> np.ndarray:
     """
     Cosine function with amplitude, displacement and elevation parameters.
-    
+
     This is the mathematical model used in the Structural Summary Method.
-    
+
     Parameters
     ----------
     theta : np.ndarray
@@ -28,7 +29,7 @@ def cosine_form(theta: np.ndarray, ampl: float, disp: float, elev: float) -> np.
         Angular displacement in radians.
     elev : float
         Elevation (mean level) of the cosine curve.
-        
+
     Returns
     -------
     np.ndarray
@@ -53,16 +54,16 @@ def angle_median(angles: np.ndarray) -> float:
 def r2_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     """
     Calculate the R² coefficient of determination for a set of predictions.
-    
+
     Measures how well the predictions match the observed data.
-    
+
     Parameters
     ----------
     y_true : np.ndarray
         True values.
     y_pred : np.ndarray
         Predicted values.
-        
+
     Returns
     -------
     float
@@ -74,22 +75,22 @@ def r2_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
 
 
 def sort_angles(
-        angles: np.ndarray, scores: np.ndarray
-        ) -> Tuple[np.ndarray, np.ndarray]:
+    angles: np.ndarray, scores: np.ndarray
+) -> Tuple[np.ndarray, np.ndarray]:
     """Sort angles and corresponding scores in ascending order."""
     sorted_indices = np.argsort(angles)
     return np.array(angles)[sorted_indices], np.array(scores)[sorted_indices]
 
 
 def standardize(
-        data: pd.DataFrame,
-        scales: Union[List[str], pd.Index],
-        angles: List[float],
-        instrument: 'Instrument',
-        sample: int = 1,
-        prefix: str = "",
-        suffix: str = "_z",
-        ) -> pd.DataFrame:
+    data: pd.DataFrame,
+    scales: Union[List[str], pd.Index],
+    angles: List[float],
+    instrument: "Instrument",
+    sample: int = 1,
+    prefix: str = "",
+    suffix: str = "_z",
+) -> pd.DataFrame:
     """
     Standardize circumplex scales using normative data.
 
@@ -106,9 +107,9 @@ def standardize(
         pd.DataFrame: A DataFrame that matches data except that new variables are appended that contain standardized versions of scales.
     """
     assert isinstance(data, pd.DataFrame), "data must be a pandas DataFrame"
-    assert all(
-            scale in data.columns for scale in scales
-            ), "All scales must be present in data"
+    assert all(scale in data.columns for scale in scales), (
+        "All scales must be present in data"
+    )
     assert len(scales) == len(angles), "scales and angles must have the same length"
     assert isinstance(sample, int), "sample must be an integer"
     assert isinstance(prefix, str), "prefix must be a string"

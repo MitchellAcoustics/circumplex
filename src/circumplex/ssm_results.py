@@ -14,7 +14,7 @@ class SSMResults:
     def __init__(
         self,
         results: pd.DataFrame,
-            scales: List[str],
+        scales: List[str],
         scores: pd.DataFrame,
         details: Dict[str, Any],
         call: str,
@@ -70,17 +70,17 @@ class SSMResults:
 
     def table(self):
         table = pd.DataFrame(
-                columns=[
-                    "Profile",
-                    "Elevation",
-                    "X-Value",
-                    "Y-Value",
-                    "Amplitude",
-                    "Displacement",
-                    "Fit",
-                    ],
-                index=self.results.index,
-                )
+            columns=[
+                "Profile",
+                "Elevation",
+                "X-Value",
+                "Y-Value",
+                "Amplitude",
+                "Displacement",
+                "Fit",
+            ],
+            index=self.results.index,
+        )
         for i, (_, row) in enumerate(self.results.iterrows()):
             table.loc[i] = [
                 row["label"],
@@ -90,38 +90,38 @@ class SSMResults:
                 row["a_est"],
                 row["d_est"],
                 row["fit_est"],
-                ]
+            ]
         return table
 
     def plot(self, **kwargs) -> Figure:
         """
         Create a figure from SSM results.
-        
+
         This is a convenience wrapper for ssm_plot().
-        
+
         Parameters
         ----------
         **kwargs
             Additional arguments to pass to ssm_plot().
-            
+
         Returns
         -------
         matplotlib.figure.Figure
             A figure object representing the plot.
         """
         return vis.ssm_plot(self, **kwargs)
-        
+
     def profile_plot(self, **kwargs) -> Tuple[Figure, List[Axes]]:
         """
         Create profile plots from SSM results.
-        
+
         Creates one profile plot for each component in the results.
-        
+
         Parameters
         ----------
         **kwargs
             Additional arguments to pass to ssm_profile_plot().
-            
+
         Returns
         -------
         Tuple[matplotlib.figure.Figure, List[matplotlib.axes.Axes]]
@@ -138,13 +138,13 @@ class SSMResults:
 
         for i, (ax, (_, row)) in enumerate(zip(axes, results.iterrows())):
             fig, ax = vis.ssm_profile_plot(
-                    scores=scores.iloc[i][self.scales],
+                scores=scores.iloc[i][self.scales],
                 angles=details["angles"],
                 amplitude=row["a_est"],
                 displacement=row["d_est"],
                 elevation=row["e_est"],
                 r2=row["fit_est"],
-                    title=f"{results.iloc[i]['label']} Profile",
+                title=f"{results.iloc[i]['label']} Profile",
                 ax=ax,
                 **kwargs,
             )
