@@ -307,7 +307,9 @@ class Instrument:
                 "\nNo data has been loaded for this instrument. Use attach_data() to load data."
             )
 
-    def attach_data(self, data: pd.DataFrame, scales: list | dict = None) -> Instrument:
+    def attach_data(
+        self, data: pd.DataFrame, scales: list | dict | None = None
+    ) -> Instrument:
         # check scales
         assert set(self.scales.abbrev).issubset(data.columns), (
             f"Data is missing scales. "
@@ -317,7 +319,7 @@ class Instrument:
         return self
 
     def ssm_analyze(
-        self, measures: list[str] = None, grouping: list[str] = None
+        self, measures: list[str] | None = None, grouping: str | None = None
     ) -> ssm_results.SSMResults:
         """
         Perform Structural Summary Method analysis on the instrument's data.
