@@ -43,7 +43,7 @@ def cosine_form(
     return elev + ampl * np.cos(theta - disp)
 
 
-def angle_median(angles: np.ndarray) -> float:
+def angle_median(angles: NDArray[Shape[Any], Float]) -> float:
     """
     Calculate the median of circular data.
 
@@ -56,7 +56,9 @@ def angle_median(angles: np.ndarray) -> float:
     return np.arctan2(np.median(np.sin(angles)), np.median(np.cos(angles)))
 
 
-def r2_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+def r2_score(
+    y_true: NDArray[Shape[Any], Float], y_pred: NDArray[Shape[Any], Float]
+) -> float:
     """
     Calculate the R² coefficient of determination for a set of predictions.
 
@@ -80,8 +82,8 @@ def r2_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
 
 
 def sort_angles(
-    angles: np.ndarray, scores: np.ndarray
-) -> Tuple[np.ndarray, np.ndarray]:
+    angles: NDArray[Shape[Any], Float], scores: NDArray[Shape[Any], Float]
+) -> tuple[NDArray[Shape[Any], Float], NDArray[Shape[Any], Float]]:
     """Sort angles and corresponding scores in ascending order."""
     sorted_indices = np.argsort(angles)
     return np.array(angles)[sorted_indices], np.array(scores)[sorted_indices]
