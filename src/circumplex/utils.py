@@ -1,19 +1,24 @@
-from typing import List, Tuple, Union, Optional, Any
+from __future__ import annotations
+
+from typing import List, Union
 
 import numpy as np
 import pandas as pd
 
 # Import Instrument type for type annotation only
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from circumplex.instrument import Instrument
+    from nptyping import NDArray, Float, Shape
 
 # Common constants
-OCTANTS = (0, 45, 90, 135, 180, 225, 270, 315)
+OCTANTS: tuple[int, ...] = (0, 45, 90, 135, 180, 225, 270, 315)
 
 
-def cosine_form(theta: np.ndarray, ampl: float, disp: float, elev: float) -> np.ndarray:
+def cosine_form(
+    theta: NDArray[Shape[Any], Float], ampl: float, disp: float, elev: float
+) -> NDArray[Shape[Any], Float]:
     """
     Cosine function with amplitude, displacement and elevation parameters.
 
