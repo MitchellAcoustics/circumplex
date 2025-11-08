@@ -20,7 +20,7 @@ OCTANTS = utils.OCTANTS
 def validate_ssm_input(
     data: pd.DataFrame,
     scales: List[str],
-    angles: Tuple[float],
+    angles: Tuple[float, ...],
     measures: Optional[List[str]] = None,
     grouping: Optional[str] = None,
     contrast: str = "none",
@@ -127,7 +127,7 @@ def validate_ssm_input(
 def ssm_analyze(
     data: pd.DataFrame,
     scales: List[str],
-    angles: Tuple[float] = OCTANTS,
+    angles: Tuple[float, ...] = OCTANTS,
     measures: Optional[List[str]] = None,
     grouping: Optional[str] = None,
     contrast: str = "none",
@@ -279,7 +279,7 @@ def ssm_analyze(
 def ssm_analyze_means(
     data: pd.DataFrame,
     scales: List[str],
-    angles: Tuple[float],
+    angles: Tuple[float, ...],
     grouping: Optional[str] = None,
     contrast: str = "none",
     boots: int = 2000,
@@ -501,7 +501,7 @@ def ssm_parameters(scores: np.ndarray, angles: Tuple[float], bounds=BOUNDS) -> n
 def ssm_bootstrap(
     bs_input: pd.DataFrame,
     bs_function: Callable,
-    angles: Tuple[float],
+    angles: Tuple[float, ...],
     boots: int,
     interval: float,
     contrast: str,
@@ -572,7 +572,7 @@ def ssm_bootstrap(
 def ssm_analyze_corrs(
     data: pd.DataFrame,
     scales: List[str],
-    angles: Tuple[float],
+    angles: Tuple[float, ...],
     measures: List[str],
     grouping: Optional[str] = None,
     contrast: str = "none",
@@ -759,7 +759,7 @@ def corr_scores(
     measures: Union[np.ndarray, pd.DataFrame],
     grouping: Union[np.ndarray, pd.Series],
     listwise: bool,
-    scales: List[str] = None,
+    scales: List[str] | None = None,
 ) -> pd.DataFrame:
     """
     Calculate the correlation of each measure with each scale by group.
