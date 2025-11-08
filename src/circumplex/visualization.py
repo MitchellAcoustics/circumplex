@@ -433,7 +433,7 @@ def ssm_profile_plot(
     if ax is None:
         fig, ax = plt.subplots(figsize=(10, 5))
     else:
-        fig = ax.get_figure()
+        fig = cast(Figure, ax.get_figure())
 
     assert len(scores) == len(angles), "Scores and angles must be the same length."
     # assert 0 <= elevation <= 1, "Elevation must be between 0 and 1."
@@ -443,7 +443,7 @@ def ssm_profile_plot(
     assert 0 <= displacement <= 360, "Displacement must be between 0 and 360."
 
     if reorder_scales:
-        angles, scores = utils.sort_angles(angles, scores)
+        angles, scores = utils.sort_angles(angles, scores)  # type: ignore[invalid-argument]
         if angles[-1] == 360:
             angles = (0,) + angles
             scores = (scores[-1],) + scores
