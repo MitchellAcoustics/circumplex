@@ -77,7 +77,7 @@ def from_dict(inst_dict: dict) -> Instrument:
         if "norms" in inst_dict
         else None
     )
-    details = InstrumentDetails(**inst_dict["details"])
+    details = InstrumentDetails(**inst_dict["details"])  # type: ignore[missing-argument]
     return Instrument(scales, anchors, details, norms)
 
 
@@ -185,7 +185,7 @@ class Scales:
                 p.append(f"{abbrev}: {self.label[i]} ({self.angle[i]}°)")
                 p.append(
                     "\n".join(
-                        [f"\t{key}: {val}" for key, val in self.inst_items[i].items()]
+                        [f"\t{key}: {val}" for key, val in self.inst_items[i].items()]  # type: ignore[non-subscriptable]
                     )
                 )
             return print("\n".join(p))
