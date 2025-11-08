@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import Callable, List, Optional, Tuple, Union, Dict, Any
+from typing import Callable, List, Optional, Tuple, Union, Dict, Any, TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
@@ -9,6 +9,9 @@ from scipy.optimize import curve_fit
 
 import circumplex.ssm_results as ssm_results
 import circumplex.utils as utils
+
+if TYPE_CHECKING:
+    from nptyping import NDArray
 
 BOUNDS = ([0, -2 * np.pi, -np.inf], [np.inf, 2 * np.pi, np.inf])
 OCTANTS = utils.OCTANTS
