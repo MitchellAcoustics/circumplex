@@ -458,7 +458,9 @@ def group_parameters(scores: np.ndarray, angles: Tuple[float]) -> np.ndarray:
     return out
 
 
-def ssm_parameters(scores: np.ndarray, angles: Tuple[float], bounds=BOUNDS) -> np.array:
+def ssm_parameters(
+    scores: NDArray, angles: Tuple[float, ...], bounds=BOUNDS
+) -> NDArray:
     """Calculate SSM parameters (without confidence intervals) for a set of scores.
 
     Args:
