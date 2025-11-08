@@ -36,7 +36,8 @@ dependencies = [
   "scipy>=1.9.3",
   "pandas[excel,performance]>=2.2.2",
   "matplotlib>=3.9.4",
-  "seaborn>=0.13.2"
+  "seaborn>=0.13.2",
+  "nptyping>=2.5.0"
 ]
 readme = "README.md"
 requires-python = ">= 3.9"
