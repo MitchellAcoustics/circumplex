@@ -1,7 +1,7 @@
 # Welcome to Circumplex
 
 [![PyPI version][pypi-badge]][pypi-link]
-![pre-commit][precommit-badge]
+[![pre-commit][precommit-badge]][prek-link]
 [![Tests status][tests-badge]][tests-link]
 [![Linting status][linting-badge]][linting-link]
 [![Documentation status][documentation-badge]][documentation-link]
@@ -13,6 +13,7 @@
 [tests-badge]:              https://github.com/MitchellAcoustics/circumplex/actions/workflows/tests.yml/badge.svg
 [tests-link]:               https://github.com/MitchellAcoustics/circumplex/actions/workflows/tests.yml
 [precommit-badge]:          https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
+[prek-link]:                https://prek.j178.dev/
 [linting-badge]:            https://github.com/MitchellAcoustics/circumplex/actions/workflows/linting.yml/badge.svg
 [linting-link]:             https://github.com/MitchellAcoustics/circumplex/actions/workflows/linting.yml
 [documentation-badge]:      https://github.com/MitchellAcoustics/circumplex/actions/workflows/docs.yml/badge.svg
