@@ -28,13 +28,13 @@ Examples
 """
 
 # Core analysis functions
+# Utility functions
+from circumplex import utils
 from circumplex.analysis import ssm_analyze
 
 # Data loading
 from circumplex.data import load_dataset
-
-# Utility functions
-from circumplex.utils.angles import OCTANTS, POLES, QUADRANTS, Degree, Radian
+from circumplex.utils.angles import OCTANTS, POLES, QUADRANTS, Degree, Radian, octants
 
 # Visualization functions
 from circumplex.visualization import plot_circle, plot_contrast, plot_curve
@@ -63,6 +63,7 @@ __all__ = [
     "ipsatize",
     "load_dataset",
     "norm_standardize",
+    "octants",
     "plot_circle",
     "plot_contrast",
     "plot_curve",
@@ -70,4 +71,5 @@ __all__ = [
     "score",
     "show_instruments",
     "ssm_analyze",
+    "utils",
 ]

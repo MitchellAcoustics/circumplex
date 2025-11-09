@@ -229,7 +229,12 @@ class TestNormStandardize:
         """Test that non-iterable scales raises TypeError."""
         data = pd.DataFrame({"scale1": [1, 2]})
         with pytest.raises(TypeError, match="Input 'scales' must be a sequence"):
-            norm_standardize(data, "scale1", "csig", 1)
+            norm_standardize(
+                data,
+                "csig",
+                1,
+                scales="scale1",
+            )
 
     def test_norm_standardize_invalid_instrument_type(self):
         """Test that invalid instrument type raises TypeError."""
@@ -237,7 +242,7 @@ class TestNormStandardize:
         with pytest.raises(
             TypeError, match="Input 'instrument' must be an Instrument instance"
         ):
-            norm_standardize(data, ["scale1"], 123, 1)  # type: ignore[invalid-argument-type]
+            norm_standardize(data, 123, 1, scales=["scale1"])  # type: ignore[invalid-argument-type]
 
     def test_norm_standardize_delegates_to_instrument(self):
         """Test norm_standardize delegates to instrument.norm_standardize method."""
@@ -252,9 +257,9 @@ class TestNormStandardize:
 
         result = norm_standardize(
             data,
-            ["scale1", "scale2"],
             mock_instrument,
             1,
+            scales=["scale1", "scale2"],
             prefix="pre_",
             suffix="_post",
             append=False,
@@ -262,8 +267,8 @@ class TestNormStandardize:
 
         mock_instrument.norm_standardize.assert_called_once_with(
             data,
-            ["scale1", "scale2"],
             1,
+            scales=["scale1", "scale2"],
             prefix="pre_",
             suffix="_post",
             append=False,
@@ -278,9 +283,14 @@ class TestNormStandardize:
             {"scale1_z": [-1.0, 1.0]}
         )
 
-        norm_standardize(data, ["scale1"], mock_instrument, "1")  # type: ignore[invalid-argument-type]
+        norm_standardize(
+            data,
+            mock_instrument,
+            "1",  # type: ignore[invalid-argument-type]
+            scales=["scale1"],
+        )
 
         # Check that int(sample_id) was passed
         call_args = mock_instrument.norm_standardize.call_args
-        assert call_args[0][2] == 1
-        assert isinstance(call_args[0][2], int)
+        assert call_args[0][1] == 1
+        assert isinstance(call_args[0][1], int)

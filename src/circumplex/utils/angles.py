@@ -7,7 +7,8 @@ circumplex models.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from enum import IntEnum, auto
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
@@ -37,6 +38,48 @@ POLES: NDArray[Shape["2"], Float] = np.array([90, 270], dtype=float)
 Returns the two primary axis positions (vertical poles)
 on a circumplex circle.
 """
+
+
+class AngleStart(IntEnum):
+    """Enumeration for angle starting positions."""
+
+    EAST = 0  # 0 degrees
+    NE = auto()  # 45 degrees
+    NORTH = auto()  # 90 degrees
+    NW = auto()  # 135 degrees
+    WEST = auto()  # 180 degrees
+    SW = auto()  # 225 degrees
+    SOUTH = auto()  # 270 degrees
+    SE = auto()  # 315 degrees
+
+
+def octants(start: AngleStart | int = AngleStart.EAST) -> NDArray[Shape["8"], Float]:
+    """Get octant angles starting from a specified position.
+
+    Parameters
+    ----------
+    start
+        Starting position for the octants (default is 90 degrees).
+
+    Returns
+    -------
+    np.ndarray
+        Array of octant angles in degrees starting from the specified position.
+
+    Examples
+    --------
+    >>> octants(AngleStart.ONE)
+    array([  0.,  45.,  90., 135., 180., 225., 270., 315.])
+    >>> octants(AngleStart.FIVE)
+    array([180., 225., 270., 315.,   0.,  45.,  90., 135.])
+
+    """
+    if isinstance(start, int):
+        start = AngleStart(start)
+
+    base_angles = np.array([0, 45, 90, 135, 180, 225, 270, 315], dtype=float)
+    start_index = start
+    return np.roll(base_angles, -start_index)
 
 
 class Degree(float):
@@ -139,3 +182,38 @@ def radians_to_degrees(radians: float | np.ndarray) -> float | np.ndarray:
 
     """
     return np.degrees(radians)
+
+
+def cosine_form(
+    theta: NDArray[Shape[Any], Float], ampl: float, disp: float, elev: float
+) -> NDArray[Shape[Any], Float]:
+    """
+    Cosine function with amplitude, displacement and elevation parameters.
+
+    This is the mathematical model used in the Structural Summary Method.
+
+    Parameters
+    ----------
+    theta
+        Angular positions in radians.
+    ampl
+        Amplitude of the cosine curve.
+    disp
+        Angular displacement in radians.
+    elev
+        Elevation (mean level) of the cosine curve.
+
+    Returns
+    -------
+    np.ndarray
+        Predicted values at each theta position.
+    """
+    return elev + ampl * np.cos(theta - disp)
+
+
+def sort_angles(
+    angles: NDArray[Shape[Any], Float], scores: NDArray[Shape[Any], Float]
+) -> tuple[NDArray[Shape[Any], Float], NDArray[Shape[Any], Float]]:
+    """Sort angles and corresponding scores in ascending order."""
+    sorted_indices = np.argsort(angles)
+    return np.array(angles)[sorted_indices], np.array(scores)[sorted_indices]

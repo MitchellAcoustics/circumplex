@@ -157,9 +157,9 @@ def score(
 
 def norm_standardize(
     data: pd.DataFrame,
-    scales: Iterable[str | int],
     instrument: Instrument | str,
     sample_id: int,
+    scales: Iterable[str | int] | None = None,
     prefix: str = "",
     suffix: str = "_z",
     *,
@@ -206,7 +206,7 @@ def norm_standardize(
     if isinstance(scales, str):
         msg = "Input 'scales' must be a sequence of column names."
         raise TypeError(msg)
-    if not isinstance(scales, Iterable):
+    if not isinstance(scales, Iterable) and scales is not None:
         msg = "Input 'scales' must be a sequence of column names or indices."
         raise TypeError(msg)
 
@@ -219,8 +219,8 @@ def norm_standardize(
 
     return instrument.norm_standardize(
         data,
-        scales,
         int(sample_id),
+        scales=scales,
         prefix=prefix,
         suffix=suffix,
         append=append,

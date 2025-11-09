@@ -320,8 +320,8 @@ class Instrument:
     def norm_standardize(
         self,
         data: pd.DataFrame,
-        scales: Iterable[str | int],
         sample_id: int,
+        scales: Iterable[str | int] | None = None,
         prefix: str = "",
         suffix: str = "_z",
         *,
@@ -333,10 +333,11 @@ class Instrument:
         ----------
         data
             DataFrame containing at least circumplex scales.
-        scales
-            The variable names or column numbers for the scales in `data`.
         sample_id
             The ID of the normative sample to use for standardization.
+        scales
+            The variable names or column numbers for the scales in `data`. If None,
+            all scales in the instrument are standardized.
         prefix
             Prefix to add to standardized scale names.
         suffix
@@ -366,6 +367,8 @@ class Instrument:
                 f"'{self.abbrev}'."
             )
             raise ValueError(msg)
+        if scales is None:
+            scales = self.scale_abbrevs
 
         scores = pd.DataFrame(index=data.index, columns=[], dtype=float)
         for scale in scales:
