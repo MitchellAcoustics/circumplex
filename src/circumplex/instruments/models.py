@@ -208,7 +208,7 @@ class Instrument:
                 scale_branch = tree.add(
                     f"{scale.abbrev} ({scale.angle}°): {scale.label}"
                 )
-                if items:
+                if items and self.items is not None:
                     for item_id in scale.items:
                         scale_branch.add(
                             f"[dim]{item_id}. {self.items[item_id - 1].text}"
@@ -218,7 +218,7 @@ class Instrument:
         text = [f"The {self.abbrev} contains {self.n_scales} scales:"]
         for scale in self.scales:
             text.append(f"  {scale.abbrev}: {scale.label} ({scale.angle}°)")
-            if items:
+            if items and self.items is not None:
                 for item_id in scale.items:
                     text.append(f"    {item_id}. {self.items[item_id - 1].text}")
         return "\n".join(text)
@@ -372,7 +372,7 @@ class Instrument:
 
         scores = pd.DataFrame(index=data.index, columns=[], dtype=float)
         for scale in scales:
-            if isinstance(scale, (int, np.integer, float, np.floating)):
+            if isinstance(scale, (int, np.integer)):
                 scale_abbrev = self.scales[scale].abbrev
             else:
                 scale_abbrev = scale
