@@ -138,12 +138,6 @@ venv.bak/
 # mkdocs documentation
 /site
 
-# Jupyter notebook artifacts
-docs/**/*.ipynb
-.ipynb_checkpoints/
-docs/**/*.html
-docs/**/*_files/
-
 # mypy
 .mypy_cache/
 .dmypy.json
@@ -165,12 +159,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-# Claude Code configuration
-.claude/
-CLAUDE.md
-
 # package version
 _version.py
 
-.vscode/
-.idea/
+R-circumplex/
+.claude/
