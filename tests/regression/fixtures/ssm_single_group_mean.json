@@ -1,0 +1,39 @@
+{
+  "dataset": "aw2009",
+  "analysis_type": "single_group_mean",
+  "seed": 12345,
+  "input": {
+    "scales": ["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
+    "boots": 2000,
+    "interval": 0.95,
+    "listwise": true
+  },
+  "expected": {
+    "e_est": 0.423,
+    "x_est": 0.945,
+    "y_est": -0.264,
+    "a_est": 0.981,
+    "d_est": 344.358,
+    "fit_est": 0.954,
+    "e_lci": 0.129,
+    "e_uci": 0.708,
+    "x_lci": 0.654,
+    "x_uci": 1.251,
+    "y_lci": -0.946,
+    "y_uci": 0.3,
+    "a_lci": 0.662,
+    "a_uci": 1.403,
+    "d_lci": 316.48,
+    "d_uci": 17.191,
+    "scores": {
+      "PA": 0.374,
+      "BC": -0.572,
+      "DE": -0.52,
+      "FG": 0.016,
+      "HI": 0.688,
+      "JK": 1.142,
+      "LM": 1.578,
+      "NO": 0.678
+    }
+  }
+}
