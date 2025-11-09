@@ -3,19 +3,19 @@
 <!-- markdownlint-disable MD033 -->
 <img src="https://raw.githubusercontent.com/MitchellAcoustics/circumplex/main/docs/img/logo-dark.png" align="right" alt="" width="200" />
 
-[![PyPI version](https://badge.fury.io/py/circumplex.svg)](https://badge.fury.io/py/circumplex)
-[![Documentation Status](https://readthedocs.org/projects/circumplex/badge/?version=latest)](https://circumplex.readthedocs.io/en/latest/?badge=latest)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![PyPI version][pypi-badge]][pypi-link]
+[![pre-commit][precommit-badge]]
 [![Tests status][tests-badge]][tests-link]
 [![Linting status][linting-badge]][linting-link]
 [![Documentation status][documentation-badge]][documentation-link]
 [![License][license-badge]](./LICENSE)
 
 <!-- prettier-ignore-start -->
+[pypi-badge]:               https://badge.fury.io/py/circumplex.svg
+[pypi-link]:                https://pypi.org/project/circumplex/
 [tests-badge]:              https://github.com/MitchellAcoustics/circumplex/actions/workflows/tests.yml/badge.svg
 [tests-link]:               https://github.com/MitchellAcoustics/circumplex/actions/workflows/tests.yml
+[precommit-badge]:          https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
 [linting-badge]:            https://github.com/MitchellAcoustics/circumplex/actions/workflows/linting.yml/badge.svg
 [linting-link]:             https://github.com/MitchellAcoustics/circumplex/actions/workflows/linting.yml
 [documentation-badge]:      https://github.com/MitchellAcoustics/circumplex/actions/workflows/docs.yml/badge.svg
