@@ -16,12 +16,12 @@ build:
     # golang: "1.19"
   jobs:
     post_install:
-      - pip install mkdocs-material "mkdocstrings[python]" mkdocs-jupyter markdown pymdown-extensions
+      - pip install mike mkdocs-bibtex mkdocs-git-authors-plugin mkdocs-git-revision-date-localized-plugin mkdocs-include-markdown-plugin mkdocs-jupyter mkdocs-material mkdocs "mkdocstrings[python]" pymdown-extensions rich shtab
       - pip install .
 
 # Build documentation in the "docs/" directory with Sphinx
 mkdocs:
-   configuration: mkdocs.yml
+  configuration: mkdocs.yml
 
 # Optionally build your docs in additional formats such as PDF and ePub
 formats:

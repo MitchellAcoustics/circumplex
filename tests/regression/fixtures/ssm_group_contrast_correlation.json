@@ -1,0 +1,25 @@
+{
+  "dataset": "jz2017",
+  "analysis_type": "group_contrast_correlation",
+  "seed": 12345,
+  "input": {
+    "scales": ["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
+    "measures": "NARPD",
+    "grouping": "Gender",
+    "contrast": true,
+    "boots": 2000
+  },
+  "expected": {
+    "e_est": [0.172, 0.244, 0.072],
+    "x_est": [-0.08, -0.029, 0.051],
+    "y_est": [0.202, 0.146, -0.056],
+    "a_est": [0.217, 0.149, -0.068],
+    "d_est": [111.7, 101.2, -10.4],
+    "fit_est": [0.972, 0.902, -0.071],
+    "labels": ["NARPD: Female", "NARPD: Male", "NARPD: Male - Female"],
+    "e_lci": [0.126, 0.194, 0.005],
+    "e_uci": [0.217, 0.295, 0.142],
+    "a_lci": [0.17, 0.105, -0.133],
+    "a_uci": [0.265, 0.195, -0.003]
+  }
+}

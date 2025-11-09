@@ -1,0 +1,15 @@
+{
+  "function_name": "ssm_parameters",
+  "input": {
+    "scores": [0.374, -0.572, -0.52, 0.016, 0.688, 1.142, 1.578, 0.678],
+    "angles": [90, 135, 180, 225, 270, 315, 360, 45]
+  },
+  "expected": {
+    "elevation": 0.423,
+    "x_value": 0.9445,
+    "y_value": -0.2645,
+    "amplitude": 0.9808,
+    "displacement": 344.3576,
+    "fit": 0.9541
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "dataset": "jz2017",
+  "analysis_type": "single_group_correlation",
+  "seed": 12345,
+  "input": {
+    "scales": ["PA", "BC", "DE", "FG", "HI", "JK", "LM", "NO"],
+    "measures": "PARPD",
+    "boots": 2000
+  },
+  "expected": {
+    "e_est": 0.25,
+    "x_est": -0.094,
+    "y_est": 0.117,
+    "a_est": 0.15,
+    "d_est": 128.9,
+    "fit_est": 0.802,
+    "e_lci": 0.218,
+    "e_uci": 0.282,
+    "x_lci": -0.128,
+    "x_uci": -0.062,
+    "y_lci": 0.081,
+    "y_uci": 0.153
+  }
+}
