@@ -836,11 +836,10 @@ def plot_curve(
         Which rows to plot. If None, plots all profiles.
     angle_labels
         Labels for each angle on x-axis. If None, shows degree symbols (e.g., "90°").
-    colors
-        Colors for profiles. Can be:
-        - Seaborn palette name: "Set2", "husl", "deep", etc.
-        - List of color specifications: ['red', 'blue'] or ['#FF0000', '#0000FF']
-        - None: single blue color
+    c_scores
+        Color for observed scores (points and lines).
+    c_fit
+        Color for fitted curve.
     base_size
         Base font size in points for labels and text.
     drop_lowfit

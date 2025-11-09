@@ -4,7 +4,7 @@
 [![Tests status][tests-badge]][tests-link]
 [![Linting status][linting-badge]][linting-link]
 [![Documentation status][documentation-badge]][documentation-link]
-[![License][license-badge]](./LICENSE)
+[![License][license-badge]](./license.md)
 
 <!-- prettier-ignore-start -->
 [tests-badge]:              https://github.com/MitchellAcoustics/python-circumplex/actions/workflows/tests.yml/badge.svg
@@ -13,7 +13,7 @@
 [linting-link]:             https://github.com/MitchellAcoustics/python-circumplex/actions/workflows/linting.yml
 [documentation-badge]:      https://github.com/MitchellAcoustics/python-circumplex/actions/workflows/docs.yml/badge.svg
 [documentation-link]:       https://github.com/MitchellAcoustics/python-circumplex/actions/workflows/docs.yml
-[license-badge]:            https://img.shields.io/badge/License-MIT-yellow.svg
+[license-badge]:            https://img.shields.io/badge/License-GPL%20v3-blue.svg
 <!-- prettier-ignore-end -->
 
 ## Overview
