@@ -1,9 +1,5 @@
-from instrument import Instrument, instruments
+"""Core circumplex analysis functions."""
 
-__all__ = [
-    "ssm_analyze",
-    "SSMResults",
-    "ssm_plot",
-    "Instrument",
-    "instruments",
-]
+from circumplex.core.parameters import ssm_parameters
+
+__all__ = ["ssm_parameters"]
