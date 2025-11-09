@@ -21,5 +21,5 @@ repository-code: "https://github.com/MitchellAcoustics/circumplex"
 url: "https://circumplex.readthedocs.io/en/latest/"
 repository: "https://osf.io/fa5ur/"
 license: GPL-3.0
-version: 0.1.4
+version: 0.3.0
 date-released: "2023-11-25"
