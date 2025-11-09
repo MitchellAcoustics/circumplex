@@ -4,7 +4,7 @@
 [![Tests status][tests-badge]][tests-link]
 [![Linting status][linting-badge]][linting-link]
 [![Documentation status][documentation-badge]][documentation-link]
-[![License][license-badge]](./LICENSE.md)
+[![License][license-badge]](./LICENSE)
 
 <!-- prettier-ignore-start -->
 [tests-badge]:              https://github.com/MitchellAcoustics/python-circumplex/actions/workflows/tests.yml/badge.svg

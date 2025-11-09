@@ -63,7 +63,7 @@ nav:
           - Contrast: api/utils/contrast.md
           - Tidying Functions: api/utils/tidying_functions.md
       - Visualization: api/plots.md
-  - License: LICENSE.md
+  - License: LICENSE
 
 markdown_extensions:
   - admonition

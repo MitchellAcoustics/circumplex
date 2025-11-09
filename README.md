@@ -11,7 +11,7 @@
 [![Tests status][tests-badge]][tests-link]
 [![Linting status][linting-badge]][linting-link]
 [![Documentation status][documentation-badge]][documentation-link]
-[![License][license-badge]](./LICENSE.md)
+[![License][license-badge]](./LICENSE)
 
 <!-- prettier-ignore-start -->
 [tests-badge]:              https://github.com/MitchellAcoustics/circumplex/actions/workflows/tests.yml/badge.svg
@@ -51,7 +51,7 @@ We welcome contributions from the community. If you're interested in contributin
 
 ## License
 
-This project is licensed under the GNU GPLv3 License. For more information, please see the `license.md` file.
+This project is licensed under the GNU GPLv3 License. For more information, please see the `LICENSE` file.
 
 ## Project layout
 
@@ -60,7 +60,7 @@ This project is licensed under the GNU GPLv3 License. For more information, plea
     docs/
         index.md   # The documentation homepage.
         about.md   # The about page.
-        license.md # The license page.
+        LICENSE # The license page.
         tutorials/ # Tutorial pages.
             Introduction to SSM Analysis.ipynb
         ...        # Other markdown pages, images and other files.
