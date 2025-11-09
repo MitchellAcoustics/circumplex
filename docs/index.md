@@ -1,10 +1,7 @@
 # Welcome to Circumplex
 
-<!-- markdownlint-disable MD033 -->
-<img src="https://raw.githubusercontent.com/MitchellAcoustics/circumplex/main/docs/img/logo-dark.png" align="right" alt="" width="200" />
-
 [![PyPI version][pypi-badge]][pypi-link]
-[![pre-commit][precommit-badge]]
+![pre-commit][precommit-badge]
 [![Tests status][tests-badge]][tests-link]
 [![Linting status][linting-badge]][linting-link]
 [![Documentation status][documentation-badge]][documentation-link]
