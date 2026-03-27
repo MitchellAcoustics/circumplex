@@ -1,0 +1,113 @@
+[project]
+copyright = "&copy; 2026 Andrew Mitchell"
+extra_css = [
+    "https://unpkg.com/katex@0/dist/katex.min.css",
+    "stylesheets/extra.css",
+]
+extra_javascript = [
+    "https://unpkg.com/katex@0/dist/contrib/auto-render.min.js",
+    "https://unpkg.com/katex@0/dist/katex.min.js",
+    "javascripts/katex.js",
+]
+nav = [
+    { "Home" = "index.md" },
+    { "API Reference" = [
+        "api/index.md",
+        "api/ssm.md",
+        { "Analysis" = [
+            "api/analysis/bootstrap.md",
+            "api/analysis/corr_analysis.md",
+            "api/analysis/mean_analysis.md",
+            "api/analysis/ssm_analyze.md",
+        ] },
+        { "Core" = [
+            "api/core/parameters.md",
+            "api/core/scores.md",
+        ] },
+        "api/data.md",
+        "api/models.md",
+        { "Utilities" = [
+            "api/utils/angles.md",
+            "api/utils/contrast.md",
+            "api/utils/tidying_functions.md",
+        ] },
+        "api/plots.md",
+    ] },
+    { "License" = "license.md" },
+]
+repo_name = "MitchellAcoustics/circumplex"
+repo_url = "https://github.com/MitchellAcoustics/circumplex/"
+site_author = "Andrew Mitchell"
+site_description = "Documentation website for Circumplex"
+site_name = "Circumplex"
+site_url = "https://drandrewmitchell.com/circumplex/"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/MitchellAcoustics"
+
+[project.plugins.mkdocstrings.handlers.python]
+inventories = ["https://docs.python.org/3/objects.inv"]
+paths = ["src"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_section_style = "spacy"
+docstring_style = "numpy"
+members_order = "source"
+merge_init_into_class = true
+modernize_annotations = true
+overloads_only = true
+separate_signature = true
+show_overloads = true
+show_root_heading = true
+show_signature = true
+show_signature_annotations = true
+show_signature_type_parameters = true
+show_source = true
+show_submodules = true
+show_symbol_type_heading = true
+show_symbol_type_toc = true
+summary = true
+
+[project.theme]
+favicon = "img/favicon.png"
+features = [
+    "content.action.edit",
+    "content.action.view",
+    "content.code.copy",
+    "content.tooltips",
+    "navigation.footer",
+    "navigation.indexes",
+    "navigation.instant",
+    "navigation.instant.prefetch",
+    "navigation.instant.progress",
+    "navigation.path",
+    "navigation.prune",
+    "navigation.sections",
+    "navigation.tabs",
+    "navigation.top",
+]
+logo = "img/small-logo.png"
+font.code = "Fira Code"
+
+[project.theme.icon]
+repo = "fontawesome/brands/github"
+
+# Palette toggle for automatic mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+
+# Palette toggle for dark mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to system preference"
