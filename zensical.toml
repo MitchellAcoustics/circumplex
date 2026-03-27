@@ -10,12 +10,8 @@ extra_javascript = [
     "javascripts/katex.js",
 ]
 nav = [
-    {"Home" = "index.md"},
     {"API Reference" = [
-        "api/data.md",
         "api/index.md",
-        "api/models.md",
-        "api/plots.md",
         "api/ssm.md",
         {"Analysis" = [
             "api/analysis/bootstrap.md",
@@ -27,12 +23,16 @@ nav = [
             "api/core/parameters.md",
             "api/core/scores.md",
         ]},
+        "api/data.md",
+        "api/models.md",
         {"Utilities" = [
             "api/utils/angles.md",
             "api/utils/contrast.md",
             "api/utils/tidying_functions.md",
         ]},
+        "api/plots.md",
     ]},
+    {"Home" = "index.md"},
     {"License" = "license.md"},
 ]
 repo_name = "MitchellAcoustics/circumplex"
@@ -111,6 +111,3 @@ media = "(prefers-color-scheme: dark)"
 scheme = "slate"
 toggle.icon = "lucide/moon"
 toggle.name = "Switch to system preference"
-
-[tool.tomlsort.overrides."project.nav"]
-sort_table_keys = false
