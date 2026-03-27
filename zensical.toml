@@ -10,30 +10,30 @@ extra_javascript = [
     "javascripts/katex.js",
 ]
 nav = [
-    {"API Reference" = [
+    { "Home" = "index.md" },
+    { "API Reference" = [
         "api/index.md",
         "api/ssm.md",
-        {"Analysis" = [
+        { "Analysis" = [
             "api/analysis/bootstrap.md",
             "api/analysis/corr_analysis.md",
             "api/analysis/mean_analysis.md",
             "api/analysis/ssm_analyze.md",
-        ]},
-        {"Core" = [
+        ] },
+        { "Core" = [
             "api/core/parameters.md",
             "api/core/scores.md",
-        ]},
+        ] },
         "api/data.md",
         "api/models.md",
-        {"Utilities" = [
+        { "Utilities" = [
             "api/utils/angles.md",
             "api/utils/contrast.md",
             "api/utils/tidying_functions.md",
-        ]},
+        ] },
         "api/plots.md",
-    ]},
-    {"Home" = "index.md"},
-    {"License" = "license.md"},
+    ] },
+    { "License" = "license.md" },
 ]
 repo_name = "MitchellAcoustics/circumplex"
 repo_url = "https://github.com/MitchellAcoustics/circumplex/"

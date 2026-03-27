@@ -11,8 +11,8 @@ dev = [
     "tox>=4.30.3",
     "twine>=6.2.0",
     "ty>=0.0.1a21",
-    {include-group = "docs"},
-    {include-group = "test"},
+    { include-group = "docs" },
+    { include-group = "test" },
 ]
 docs = [
     "mike>=2.1.3",
@@ -31,7 +31,7 @@ test = [
 
 [project]
 authors = [
-    {email = "andrew.mitchell.research@gmail.com", name = "Andrew Mitchell"},
+    { email = "andrew.mitchell.research@gmail.com", name = "Andrew Mitchell" },
 ]
 classifiers = [
     "Operating System :: POSIX",
@@ -73,7 +73,7 @@ repository = "https://github.com/MitchellAcoustics/circumplex"
 
 [tool.coverage]
 omit = ["*/__pycache__/*", "*/tests/*"]
-run = {branch = true, parallel = true, source = ["circumplex"]}
+run = { branch = true, parallel = true, source = ["circumplex"] }
 paths.source = ["src", ".tox*/*/lib/python*/site-packages"]
 
 [tool.coverage.report]
@@ -111,35 +111,35 @@ testpaths = ["tests"]
 fix = true
 force-exclude = true
 lint.ignore = [
-    "ANN401", # Dynamically typed expressions (typing.Any) are disallowed in `**kwargs`
-    "COM812", # trailing commas (ruff-format recommended)
-    "D417", # argument description in docstring (unreliable)
-    "ISC001", # simplify implicit str concatenation (ruff-format recommended)
-    "NPY002", # legacy np.random (required for R parity)
+    "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed in `**kwargs`
+    "COM812",  # trailing commas (ruff-format recommended)
+    "D417",    # argument description in docstring (unreliable)
+    "ISC001",  # simplify implicit str concatenation (ruff-format recommended)
+    "NPY002",  # legacy np.random (required for R parity)
     "PERF401", # list.extend suggestion (readability over micro-optimization)
     "PLR0912", # too many branches (acceptable for RTHOR algorithm complexity)
     "PLR0913", # too many arguments (acceptable for algorithm functions)
     "PLR2004", # magic value comparison (acceptable for algorithm constants)
-    "TC002", # type checking blocks (would break runtime imports)
-    "TC003", # type checking blocks (would break runtime imports)
-    "UP037", # Remove quotes from type annotation
+    "TC002",   # type checking blocks (would break runtime imports)
+    "TC003",   # type checking blocks (would break runtime imports)
+    "UP037",   # Remove quotes from type annotation
 ]
-lint.per-file-ignores = {"*.ipynb" = [
+lint.per-file-ignores = { "*.ipynb" = [
     "T201", # print statement found
 ], "*demo.py" = [
-    "E501", # line-too-long
+    "E501",   # line-too-long
     "INP001", # File is part of an implicit namespace package.
-    "T201", # print statement found
+    "T201",   # print statement found
 ], "tests*" = [
-    "ANN001", # missing type annotation for function (test code)
-    "ANN201", # missing type annotation for self in methods (test code)
-    "D100", # missing docstring in public module (test code)
-    "D103", # missing docstring in public function (test code)
-    "ERA001", # assertRaises(Exception) (test code)
-    "INP001", # File is part of an implicit namespace package.
+    "ANN001",  # missing type annotation for function (test code)
+    "ANN201",  # missing type annotation for self in methods (test code)
+    "D100",    # missing docstring in public module (test code)
+    "D103",    # missing docstring in public function (test code)
+    "ERA001",  # assertRaises(Exception) (test code)
+    "INP001",  # File is part of an implicit namespace package.
     "PLR2004", # magic value comparison (test code)
-    "S101", # Use of `assert` detected
-]}
+    "S101",    # Use of `assert` detected
+] }
 lint.select = ["ALL"]
 lint.isort.known-first-party = ["circumplex"]
 lint.mccabe.max-complexity = 18
@@ -150,20 +150,9 @@ lint.pydocstyle.convention = "numpy"
 local_scheme = "no-local-version"
 write_to = "src/circumplex/_version.py"
 
-[tool.tomlsort]
-all = true
-spaces_indent_inline_array = 4
-trailing_comma_inline_array = true
-overrides."project.classifiers".inline_arrays = false
-overrides."project.nav.*".inline_arrays = false
-overrides."project.nav.*".inline_tables = false
-overrides."project.nav.*".table_keys = false
-overrides."tool.coverage.paths.source".inline_arrays = false
-overrides."tool.tox.env.docs.commands".inline_arrays = false
-
 [tool.tox]
 env_list = ["py311", "py312", "py313"]
-env_run_base = {commands = [
+env_run_base = { commands = [
     [
         "--cov",
         "--cov-report=xml",
@@ -171,8 +160,8 @@ env_run_base = {commands = [
     ],
 ], dependency_groups = [
     "test",
-]}
-env.docs = {commands = [["zensical", "build"]], dependency_groups = ["docs"]}
+] }
+env.docs = { commands = [["zensical", "build"]], dependency_groups = ["docs"] }
 gh.python."3.11" = ["py311"]
 gh.python."3.12" = ["py312"]
 gh.python."3.13" = ["py313"]
