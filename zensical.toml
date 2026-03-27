@@ -10,6 +10,7 @@ extra_javascript = [
     "javascripts/katex.js",
 ]
 nav = [
+    {"Home" = "index.md"},
     {"API Reference" = [
         "api/data.md",
         "api/index.md",
@@ -32,7 +33,6 @@ nav = [
             "api/utils/tidying_functions.md",
         ]},
     ]},
-    {"Home" = "index.md"},
     {"License" = "license.md"},
 ]
 repo_name = "MitchellAcoustics/circumplex"
@@ -111,3 +111,6 @@ media = "(prefers-color-scheme: dark)"
 scheme = "slate"
 toggle.icon = "lucide/moon"
 toggle.name = "Switch to system preference"
+
+[tool.tomlsort.overrides."project.nav"]
+sort_table_keys = false
