@@ -29,10 +29,10 @@ jobs:
           cache-dependency-path: "pyproject.toml"
 
       - name: Install tox
-        run: python -m pip install tox
+        run: python -m pip install tox tox-uv-bare
 
       - name: Build HTML documentation with tox
-        run: tox -e docs
+        run: tox r -e docs
 
       - name: Upload built docs as artifact
         id: deployment

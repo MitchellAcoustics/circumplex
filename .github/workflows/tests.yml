@@ -36,7 +36,7 @@ jobs:
           cache-dependency-path: pyproject.toml
 
       - name: Install dependencies
-        run: python -m pip install tox tox-gh
+        run: python -m pip install tox tox-gh tox-uv-bare
 
       - name: Test with tox
         run: tox run
