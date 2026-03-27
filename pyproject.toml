@@ -154,9 +154,9 @@ write_to = "src/circumplex/_version.py"
 env_list = ["py311", "py312", "py313"]
 env_run_base = { commands = [
     [
+        "pytest",
         "--cov",
         "--cov-report=xml",
-        "pytest",
     ],
 ], dependency_groups = [
     "test",
