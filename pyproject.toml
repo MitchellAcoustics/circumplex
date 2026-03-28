@@ -20,6 +20,7 @@ docs = [
     "mkdocstrings[python]>=0.30.1",
     "rich>=14.1.0",
     "shtab>=1.7.2",
+    "tabulate",
     "zensical>=0.0.29",
 ]
 test = [

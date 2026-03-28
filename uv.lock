@@ -16,6 +16,15 @@ wheels = [
 ]
 
 [[package]]
+name = "babel"
+version = "2.18.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/7d/b2/51899539b6ceeeb420d40ed3cd4b7a40519404f9baf3d4ac99dc413a834b/babel-2.18.0.tar.gz", hash = "sha256:b80b99a14bd085fcacfa15c9165f651fbb3406e66cc603abf11c5750937c992d", size = 9959554, upload-time = "2026-02-01T12:30:56.078Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/77/f5/21d2de20e8b8b0408f0681956ca2c69f1320a3848ac50e6e7f39c6159675/babel-2.18.0-py3-none-any.whl", hash = "sha256:e2b422b277c2b9a9630c1d7903c2a00d0830c409c59ac8cae9081c92f1aeba35", size = 10196845, upload-time = "2026-02-01T12:30:53.445Z" },
+]
+
+[[package]]
 name = "backports-tarfile"
 version = "1.2.0"
 source = { registry = "https://pypi.org/simple" }
@@ -169,6 +178,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "build" },
+    { name = "great-tables" },
     { name = "hypothesis" },
     { name = "mike" },
     { name = "mkdocs-bibtex" },
@@ -179,6 +189,7 @@ dev = [
     { name = "rich" },
     { name = "ruff" },
     { name = "shtab" },
+    { name = "tabulate" },
     { name = "tox" },
     { name = "tox-uv-bare" },
     { name = "twine" },
@@ -187,11 +198,13 @@ dev = [
     { name = "zensical" },
 ]
 docs = [
+    { name = "great-tables" },
     { name = "mike" },
     { name = "mkdocs-bibtex" },
     { name = "mkdocstrings", extra = ["python"] },
     { name = "rich" },
     { name = "shtab" },
+    { name = "tabulate" },
     { name = "zensical" },
 ]
 test = [
@@ -214,6 +227,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "build", specifier = ">=1.3.0" },
+    { name = "great-tables", specifier = ">=0.21.0" },
     { name = "hypothesis", specifier = ">=6.140.3" },
     { name = "mike", specifier = ">=2.1.3" },
     { name = "mkdocs-bibtex", specifier = ">=4.4.0" },
@@ -224,6 +238,7 @@ dev = [
     { name = "rich", specifier = ">=14.1.0" },
     { name = "ruff", specifier = ">=0.13.3" },
     { name = "shtab", specifier = ">=1.7.2" },
+    { name = "tabulate", specifier = ">=0.10.0" },
     { name = "tox", specifier = ">=4.30.3" },
     { name = "tox-uv-bare", specifier = ">=1.33.4" },
     { name = "twine", specifier = ">=6.2.0" },
@@ -232,11 +247,13 @@ dev = [
     { name = "zensical", specifier = ">=0.0.29" },
 ]
 docs = [
+    { name = "great-tables", specifier = ">=0.21.0" },
     { name = "mike", specifier = ">=2.1.3" },
     { name = "mkdocs-bibtex", specifier = ">=4.4.0" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=0.30.1" },
     { name = "rich", specifier = ">=14.1.0" },
     { name = "shtab", specifier = ">=1.7.2" },
+    { name = "tabulate", specifier = ">=0.10.0" },
     { name = "zensical", specifier = ">=0.0.29" },
 ]
 test = [
@@ -265,6 +282,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44", size = 27697, upload-time = "2022-10-25T02:36:22.414Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6", size = 25335, upload-time = "2022-10-25T02:36:20.889Z" },
+]
+
+[[package]]
+name = "commonmark"
+version = "0.9.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/60/48/a60f593447e8f0894ebb7f6e6c1f25dafc5e89c5879fdc9360ae93ff83f0/commonmark-0.9.1.tar.gz", hash = "sha256:452f9dc859be7f06631ddcb328b6919c67984aca654e5fefb3914d54691aed60", size = 95764, upload-time = "2019-10-04T15:37:39.817Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b1/92/dfd892312d822f36c55366118b95d914e5f16de11044a27cf10a7d71bbbf/commonmark-0.9.1-py2.py3-none-any.whl", hash = "sha256:da2f38c92590f83de410ba1a3cbceafbc74fee9def35f9251ba9a971d6d66fd9", size = 51068, upload-time = "2019-10-04T15:37:37.674Z" },
 ]
 
 [[package]]
@@ -544,6 +570,18 @@ wheels = [
 ]
 
 [[package]]
+name = "faicons"
+version = "0.2.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "htmltools" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/06/e8/c12ef85c4444616ab1c1e96d5ecbadc8046d40b34797308846a2cfc06c80/faicons-0.2.2.tar.gz", hash = "sha256:6b7d7b19180179b6b83783f91bf6c9311c0f00ae0f97d41be1d24d9942361659", size = 604434, upload-time = "2024-01-16T23:27:21.634Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/65/3c/1db1b0f878319bb227f35a0fca7cad64e1f528b518bcab1a708da305c86d/faicons-0.2.2-py3-none-any.whl", hash = "sha256:d45d7c2635b53582a3375c67d7e975a28a91d2c16ef5f6b5033b5cdd507224b6", size = 607225, upload-time = "2024-01-16T23:27:19.475Z" },
+]
+
+[[package]]
 name = "filelock"
 version = "3.25.2"
 source = { registry = "https://pypi.org/simple" }
@@ -614,6 +652,24 @@ wheels = [
 ]
 
 [[package]]
+name = "great-tables"
+version = "0.21.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "babel" },
+    { name = "commonmark" },
+    { name = "faicons" },
+    { name = "htmltools" },
+    { name = "importlib-metadata" },
+    { name = "importlib-resources" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/4a/62/2f323fa5d907a741ad84db4cb4e9f8eb56fa2149a4f571e761951390d2cb/great_tables-0.21.0.tar.gz", hash = "sha256:40869cf972ea679710a0985c54c28e6787435e9b26ca295a8848ca5fbc02259a", size = 13002962, upload-time = "2026-03-03T20:25:28.93Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/78/24/cd32cb847edfa9b658bcb4647b3f4247c09ef7dc1f4f2cba5a620d266865/great_tables-0.21.0-py3-none-any.whl", hash = "sha256:d2f300f44cffb47d59e4dd4038d115633806b20275d39616e26f137627818b6b", size = 1405818, upload-time = "2026-03-03T20:25:27.21Z" },
+]
+
+[[package]]
 name = "griffe"
 version = "1.14.0"
 source = { registry = "https://pypi.org/simple" }
@@ -623,6 +679,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ec/d7/6c09dd7ce4c7837e4cdb11dce980cb45ae3cd87677298dc3b781b6bce7d3/griffe-1.14.0.tar.gz", hash = "sha256:9d2a15c1eca966d68e00517de5d69dd1bc5c9f2335ef6c1775362ba5b8651a13", size = 424684, upload-time = "2025-09-05T15:02:29.167Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2a/b1/9ff6578d789a89812ff21e4e0f80ffae20a65d5dd84e7a17873fe3b365be/griffe-1.14.0-py3-none-any.whl", hash = "sha256:0e9d52832cccf0f7188cfe585ba962d2674b241c01916d780925df34873bceb0", size = 144439, upload-time = "2025-09-05T15:02:27.511Z" },
+]
+
+[[package]]
+name = "htmltools"
+version = "0.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "packaging" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cd/1d/c568d17e9fb5ad5aa0ca3531c58d36fe69deb8eee4e53ff6425c1f99f210/htmltools-0.6.0.tar.gz", hash = "sha256:e8a3fb023d748935035db7ff17f620612ffc814a6a80b6ae388f7b7ab182adf7", size = 97152, upload-time = "2024-10-29T20:21:43.378Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0a/ba/aa99706246f1938ca905eb6eeb7db832ac2e157aa4b805acb5cd4cd1791a/htmltools-0.6.0-py3-none-any.whl", hash = "sha256:072a274ff5e2851e0acce13fc5bb2bbdbbad8268dc8b123f881c05012ce7dce0", size = 84954, upload-time = "2024-10-29T20:21:42.067Z" },
 ]
 
 [[package]]
@@ -2098,6 +2167,15 @@ wheels = [
 ]
 
 [[package]]
+name = "tabulate"
+version = "0.10.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/46/58/8c37dea7bbf769b20d58e7ace7e5edfe65b849442b00ffcdd56be88697c6/tabulate-0.10.0.tar.gz", hash = "sha256:e2cfde8f79420f6deeffdeda9aaec3b6bc5abce947655d17ac662b126e48a60d", size = 91754, upload-time = "2026-03-04T18:55:34.402Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/99/55/db07de81b5c630da5cbf5c7df646580ca26dfaefa593667fc6f2fe016d2e/tabulate-0.10.0-py3-none-any.whl", hash = "sha256:f0b0622e567335c8fabaaa659f1b33bcb6ddfe2e496071b743aa113f8774f2d3", size = 39814, upload-time = "2026-03-04T18:55:31.284Z" },
+]
+
+[[package]]
 name = "tomli"
 version = "2.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2231,6 +2309,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/6c/60/9a6d5530d6829ccf656e6ae0fb13d70a4e2514f4fb8910266ebd54286620/ty-0.0.1a22-py3-none-win32.whl", hash = "sha256:37525433ca7b02a8fca4b8fa9dcde818bf3a413b539b9dbc8f7b39d124eb7c49", size = 8165703, upload-time = "2025-10-10T13:07:11.378Z" },
     { url = "https://files.pythonhosted.org/packages/14/9c/ac08c832643850d4e18cbc959abc69cd51d531fe11bdb691098b3cf2f562/ty-0.0.1a22-py3-none-win_amd64.whl", hash = "sha256:75d21cdeba8bcef247af89518d7ce98079cac4a55c4160cb76682ea40a18b92c", size = 8828319, upload-time = "2025-10-10T13:07:12.815Z" },
     { url = "https://files.pythonhosted.org/packages/22/df/38068fc44e3cfb455aeb41d0ff1850a4d3c9988010466d4a8d19860b8b9a/ty-0.0.1a22-py3-none-win_arm64.whl", hash = "sha256:1c7f040fe311e9696917417434c2a0e58402235be842c508002c6a2eff1398b0", size = 8367136, upload-time = "2025-10-10T13:07:14.518Z" },
+]
+
+[[package]]
+name = "typing-extensions"
+version = "4.15.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f/typing_extensions-4.15.0.tar.gz", hash = "sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466", size = 109391, upload-time = "2025-08-25T13:49:26.313Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/18/67/36e9267722cc04a6b9f15c7f3441c2363321a3ea07da7ae0c0707beb2a9c/typing_extensions-4.15.0-py3-none-any.whl", hash = "sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548", size = 44614, upload-time = "2025-08-25T13:49:24.86Z" },
 ]
 
 [[package]]

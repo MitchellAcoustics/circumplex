@@ -33,6 +33,13 @@ nav = [
         ] },
         "api/plots.md",
     ] },
+    { "Tutorials" = [
+        # "tutorials/Intro_to_SSM_Analysis.md",
+        "tutorials/introduction-to-ssm-analysis.md",
+        "tutorials/Random_exs.md",
+        "tutorials/using-instruments-v1.md",
+        "tutorials/using-instruments.md",
+    ] },
     { "License" = "license.md" },
 ]
 repo_name = "MitchellAcoustics/circumplex"
