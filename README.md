@@ -33,7 +33,8 @@ _circumplex_ is a Python package for analyzing and visualizing circumplex data. 
 > plotting workflows, built-in instrument and tidying utilities, stronger regression
 > coverage against the R package, and a refreshed docs/CI/release toolchain.
 > See the [changelog](CHANGELOG.md) for release notes.
->
+
+<!-- markdownlint-disable MD028 -->
 > [!WARNING]
 > This project is still under development. We're working hard to make it as good as possible, but there may be bugs or missing features. If you find any issues, please let us know by submitting an issue on Github.
 
