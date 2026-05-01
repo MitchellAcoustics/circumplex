@@ -1,3 +1,0 @@
-# Survey Instruments
-
-::: circumplex.instrument
