@@ -71,7 +71,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 
 [project.urls]
-documentation = "https://circumplex.readthedocs.io/en/latest/"
+documentation = "https://drandrewmitchell.com/circumplex/"
 homepage = "https://github.com/MitchellAcoustics/circumplex"
 repository = "https://github.com/MitchellAcoustics/circumplex"
 
