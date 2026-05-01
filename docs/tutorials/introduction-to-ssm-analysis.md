@@ -16,10 +16,10 @@ We’ll use the `jz2017` dataset from Zimmermann & Wright (2017). This
 dataset includes self-report data from 1166 undergraduate students who
 completed:
 
--   A circumplex measure of interpersonal problems (IIP-SC) with eight
-    subscales: PA, BC, DE, FG, HI, JK, LM, NO
--   A measure of personality disorder symptoms with ten subscales:
-    PARPD, SCZPD, SZTPD, ASPD, BORPD, HISPD, NARPD, AVPD, DPNPD, OCPD
+- A circumplex measure of interpersonal problems (IIP-SC) with eight
+  subscales: PA, BC, DE, FG, HI, JK, LM, NO
+- A measure of personality disorder symptoms with ten subscales: PARPD,
+  SCZPD, SZTPD, ASPD, BORPD, HISPD, NARPD, AVPD, DPNPD, OCPD
 
 ``` python
 jz2017 = load_dataset("jz2017")
@@ -1092,12 +1092,12 @@ fig2.savefig("curve_plot.png", dpi=300, bbox_inches="tight")
 The circumplex package provides a comprehensive toolkit for SSM
 analysis:
 
--   **`ssm_analyze()`**: Performs mean-based or correlation-based SSM
-    analysis
--   **`plot_circle()`**: Visualizes amplitude/displacement on circular
-    plots
--   **`plot_curve()`**: Shows fitted curves with observed data
--   **`plot_contrast()`**: Displays parameter differences between groups
+- **`ssm_analyze()`**: Performs mean-based or correlation-based SSM
+  analysis
+- **`plot_circle()`**: Visualizes amplitude/displacement on circular
+  plots
+- **`plot_curve()`**: Shows fitted curves with observed data
+- **`plot_contrast()`**: Displays parameter differences between groups
 
 All functions support: - Single or multiple groups - Single or multiple
 measures - Bootstrap confidence intervals - Contrast analyses -
