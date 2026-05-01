@@ -1,4 +1,4 @@
-name: Python package
+name: CI
 
 on:
   push:
@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up uv
-        uses: astral-sh/setup-uv@v8
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
-          python-version: "3.13"
+          python-version: "3.12"
           enable-cache: true
           cache-python: true
-          cache-suffix: lint-py3.13
+          cache-suffix: lint-py3.12
           cache-dependency-glob: |
             pyproject.toml
             uv.lock
@@ -34,12 +34,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11", "3.12", "3.13"]
+        include:
+          - python-version: "3.11"
+            tox-env: py311
+          - python-version: "3.12"
+            tox-env: py312
+          - python-version: "3.13"
+            tox-env: py313
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up uv
-        uses: astral-sh/setup-uv@v8
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
@@ -48,18 +54,18 @@ jobs:
           cache-dependency-glob: |
             pyproject.toml
             uv.lock
-      - name: Sync test environment
-        run: uv sync --locked --group test
-      - name: Run tests
-        run: uv run --frozen pytest
+      - name: Sync tox runner
+        run: uv sync --locked --group ci
+      - name: Run tests with tox
+        run: uv run tox run -e ${{ matrix.tox-env }}
 
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up uv
-        uses: astral-sh/setup-uv@v8
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           python-version: "3.13"
           enable-cache: true

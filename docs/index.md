@@ -2,7 +2,7 @@
 
 [![PyPI version][pypi-badge]][pypi-link]
 [![pre-commit][precommit-badge]][prek-link]
-[![Tests status][tests-badge]][tests-link]
+[![CI status][tests-badge]][tests-link]
 [![Linting status][linting-badge]][linting-link]
 [![Documentation status][documentation-badge]][documentation-link]
 [![License][license-badge]](./LICENSE)
@@ -10,8 +10,8 @@
 <!-- prettier-ignore-start -->
 [pypi-badge]:               https://badge.fury.io/py/circumplex.svg
 [pypi-link]:                https://pypi.org/project/circumplex/
-[tests-badge]:              https://github.com/MitchellAcoustics/circumplex/actions/workflows/tests.yml/badge.svg
-[tests-link]:               https://github.com/MitchellAcoustics/circumplex/actions/workflows/tests.yml
+[tests-badge]:              https://github.com/MitchellAcoustics/circumplex/actions/workflows/python-package.yml/badge.svg
+[tests-link]:               https://github.com/MitchellAcoustics/circumplex/actions/workflows/python-package.yml
 [precommit-badge]:          https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
 [prek-link]:                https://prek.j178.dev/
 [linting-badge]:            https://github.com/MitchellAcoustics/circumplex/actions/workflows/linting.yml/badge.svg
@@ -31,6 +31,13 @@ _circumplex_ is a Python package for analyzing and visualizing circumplex data. 
 
 This project is a Python implementation based on the R [circumplex](https://circumplex.jmgirard.com/) package. Our goal is to provide a similar functionality and experience for Python users.
 
+!!! success "Massive update"
+    The upcoming 0.3 release is the largest update to _circumplex_ so far. It
+    introduces a modular package structure, expanded SSM and plotting workflows,
+    built-in instrument and tidying utilities, stronger regression coverage against
+    the R package, and refreshed documentation and CI/release infrastructure.
+    See the [changelog](changelog.md) for release notes.
+
 !!! note
     This project is still under development. We're working hard to make it as good as possible, but there may be bugs or missing features. If you find any issues, please let us know by submitting an issue on Github.
 
@@ -47,10 +54,10 @@ This project is a Python implementation based on the R [circumplex](https://circ
 
 ### Installation
 
-Install the latest development version:
+Install the latest release from PyPI:
 
 ```bash
-pip install git+https://github.com/MitchellAcoustics/python-circumplex.git
+pip install circumplex
 ```
 
 ### Basic Usage
@@ -79,6 +86,7 @@ results.plot_curve()
 ## Documentation
 
 - **[API Reference](api/index.md)** - Complete API documentation
+- **[Changelog](changelog.md)** - Release highlights and major updates
 - **[GitHub Repository](https://github.com/MitchellAcoustics/circumplex)** - Source code and issue tracker
 
 ## Requirements
@@ -92,7 +100,7 @@ This project is in active development. Core SSM analysis functionality is implem
 
 ## Contributing
 
-Contributions are welcome! Please see the [GitHub repository](https://github.com/MitchellAcoustics/python-circumplex) for guidelines.
+Contributions are welcome! Please see the [GitHub repository](https://github.com/MitchellAcoustics/circumplex) for guidelines.
 
 ## Acknowledgments
 
