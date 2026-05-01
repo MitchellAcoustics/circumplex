@@ -6,12 +6,19 @@ and vocational preferences.
 
 Main functions:
 
-- ssm_analyze: Perform SSM analysis with bootstrap confidence intervals
-- plot_circle: Plot SSM profiles on a circumplex circle
-- plot_curve: Plot SSM fitted curves with observed scores
-- plot_contrast: Plot SSM parameter contrasts between groups
-- load_dataset: Load built-in example datasets
-- OCTANTS, QUADRANTS, POLES: Standard angle sets
+- [`ssm_analyze`](analysis/ssm_analyze/#circumplex.analysis.ssm_analyze):
+    Perform SSM analysis with bootstrap confidence intervals
+- [`plot_circle`](plots/#circumplex.visualization.plots.plot_circle):
+    Plot SSM profiles on a circumplex circle
+- [`plot_curve`](plots/#circumplex.visualization.plots.plot_curve):
+    Plot SSM fitted curves with observed scores
+- [`plot_contrast`](plots/#circumplex.visualization.plots.plot_contrast):
+    Plot SSM parameter contrasts between groups
+- [`load_dataset`](data/#circumplex.data.load_dataset): Load built-in example datasets
+- [`OCTANTS`](utils/angles/#circumplex.utils.angles.OCTANTS),
+  [`QUADRANTS`](utils/angles/#circumplex.utils.angles.QUADRANTS),
+  [`POLES`](utils/angles/#circumplex.utils.angles.POLE):
+  Standard angle sets
 
 Examples
 --------

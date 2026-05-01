@@ -348,7 +348,7 @@ class Instrument:
 
         Returns
         -------
-        DataFrame
+        :
             DataFrame with standardized scale-level data.
 
         Raises

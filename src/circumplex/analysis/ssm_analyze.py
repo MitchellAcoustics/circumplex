@@ -82,7 +82,7 @@ def ssm_analyze(
 
     Returns
     -------
-    dict
+    :
         Dictionary containing:
 
         - **results** : pd.DataFrame
@@ -179,8 +179,9 @@ def ssm_analyze(
 
     See Also
     --------
-    load_dataset : Load example datasets
-    OCTANTS : Standard octant angles for 8-scale circumplex
+    [`load_dataset`](../data/#circumplex.data.load_dataset) : Load example datasets
+    [`OCTANTS`](../utils/angles/#circumplex.utils.angles.OCTANTS) :
+        Standard octant angles for 8-scale circumplex
 
     References
     ----------

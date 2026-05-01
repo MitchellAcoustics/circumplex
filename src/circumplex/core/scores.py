@@ -35,7 +35,8 @@ def mean_scores(
 
     Returns
     -------
-    Array of mean scores, shape (n_groups, n_scales)
+    :
+        Array of mean scores, shape (n_groups, n_scales)
 
     Examples
     --------
@@ -114,8 +115,9 @@ def corr_scores(
 
     Returns
     -------
-    Array of correlation scores, shape (n_groups * n_measures, n_scales).
-    Rows are ordered by group, then by measure within each group.
+    :
+        Array of correlation scores, shape (n_groups * n_measures, n_scales).
+        Rows are ordered by group, then by measure within each group.
 
     Examples
     --------
@@ -214,8 +216,9 @@ def group_parameters(
 
     Returns
     -------
-    Flat array of parameters, length (n_groups * 6).
-    Order: [e1, x1, y1, a1, d1, f1, e2, x2, y2, a2, d2, f2, ...]
+    :
+        Flat array of parameters, length (n_groups * 6).
+        Order: [e1, x1, y1, a1, d1, f1, e2, x2, y2, a2, d2, f2, ...]
 
     Examples
     --------

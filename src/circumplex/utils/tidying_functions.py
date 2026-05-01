@@ -38,7 +38,8 @@ def ipsatize(
 
     Returns
     -------
-    DataFrame with ipsatized item-level data.
+    :
+        DataFrame with ipsatized item-level data.
 
     Raises
     ------
@@ -117,7 +118,8 @@ def score(
 
     Returns
     -------
-    DataFrame with scored scale-level data.
+    :
+        DataFrame with scored scale-level data.
 
     Raises
     ------
@@ -189,7 +191,8 @@ def norm_standardize(
 
     Returns
     -------
-    DataFrame with standardized scale-level data.
+    :
+        DataFrame with standardized scale-level data.
 
     Raises
     ------

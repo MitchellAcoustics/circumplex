@@ -35,14 +35,15 @@ def ssm_parameters(
 
     Returns
     -------
-    Dictionary with keys:
+    :
+        Dictionary with keys:
 
-    - elevation: Mean of all scale scores
-    - x_value: Projection onto x-axis (cosine component)
-    - y_value: Projection onto y-axis (sine component)
-    - amplitude: Vector length in 2D space
-    - displacement: Angular position in radians [0, 2π)
-    - fit: Model fit (R²), proportion of variance explained
+        - elevation: Mean of all scale scores
+        - x_value: Projection onto x-axis (cosine component)
+        - y_value: Projection onto y-axis (sine component)
+        - amplitude: Vector length in 2D space
+        - displacement: Angular position in radians [0, 2π)
+        - fit: Model fit (R²), proportion of variance explained
 
     Examples
     --------

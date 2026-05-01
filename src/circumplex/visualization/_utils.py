@@ -19,7 +19,8 @@ def ggrad(degrees: float | np.ndarray) -> float | np.ndarray:
 
     Returns
     -------
-    Angle(s) in radians with ggplot2 orientation.
+    :
+        Angle(s) in radians with ggplot2 orientation.
 
     Examples
     --------
@@ -47,7 +48,8 @@ def pretty_max(values: np.ndarray) -> float:
 
     Returns
     -------
-    A nice round number suitable for the amplitude scale maximum.
+    :
+        A nice round number suitable for the amplitude scale maximum.
 
     Examples
     --------

@@ -63,7 +63,7 @@ def octants(start: AngleStart | int = AngleStart.EAST) -> NDArray[Shape["8"], Fl
 
     Returns
     -------
-    np.ndarray
+    :
         Array of octant angles in degrees starting from the specified position.
 
     Examples
@@ -101,7 +101,8 @@ class Degree(float):
 
         Returns
         -------
-        Angle in radians
+        :
+            Angle in radians
 
         """
         return Radian(np.radians(self))
@@ -130,7 +131,8 @@ class Radian(float):
 
         Returns
         -------
-        Angle in degrees
+        :
+            Angle in degrees
 
         """
         return Degree(np.degrees(self))
@@ -150,7 +152,8 @@ def degrees_to_radians(degrees: float | np.ndarray) -> float | np.ndarray:
 
     Returns
     -------
-    Angle(s) in radians
+    :
+        Angle(s) in radians
 
     Examples
     --------
@@ -173,7 +176,8 @@ def radians_to_degrees(radians: float | np.ndarray) -> float | np.ndarray:
 
     Returns
     -------
-    Angle(s) in degrees
+    :
+        Angle(s) in degrees
 
     Examples
     --------
@@ -205,7 +209,7 @@ def cosine_form(
 
     Returns
     -------
-    np.ndarray
+    :
         Predicted values at each theta position.
     """
     return elev + ampl * np.cos(theta - disp)

@@ -25,7 +25,7 @@ def load_dataset(name: DatasetName) -> pd.DataFrame:
 
     Returns
     -------
-    pd.DataFrame
+    :
         The requested dataset
 
     Raises
@@ -82,7 +82,7 @@ def list_datasets() -> list[str]:
 
     Returns
     -------
-    list of str
+    :
         Names of available datasets
 
     Examples

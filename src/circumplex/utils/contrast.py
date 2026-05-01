@@ -30,7 +30,8 @@ def angle_dist(angle1: float, angle2: float) -> float:
 
     Returns
     -------
-    Signed difference (angle1 - angle2) in radians, range [-π, π]
+    :
+        Signed difference (angle1 - angle2) in radians, range [-π, π]
 
     Examples
     --------
@@ -70,8 +71,9 @@ def param_diff(
 
     Returns
     -------
-    Parameter differences (params1 - params2). The displacement difference
-    uses circular distance to handle angular wrapping correctly.
+    :
+        Parameter differences (params1 - params2). The displacement difference
+        uses circular distance to handle angular wrapping correctly.
 
     Examples
     --------
@@ -118,8 +120,9 @@ def param_diff_array(
 
     Returns
     -------
-    Array of parameter differences, length 6:
-    [e_diff, x_diff, y_diff, a_diff, d_diff, f_diff]
+    :
+        Array of parameter differences, length 6:
+        [e_diff, x_diff, y_diff, a_diff, d_diff, f_diff]
 
     Examples
     --------

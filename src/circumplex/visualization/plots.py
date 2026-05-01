@@ -57,7 +57,8 @@ def _prepare_plot_data(
 
     Returns
     -------
-    Filtered DataFrame ready for plotting.
+    :
+        Filtered DataFrame ready for plotting.
 
     Raises
     ------
@@ -124,7 +125,8 @@ def _setup_colors(
 
     Returns
     -------
-    tuple of (colors list, show_legend boolean)
+    :
+        tuple of (colors list, show_legend boolean)
 
     Raises
     ------
@@ -198,7 +200,8 @@ def _build_contrast_plot_data(
 
     Returns
     -------
-    List of dictionaries with keys: parameter, estimate, lci, uci, significant.
+    :
+        List of dictionaries with keys: parameter, estimate, lci, uci, significant.
     """
     param_names = ["e", "x", "y", "a", "d"]
     param_labels = [
@@ -503,7 +506,8 @@ def plot_circle(
 
     Returns
     -------
-    Matplotlib Figure object.
+    :
+        Matplotlib Figure object.
 
     Examples
     --------
@@ -535,8 +539,10 @@ def plot_circle(
 
     See Also
     --------
-    plot_curve : Plot SSM fitted curves with observed scores
-    plot_contrast : Plot SSM parameter contrasts
+    [`plot_curve`](../plots/#circumplex.visualization.plots.plot_curve) :
+        Plot SSM fitted curves with observed scores
+    [`plot_contrast`](../plots/#circumplex.visualization.plots.plot_contrast) :
+        Plot SSM parameter contrasts
 
     """
     # Validate and prepare data
@@ -850,7 +856,8 @@ def plot_curve(
 
     Returns
     -------
-    Matplotlib Figure object.
+    :
+        Matplotlib Figure object.
 
     Examples
     --------
@@ -872,8 +879,10 @@ def plot_curve(
 
     See Also
     --------
-    plot_circle : Plot SSM profiles on a circumplex circle
-    plot_contrast : Plot SSM parameter contrasts
+    [`plot_circle`](../plots/#circumplex.visualization.plots.plot_circle) :
+        Plot SSM profiles on a circumplex circle
+    [`plot_contrast`](../plots/#circumplex.visualization.plots.plot_contrast) :
+        Plot SSM parameter contrasts
 
     """
     # Validate results
@@ -1021,7 +1030,8 @@ def plot_contrast(
 
     Returns
     -------
-    Matplotlib Figure object.
+    :
+        Matplotlib Figure object.
 
     Examples
     --------
@@ -1049,8 +1059,10 @@ def plot_contrast(
 
     See Also
     --------
-    plot_circle : Plot SSM profiles on a circumplex circle
-    plot_curve : Plot SSM fitted curves with observed scores
+    [`plot_circle`](../plots/#circumplex.visualization.plots.plot_circle) :
+        Plot SSM profiles on a circumplex circle
+    [`plot_curve`](../plots/#circumplex.visualization.plots.plot_curve) :
+        Plot SSM fitted curves with observed scores
 
     """
     # Build data

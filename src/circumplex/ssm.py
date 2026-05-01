@@ -2,8 +2,10 @@
 
 This module provides dataclasses for representing SSM analysis results:
 
-- SSMDetails: Configuration and parameters used in SSM analysis
-- SSM: Complete SSM analysis results with estimates and confidence intervals
+- [`SSMDetails`](./#circumplex.ssm.SSMDetails):
+    Configuration and parameters used in SSM analysis
+- [`SSM`](./#circumplex.ssm.SSM):
+    Complete SSM analysis results with estimates and confidence intervals
 """
 
 from __future__ import annotations
@@ -67,7 +69,8 @@ class SSMDetails:
 
         Returns
         -------
-        New SSMDetails instance populated from dictionary data.
+        :
+            New SSMDetails instance populated from dictionary data.
         """
         return cls(
             boots=data["boots"],
@@ -83,7 +86,8 @@ class SSMDetails:
 
         Returns
         -------
-        Dictionary containing all SSMDetails attributes.
+        :
+            Dictionary containing all SSMDetails attributes.
         """
         return self.__dict__.copy()
 
@@ -129,7 +133,8 @@ class SSM:
 
         Returns
         -------
-        New SSM instance populated from dictionary data.
+        :
+            New SSM instance populated from dictionary data.
         """
         return cls(
             results=data["results"],
@@ -143,7 +148,9 @@ class SSM:
 
         Returns
         -------
-        Dictionary containing all SSM attributes with details converted to dict format.
+        :
+            Dictionary containing all SSM attributes
+            with details converted to dict format.
         """
         d = self.__dict__.copy()
         d["details"] = self.details.to_dict()
@@ -236,7 +243,8 @@ class SSM:
 
         Returns
         -------
-        Matplotlib Figure object.
+        :
+            Matplotlib Figure object.
 
         Examples
         --------
@@ -248,7 +256,8 @@ class SSM:
 
         See Also
         --------
-        circumplex.visualization.plot_circle : Full function documentation
+        [`plot_circle`](../plots/#circumplex.visualization.plots.plot_circle) :
+            Full function documentation
         """
         return plot_circle(
             results_df=self.results,
@@ -271,7 +280,8 @@ class SSM:
 
         Returns
         -------
-        Matplotlib Figure object.
+        :
+            Matplotlib Figure object.
 
         Examples
         --------
@@ -284,7 +294,8 @@ class SSM:
 
         See Also
         --------
-        circumplex.visualization.plot_curve : Full function documentation
+        [`plot_curve`](../plots/#circumplex.visualization.plots.plot_curve) :
+            Full function documentation
         """
         return plot_curve(
             results_df=self.results,
@@ -308,7 +319,8 @@ class SSM:
 
         Returns
         -------
-        Matplotlib Figure object.
+        :
+            Matplotlib Figure object.
 
         Raises
         ------
@@ -326,7 +338,8 @@ class SSM:
 
         See Also
         --------
-        circumplex.visualization.plot_contrast : Full function documentation
+        [`plot_contrast`](../plots/#circumplex.visualization.plots.plot_contrast) :
+            Full function documentation
         """
         if not self.details.contrast:
             msg = (

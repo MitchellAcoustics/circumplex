@@ -35,7 +35,8 @@ def circular_quantile(
 
     Returns
     -------
-    Quantiles at the requested probability points
+    :
+        Quantiles at the requested probability points
 
     Examples
     --------
@@ -99,11 +100,12 @@ def ssm_bootstrap(
 
     Returns
     -------
-    Dictionary containing:
-    - 't0': Point estimates (observed parameters)
-    - 't': Bootstrap matrix (boots x n_params)
-    - 'n_params': Number of parameters per profile
-    - 'n_profiles': Number of profiles (groups/measures)
+    :
+        Dictionary containing:
+        - 't0': Point estimates (observed parameters)
+        - 't': Bootstrap matrix (boots x n_params)
+        - 'n_params': Number of parameters per profile
+        - 'n_profiles': Number of profiles (groups/measures)
 
     Examples
     --------
@@ -167,7 +169,8 @@ def _stratified_resample(data: pd.DataFrame, grouping_col: str) -> np.ndarray:
 
     Returns
     -------
-    Array of resampled indices
+    :
+        Array of resampled indices
 
     """
     indices = []
@@ -204,11 +207,12 @@ def calculate_confidence_intervals(
 
     Returns
     -------
-    DataFrame with columns:
-    - e_est, x_est, y_est, a_est, d_est, fit_est (point estimates)
-    - e_lci, x_lci, y_lci, a_lci, d_lci (lower CI)
-    - e_uci, x_uci, y_uci, a_uci, d_uci (upper CI)
-    Note: fit has no confidence intervals
+    :
+        DataFrame with columns:
+        - e_est, x_est, y_est, a_est, d_est, fit_est (point estimates)
+        - e_lci, x_lci, y_lci, a_lci, d_lci (lower CI)
+        - e_uci, x_uci, y_uci, a_uci, d_uci (upper CI)
+        Note: fit has no confidence intervals
 
     Notes
     -----
