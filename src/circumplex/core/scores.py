@@ -132,6 +132,7 @@ def corr_scores(
     C++ code (src/parameters.cpp lines 113-160).
 
     The output is organized as:
+
     - Single group: [measure1_corrs, measure2_corrs, ...]
     - Multiple groups: [g1_m1_corrs, g1_m2_corrs, ..., g2_m1_corrs, g2_m2_corrs, ...]
 

@@ -7,6 +7,7 @@ def ggrad(degrees: float | np.ndarray) -> float | np.ndarray:
     """Convert degrees to ggplot2-style radians.
 
     ggplot2 uses a coordinate system where:
+
     - 90° is at the top (North)
     - Angles proceed clockwise
 

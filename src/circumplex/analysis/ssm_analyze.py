@@ -52,6 +52,7 @@ def ssm_analyze(
         match the number of scales.
     measures
         Column name(s) for external measure variable(s) to correlate with scales.
+
         - If None: Performs mean-based analysis (profile analysis)
         - If string or list: Performs correlation-based analysis
     grouping
@@ -59,6 +60,7 @@ def ssm_analyze(
         single group. The variable will be converted to a categorical factor.
     contrast
         If True, calculates differences between groups or measures.
+
         - Requires exactly 2 groups (with 0 or 1 measures), OR
         - Requires exactly 2 measures (with 1 group)
         Raises ValueError if requirements not met.
@@ -70,6 +72,7 @@ def ssm_analyze(
         Default: 0.95.
     listwise
         Missing data handling:
+
         - If True: Listwise deletion (remove rows with any missing value)
         - If False: Pairwise deletion (use all available data for each calculation)
         Default: True.
@@ -106,7 +109,7 @@ def ssm_analyze(
             contrast, and score_type.
 
         - **type** : str
-            Analysis type: 'mean' or 'correlation'
+            Analysis type: `mean` or `correlation`
 
     Raises
     ------

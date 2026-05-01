@@ -20,8 +20,9 @@ def load_dataset(name: DatasetName) -> pd.DataFrame:
     ----------
     name : str
         Dataset name. Available datasets:
-        - 'jz2017': Interpersonal problems and personality disorder data
-        - 'aw2009': Standardized octant scores
+
+        - `jz2017`: Interpersonal problems and personality disorder data
+        - `aw2009`: Standardized octant scores
 
     Returns
     -------
@@ -45,12 +46,14 @@ def load_dataset(name: DatasetName) -> pd.DataFrame:
     Notes
     -----
     The jz2017 dataset contains data from Zimmermann & Wright (2017):
+
     - 1166 observations
     - 8 IIP-SC octant scales (PA through NO)
     - 10 PDQ-4+ personality disorder scales
     - Gender grouping variable
 
     The aw2009 dataset contains data from Wright et al. (2009):
+
     - 5 observations
     - 8 standardized circumplex scales
 

@@ -60,10 +60,11 @@ def ssm_analyze_means(  # noqa: PLR0915
     -------
     :
         Dictionary with keys:
-        - 'results': DataFrame with parameters and confidence intervals
-        - 'scores': DataFrame with mean scale scores per group
-        - 'details': Dict with analysis metadata
-        - 'type': 'mean'
+
+        - `results`: DataFrame with parameters and confidence intervals
+        - `scores`: DataFrame with mean scale scores per group
+        - `details`: Dict with analysis metadata
+        - `type`: `mean`
 
     Raises
     ------

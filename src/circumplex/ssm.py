@@ -47,7 +47,7 @@ class SSMDetails:
     contrast
         Whether the analysis involves contrasts between groups.
     score_type
-        Type of scores used in analysis ('mean' or 'correlation').Pterm
+        Type of scores used in analysis (`mean` or `correlation`).
     """
 
     boots: int
@@ -113,7 +113,7 @@ class SSM:
     details
         Configuration and parameters used in the SSM analysis.
     type
-        Type of SSM analysis performed (e.g., 'profile', 'contrast').
+        Type of SSM analysis performed (e.g., `profile`, `contrast`).
     """
 
     results: pd.DataFrame

@@ -65,10 +65,11 @@ def ssm_analyze_corrs(  # noqa: C901, PLR0915
     -------
     :
         Dictionary with keys:
-        - 'results': DataFrame with parameters and confidence intervals
-        - 'scores': DataFrame with correlation scores
-        - 'details': Dict with analysis metadata
-        - 'type': 'correlation'
+
+        - `results`: DataFrame with parameters and confidence intervals
+        - `scores`: DataFrame with correlation scores
+        - `details`: Dict with analysis metadata
+        - `type`: `correlation`
 
     Raises
     ------

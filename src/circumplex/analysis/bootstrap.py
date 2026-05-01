@@ -102,10 +102,11 @@ def ssm_bootstrap(
     -------
     :
         Dictionary containing:
-        - 't0': Point estimates (observed parameters)
-        - 't': Bootstrap matrix (boots x n_params)
-        - 'n_params': Number of parameters per profile
-        - 'n_profiles': Number of profiles (groups/measures)
+
+        - `t0`: Point estimates (observed parameters)
+        - `t`: Bootstrap matrix (boots x n_params)
+        - `n_params`: Number of parameters per profile
+        - `n_profiles`: Number of profiles (groups/measures)
 
     Examples
     --------
@@ -201,7 +202,7 @@ def calculate_confidence_intervals(
     Parameters
     ----------
     bootstrap_results
-        Dictionary from ssm_bootstrap() containing 't0' and 't'
+        Dictionary from ssm_bootstrap() containing `t0` and `t`
     interval
         Confidence level (e.g., 0.95 for 95% CI)
 
@@ -209,6 +210,7 @@ def calculate_confidence_intervals(
     -------
     :
         DataFrame with columns:
+
         - e_est, x_est, y_est, a_est, d_est, fit_est (point estimates)
         - e_lci, x_lci, y_lci, a_lci, d_lci (lower CI)
         - e_uci, x_uci, y_uci, a_uci, d_uci (upper CI)
