@@ -20,6 +20,7 @@
 [linting-link]:             https://github.com/MitchellAcoustics/circumplex/actions/workflows/linting.yml
 [documentation-badge]:      https://github.com/MitchellAcoustics/circumplex/actions/workflows/docs.yml/badge.svg
 [documentation-link]:       https://github.com/MitchellAcoustics/circumplex/actions/workflows/docs.yml
+[docs-site]:                https://drandrewmitchell.com/circumplex/
 [license-badge]:            https://img.shields.io/badge/License-GPLv3-blue.svg
 
 <!-- prettier-ignore-end -->
@@ -48,6 +49,7 @@ pip install circumplex
 
 This documentation is designed to help you understand and use _circumplex_ effectively. It's divided into several sections:
 
+- **Docs Site**: The published documentation is available at [drandrewmitchell.com/circumplex][docs-site].
 - **Tutorials**: Practical examples showing how to use our project in real-world scenarios.
 - **API Reference**: Detailed information about our project's API.
 - **Changelog**: Release highlights and migration context for the upcoming version.
